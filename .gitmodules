@@ -1,0 +1,3 @@
+[submodule "Swordfight/include/kecs"]
+	path = Swordfight/include/kecs
+	url = https://github.com/MitchellHodzen/kecs.git

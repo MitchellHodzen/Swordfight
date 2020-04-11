@@ -1,0 +1,2 @@
+get component returns garbage if the entity does not have the component, or the entity does not exist
+input manager mapping keys to scancodes returns 0 if it doesn't know the key, but that's a valid scancode. Find another solution
