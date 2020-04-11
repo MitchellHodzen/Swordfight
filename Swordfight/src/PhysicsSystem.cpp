@@ -61,6 +61,6 @@ void PhysicsSystem::ApplyPhysics()
 		Vector2 movementVector = phys->velocity * Time::GetDeltaTime();
 
 		//Delta time has already been applied
-		trans->position += movementVector;// *Time::GetDeltaTime();
+		trans->position += movementVector;
 	}
 }
