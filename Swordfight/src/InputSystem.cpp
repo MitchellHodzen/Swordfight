@@ -6,6 +6,7 @@
 #include "MessageManager.h"
 #include "Messages/m_bulletFired.h"
 #include "InputManager.h"
+#include "Time.h"
 
 InputSystem::InputSystem()
 {
@@ -44,32 +45,57 @@ void InputSystem::HandleUserInput()
 	{
 		Physics* phys = EntityManager::GetComponent<Physics>(entity);
 		UserInput* uin = EntityManager::GetComponent<UserInput>(entity);
-		if (uin->keyStates[UserInput::InputType::UP])
-		{
-			phys->velocity.SetY(-1);
-		}
-		else if (uin->keyStates[UserInput::InputType::DOWN])
-		{
-			phys->velocity.SetY(1);
-		}
-		else
-		{
-			phys->velocity.SetY(0);
-		}
+
+		//Movement is left and right
 		if (uin->keyStates[UserInput::InputType::LEFT])
 		{
-			phys->velocity.SetX(-1);
+			float currentVelocityX = phys->velocity.GetX();
+			float newVelocityX = currentVelocityX - phys->acceleration * Time::GetDeltaTime();
+			if (phys->velocity.GetX() > 0){
+				//If we're moving right, give left movement a boost
+				newVelocityX -= phys->friction * Time::GetDeltaTime();
+			}
+			phys->velocity.SetX(newVelocityX);
 		}
 		else if (uin->keyStates[UserInput::InputType::RIGHT])
 		{
-			phys->velocity.SetX(1);
+			float currentVelocityX = phys->velocity.GetX();
+			float newVelocityX = currentVelocityX + phys->acceleration * Time::GetDeltaTime();
+			if (phys->velocity.GetX() < 0){
+				//If we're moving right, give left movement a boost
+				newVelocityX += phys->friction * Time::GetDeltaTime();
+			}
+			phys->velocity.SetX(newVelocityX);
 		}
-		else
-		{
-			phys->velocity.SetX(0);
+		else{
+			//If no input is selected, we apply friction
+			if (phys->velocity.GetX() > 0){
+				//If we're moving right, apply friction to the left
+				phys->velocity.SetX(phys->velocity.GetX() - phys->friction * Time::GetDeltaTime());
+
+				//If after applying friction the velocity direction changed, zero the velocity out
+				if (phys->velocity.GetX() < 0){
+					phys->velocity.SetX(0);
+				}
+
+			}
+			else if (phys->velocity.GetX() < 0){
+				//If we're moving left, apply friction to the right
+				phys->velocity.SetX(phys->velocity.GetX() + phys->friction * Time::GetDeltaTime());
+
+				//If after applying friction the velocity direction changed, zero the velocity out
+				if (phys->velocity.GetX() > 0){
+					phys->velocity.SetX(0);
+				}
+			}
 		}
 
-		phys->velocity *= phys->maxSpeed;
+		//Clamping speed to max speed
+		if (phys->velocity.GetMagnitude() > phys->maxSpeed)
+		{
+			phys->velocity.SetMagnitude(phys->maxSpeed);
+		}
+
 
 		if (uin->keyStates[UserInput::InputType::SPACE] && EntityManager::HasComponent<Cannon>(entity))
 		{

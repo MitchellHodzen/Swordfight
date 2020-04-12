@@ -46,6 +46,7 @@ void Game::Run(){
 
 	Entity enemy = EnemyFactory::ConstructEnemy(100, 100);
 
+	std::cout<<"Starting game"<<std::endl;
 	while (!quit)
 	{
 		Time::CalculateDeltaTime();

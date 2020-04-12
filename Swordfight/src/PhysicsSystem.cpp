@@ -51,12 +51,6 @@ void PhysicsSystem::ApplyPhysics()
 		Transform* trans = EntityManager::GetComponent<Transform>(entity);
 		Physics* phys = EntityManager::GetComponent<Physics>(entity);
 
-		//Clamping speed to max speed
-		if (phys->velocity.GetMagnitude() > phys->maxSpeed)
-		{
-			phys->velocity.SetMagnitude(phys->maxSpeed);
-		}
-
 		//Apply delta time to velocity and assign the resulting vector to the movement vector
 		Vector2 movementVector = phys->velocity * Time::GetDeltaTime();
 

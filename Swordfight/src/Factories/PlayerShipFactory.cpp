@@ -38,7 +38,9 @@ Entity PlayerShipFactory::ConstructPlayerShip(int posX, int posY)
 		EntityManager::SetComponent<Sprite>(playerShip, sprite);
 
 		Physics physics;
-		physics.maxSpeed = 200;
+		physics.maxSpeed = 100;
+		physics.acceleration = 500;
+		physics.friction = 700;
 		EntityManager::SetComponent<Physics>(playerShip, physics);
 	}
 
