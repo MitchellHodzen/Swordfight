@@ -34,7 +34,7 @@ Entity PlayerShipFactory::ConstructPlayerShip(int posX, int posY)
 		EntityManager::SetComponent<Rect>(playerShip, rect);
 
 		Sprite sprite;
-		sprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::SpriteKey::Player);
+		sprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::TextureKey::Player);
 		EntityManager::SetComponent<Sprite>(playerShip, sprite);
 
 		Physics physics;

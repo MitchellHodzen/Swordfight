@@ -42,7 +42,7 @@ void Game::Run(){
 	EntityManager::SetUpComponents<Transform, Rect, UserInput, Sprite, Physics, Cannon>();
 	EntityManager::SetUpTags<Player, Enemy, Wall>();
 
-	Entity player1 = PlayerShipFactory::ConstructPlayerShip(0, 0);
+	Entity player1 = PlayerShipFactory::ConstructPlayerShip(500, 500);
 
 	Entity enemy = EnemyFactory::ConstructEnemy(100, 100);
 

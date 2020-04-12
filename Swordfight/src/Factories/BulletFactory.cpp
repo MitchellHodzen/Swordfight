@@ -18,7 +18,7 @@ Entity BulletFactory::ConstructBullet(int posX, int posY, float speed)
 		EntityManager::SetComponent<Transform>(bullet, bulletTransform);
 
 		Sprite bulletSprite;
-		bulletSprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::SpriteKey::Bullet);
+		bulletSprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::TextureKey::Bullet);
 		EntityManager::SetComponent<Sprite>(bullet, bulletSprite);
 
 		Physics bulletPhysics;

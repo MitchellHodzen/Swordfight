@@ -18,7 +18,7 @@ Entity EnemyFactory::ConstructEnemy(int posX, int posY)
 		EntityManager::SetComponent<Transform>(enemy, enemyTransform);
 
 		Sprite enemySprite;
-		enemySprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::SpriteKey::Enemy);
+		enemySprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::TextureKey::Enemy);
 		EntityManager::SetComponent<Sprite>(enemy, enemySprite);
 
 		Physics enemyPhysics;

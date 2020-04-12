@@ -4,7 +4,7 @@
 
 ResourceManager::~ResourceManager()
 {
-	UnloadSprites();
+	UnloadTextures();
 }
 
 ResourceManager& ResourceManager::GetInstance()
@@ -16,21 +16,21 @@ ResourceManager& ResourceManager::GetInstance()
 }
 
 bool ResourceManager::Initialize(RenderSystem* renderSystem) {
-	return LoadSprites(renderSystem);
+	return LoadTextures(renderSystem);
 }
 
-bool ResourceManager::LoadSprites(RenderSystem* renderSystem)
+bool ResourceManager::LoadTextures(RenderSystem* renderSystem)
 {
 
-	return LoadSprite("./resources/Sprites/ship1.png", SpriteKey::Player, renderSystem)
-	&& LoadSprite("./resources/Sprites/bullet1.png", SpriteKey::Bullet, renderSystem)
-	&& LoadSprite("./resources/Sprites/enemy1.png", SpriteKey::Enemy, renderSystem);
+	return LoadTexture("./resources/sprites/ship1.png", TextureKey::Player, renderSystem)
+	&& LoadTexture("./resources/sprites/bullet1.png", TextureKey::Bullet, renderSystem)
+	&& LoadTexture("./resources/sprites/enemy1.png", TextureKey::Enemy, renderSystem);
 
 }
 
-bool ResourceManager::LoadSprite(std::string path, SpriteKey key, RenderSystem* renderSystem)
+bool ResourceManager::LoadTexture(std::string path, TextureKey key, RenderSystem* renderSystem)
 {
-	std::cout << "Loading Sprite at " << path << std::endl;
+	std::cout << "Loading Texture at " << path << std::endl;
 	Texture* texture = new Texture();
 	bool success = texture->LoadTexture(path, renderSystem);
 	if (success)
@@ -40,7 +40,7 @@ bool ResourceManager::LoadSprite(std::string path, SpriteKey key, RenderSystem* 
 	return success;
 }
 
-Texture* ResourceManager::GetTexture(SpriteKey key)
+Texture* ResourceManager::GetTexture(TextureKey key)
 {
 	if (texturePointerMap->count(key))
 	{
@@ -49,7 +49,7 @@ Texture* ResourceManager::GetTexture(SpriteKey key)
 	return nullptr;
 }
 
-void ResourceManager::UnloadSprites()
+void ResourceManager::UnloadTextures()
 {
 	texturePointerMap->clear();
 }
