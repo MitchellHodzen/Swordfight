@@ -1,11 +1,14 @@
 #pragma once
 //forward declaration
-class Texture;
+class Spritesheet;
+
 struct Render
 {
 	Render()
 	{
-		texture = nullptr;
+		spritesheet = nullptr;
+		spriteIndex = 0;
 	};
-	Texture* texture;
+	Spritesheet* spritesheet;
+	int spriteIndex;
 };

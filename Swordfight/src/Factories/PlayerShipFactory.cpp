@@ -33,9 +33,11 @@ Entity PlayerShipFactory::ConstructPlayerShip(int posX, int posY)
 		rect.offsetY = -rect.height / 2;
 		EntityManager::SetComponent<Rect>(playerShip, rect);
 
-		Render sprite;
-		sprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::TextureKey::Player);
-		EntityManager::SetComponent<Render>(playerShip, sprite);
+		Render render;
+		render.spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
+		render.spriteIndex = 0;
+		//sprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::TextureKey::Player);
+		EntityManager::SetComponent<Render>(playerShip, render);
 
 		Physics physics;
 		physics.maxSpeed = 100;

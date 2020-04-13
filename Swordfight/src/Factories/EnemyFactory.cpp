@@ -17,9 +17,15 @@ Entity EnemyFactory::ConstructEnemy(int posX, int posY)
 		enemyTransform.position.SetValues(posX, posY);
 		EntityManager::SetComponent<Transform>(enemy, enemyTransform);
 
+		/*
 		Render enemySprite;
 		enemySprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::TextureKey::Enemy);
 		EntityManager::SetComponent<Render>(enemy, enemySprite);
+		*/
+		Render render;
+		render.spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
+		render.spriteIndex = 3;
+		EntityManager::SetComponent<Render>(enemy, render);
 
 		Physics enemyPhysics;
 		enemyPhysics.maxSpeed = 100;

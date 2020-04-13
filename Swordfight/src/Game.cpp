@@ -52,7 +52,8 @@ void Game::Run(){
 		Time::CalculateDeltaTime();
 		InputManager::GetInstance().UpdateInput();
 		quit = InputManager::GetInstance().ShouldQuit();
-		
+		Render* render = EntityManager::GetComponent<Render>(player1);
+		render->spriteIndex = (render->spriteIndex + 1) % 18;
 		inputSystem->GetUserInput();
 		inputSystem->HandleUserInput();
 		physicsSystem->ApplyPhysics();

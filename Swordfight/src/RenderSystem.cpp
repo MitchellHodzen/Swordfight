@@ -4,6 +4,8 @@
 #include "Components/c_rect.h"
 #include "Components/c_render.h"
 #include "Texture.h"
+#include "Spritesheet.h"
+#include "Rectangle.h"
 
 RenderSystem::RenderSystem(int screenWidth, int screenHeight)
 {
@@ -34,11 +36,18 @@ void RenderSystem::Draw()//std::vector<Entity*>* entityList, std::vector<TextEle
 	{
 		//Render red filled quad 
 		//Rect& rect = EntityManager::GetComponent<Rect>(entityIndex);
+
+
 		Transform* trans = EntityManager::GetComponent<Transform>(entity);
-		Render* sprite = EntityManager::GetComponent<Render>(entity);
-		Texture* text = sprite->texture;
-		SDL_Rect sdlRect{ 0, 0, text->GetWidth(), text->GetHeight() };
-		RenderTexture(text, trans->position.GetX(), trans->position.GetY(), sdlRect);
+		Render* render = EntityManager::GetComponent<Render>(entity);
+		Texture* text = render->spritesheet->GetTexture();
+		Rectangle* rect = render->spritesheet->GetSprite(render->spriteIndex);
+
+		SDL_Rect sdlRect{ rect->posX, rect->posY, rect->width, rect->height };
+		RenderTexture(text, trans->position.GetX() - rect->width / 2, trans->position.GetY() - rect->height / 2, sdlRect);
+
+
+
 		//SDL_Rect fillRect = { pos.x + rect.offsetX, pos.y + rect.offsetY, rect.width, rect.height };
 		//SDL_SetRenderDrawColor(sdlRenderer, 0xFF, 0x00, 0x00, 0xFF);
 		//SDL_RenderFillRect(sdlRenderer, &fillRect);
