@@ -2,7 +2,7 @@
 #include "kecs/KECS.h"
 #include "Components/c_transform.h"
 #include "Components/c_physics.h"
-#include "Components/c_sprite.h"
+#include "Components/c_render.h"
 #include "ResourceManager.h"
 
 
@@ -17,9 +17,9 @@ Entity BulletFactory::ConstructBullet(int posX, int posY, float speed)
 		bulletTransform.position.SetValues(posX, posY);
 		EntityManager::SetComponent<Transform>(bullet, bulletTransform);
 
-		Sprite bulletSprite;
+		Render bulletSprite;
 		bulletSprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::TextureKey::Bullet);
-		EntityManager::SetComponent<Sprite>(bullet, bulletSprite);
+		EntityManager::SetComponent<Render>(bullet, bulletSprite);
 
 		Physics bulletPhysics;
 		bulletPhysics.velocity.SetValues(0, -speed);

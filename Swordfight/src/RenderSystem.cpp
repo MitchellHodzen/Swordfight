@@ -2,7 +2,7 @@
 #include "kecs/KECS.h"
 #include "Components/c_transform.h"
 #include "Components/c_rect.h"
-#include "Components/c_sprite.h"
+#include "Components/c_render.h"
 #include "Texture.h"
 
 RenderSystem::RenderSystem(int screenWidth, int screenHeight)
@@ -21,19 +21,6 @@ RenderSystem::~RenderSystem()
 	SDL_Quit();
 }
 
-void RenderSystem::Render()//, Camera* camera)
-{
-	/*
-	entity->GetVisualComponent()->Render(round(entity->GetPosX()), round(entity->GetPosY()), sdlRenderer);
-
-	if (debug == true)
-	{
-		SDL_Rect newRect{ round(entity->GetCollider()->GetPosX()), round(entity->GetCollider()->GetPosY()), entity->GetCollider()->GetWidth(), entity->GetCollider()->GetHeight() };
-		SDL_RenderDrawRect(sdlRenderer, &newRect);
-	}
-	*/
-}
-
 
 void RenderSystem::Draw()//std::vector<Entity*>* entityList, std::vector<TextElement*>* textList)//, Camera* camera)
 {
@@ -41,14 +28,14 @@ void RenderSystem::Draw()//std::vector<Entity*>* entityList, std::vector<TextEle
 
 	SDL_RenderClear(sdlRenderer);
 
-	std::vector<Entity> entities = EntityManager::GetEntitiesWithComponent<Transform, Sprite>();
+	std::vector<Entity> entities = EntityManager::GetEntitiesWithComponent<Transform, Render>();
 
 	for (Entity entity : entities)
 	{
 		//Render red filled quad 
 		//Rect& rect = EntityManager::GetComponent<Rect>(entityIndex);
 		Transform* trans = EntityManager::GetComponent<Transform>(entity);
-		Sprite* sprite = EntityManager::GetComponent<Sprite>(entity);
+		Render* sprite = EntityManager::GetComponent<Render>(entity);
 		Texture* text = sprite->texture;
 		SDL_Rect sdlRect{ 0, 0, text->GetWidth(), text->GetHeight() };
 		RenderTexture(text, trans->position.GetX(), trans->position.GetY(), sdlRect);

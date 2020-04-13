@@ -4,7 +4,7 @@
 #include "Components/c_rect.h"
 #include "Components/c_input.h"
 #include "Components/c_physics.h"
-#include "Components/c_sprite.h"
+#include "Components/c_Render.h"
 #include "Components/c_cannon.h"
 #include "Tags.h"
 #include "ResourceManager.h"
@@ -33,9 +33,9 @@ Entity PlayerShipFactory::ConstructPlayerShip(int posX, int posY)
 		rect.offsetY = -rect.height / 2;
 		EntityManager::SetComponent<Rect>(playerShip, rect);
 
-		Sprite sprite;
+		Render sprite;
 		sprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::TextureKey::Player);
-		EntityManager::SetComponent<Sprite>(playerShip, sprite);
+		EntityManager::SetComponent<Render>(playerShip, sprite);
 
 		Physics physics;
 		physics.maxSpeed = 100;

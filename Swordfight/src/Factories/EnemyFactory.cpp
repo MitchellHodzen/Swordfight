@@ -2,7 +2,7 @@
 #include "kecs/KECS.h"
 #include "Components/c_transform.h"
 #include "Components/c_physics.h"
-#include "Components/c_sprite.h"
+#include "Components/c_render.h"
 #include "ResourceManager.h"
 
 
@@ -17,9 +17,9 @@ Entity EnemyFactory::ConstructEnemy(int posX, int posY)
 		enemyTransform.position.SetValues(posX, posY);
 		EntityManager::SetComponent<Transform>(enemy, enemyTransform);
 
-		Sprite enemySprite;
+		Render enemySprite;
 		enemySprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::TextureKey::Enemy);
-		EntityManager::SetComponent<Sprite>(enemy, enemySprite);
+		EntityManager::SetComponent<Render>(enemy, enemySprite);
 
 		Physics enemyPhysics;
 		enemyPhysics.maxSpeed = 100;

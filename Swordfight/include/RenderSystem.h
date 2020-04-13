@@ -10,7 +10,6 @@ class RenderSystem
 public:
 	RenderSystem(int screenWidth, int screenHeight);
 	~RenderSystem();
-	void Render();
 	void Draw();
 	bool Initialize(int screenWidth, int screenHeight);
 	int GetScreenWidth();

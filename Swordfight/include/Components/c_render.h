@@ -1,9 +1,9 @@
 #pragma once
 //forward declaration
 class Texture;
-struct Sprite
+struct Render
 {
-	Sprite()
+	Render()
 	{
 		texture = nullptr;
 	};

@@ -9,7 +9,7 @@
 #include "Time.h"
 #include "RenderSystem.h"
 #include "ResourceManager.h"
-#include "Components/c_sprite.h"
+#include "Components/c_render.h"
 #include "InputSystem.h"
 #include "CollisionSystem.h"
 #include "PhysicsSystem.h"
@@ -39,7 +39,7 @@ Game::~Game()
 
 void Game::Run(){
 
-	EntityManager::SetUpComponents<Transform, Rect, UserInput, Sprite, Physics, Cannon>();
+	EntityManager::SetUpComponents<Transform, Rect, UserInput, Render, Physics, Cannon>();
 	EntityManager::SetUpTags<Player, Enemy, Wall>();
 
 	Entity player1 = PlayerShipFactory::ConstructPlayerShip(500, 500);
