@@ -24,24 +24,24 @@ bool ResourceManager::Initialize(RenderSystem* renderSystem) {
 bool ResourceManager::LoadTextures(RenderSystem* renderSystem)
 {
 
-	return LoadTexture("./resources/sprites/ship1.png", TextureKey::Player, renderSystem)
-	&& LoadTexture("./resources/sprites/bullet1.png", TextureKey::Bullet, renderSystem)
-	&& LoadTexture("./resources/sprites/enemy1.png", TextureKey::Enemy, renderSystem)
-	&& LoadTexture("./resources/sprites/SwordfightCharacterSpritesheet.png", TextureKey::FighterSpritesheet, renderSystem);
+	return LoadTexture("./resources/sprites/ship1.png", "Ship", TextureKey::Player, renderSystem)
+	&& LoadTexture("./resources/sprites/bullet1.png", "Bullet", TextureKey::Bullet, renderSystem)
+	&& LoadTexture("./resources/sprites/enemy1.png", "Enemy", TextureKey::Enemy, renderSystem)
+	&& LoadTexture("./resources/sprites/SwordfightCharacterSpritesheet.png", "Fighter Spritesheet", TextureKey::FighterSpritesheet, renderSystem);
 
 }
 
 bool ResourceManager::LoadSpritesheets()
 {
 	std::cout<<"Loading spritesheets"<<std::endl;
-	return LoadSpritesheet(TextureKey::FighterSpritesheet, 310, 249, 5, 4, 18, SpritesheetKey::Fighter);
+	return LoadSpritesheet(TextureKey::FighterSpritesheet, "Fighter", 310, 249, 5, 4, 18, SpritesheetKey::Fighter);
 }
 
-bool ResourceManager::LoadTexture(std::string path, TextureKey key, RenderSystem* renderSystem)
+bool ResourceManager::LoadTexture(std::string path, std::string name, TextureKey key, RenderSystem* renderSystem)
 {
-	std::cout << "Loading Texture at " << path << std::endl;
+	std::cout << "Loading " << name << " texture at " << path << std::endl;
 	Texture* texture = new Texture();
-	bool success = texture->LoadTexture(path, renderSystem);
+	bool success = texture->LoadTexture(path, name, renderSystem);
 	if (success)
 	{
 		texturePointerMap->insert_or_assign(key, texture);
@@ -49,15 +49,32 @@ bool ResourceManager::LoadTexture(std::string path, TextureKey key, RenderSystem
 	return success;
 }
 
-bool ResourceManager::LoadSpritesheet(TextureKey textureKey, int spriteWidth, int spriteHeight, int rows, int columns, int spriteCount, SpritesheetKey spritesheetKey)
+bool ResourceManager::LoadSpritesheet(TextureKey textureKey, std::string name, int spriteWidth, int spriteHeight, int rows, int columns, int spriteCount, SpritesheetKey spritesheetKey)
 {
+	std::cout<< "Loading " << name <<" spritesheet "<<std::endl;
 	Spritesheet* spritesheet = new Spritesheet();
-	bool success = spritesheet->GenerateSpritesheet(GetTexture(textureKey), spriteWidth, spriteHeight, rows, columns, spriteCount);
-	if (success)
+	Texture* texture = GetTexture(textureKey);
+	if (texture != nullptr)
 	{
-		spritesheetPointerMap->insert_or_assign(spritesheetKey, spritesheet);
+		std::cout<< "\tAssigning spritesheet " << name << " texture " << texture->GetName() <<std::endl;
+		if (spritesheet->GenerateSpritesheet(GetTexture(textureKey), name, spriteWidth, spriteHeight, rows, columns, spriteCount))
+		{
+			spritesheetPointerMap->insert_or_assign(spritesheetKey, spritesheet);
+			return true;
+		}
+		else
+		{
+			std::cout<<"Could not generate spritesheet " << name << std::endl;
+			return false;
+		}
+		
 	}
-	return success;
+	else
+	{
+		std::cout<<"No texture found for spritesheet " << name << std::endl;
+		return false;
+	}
+	
 }
 
 Texture* ResourceManager::GetTexture(TextureKey key)

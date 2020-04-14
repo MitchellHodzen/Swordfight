@@ -18,7 +18,7 @@ Spritesheet::~Spritesheet()
 	int spriteCount = 0;
 }
 
-bool Spritesheet::GenerateSpritesheet(Texture* texture, int spriteWidth, int spriteHeight, int rows, int columns, int spriteCount)
+bool Spritesheet::GenerateSpritesheet(Texture* texture, std::string name, int spriteWidth, int spriteHeight, int rows, int columns, int spriteCount)
 {
 	//Set all the class level variables for the spritesheet
 	this->texture = texture;
@@ -27,6 +27,7 @@ bool Spritesheet::GenerateSpritesheet(Texture* texture, int spriteWidth, int spr
 	this->rows = rows;
 	this->columns = columns;
 	this->spriteCount = spriteCount;
+	this->name = name;
 
 	//Instantiate our list of sprite rectangles
 	spriteList = new Rectangle[spriteCount];
@@ -49,13 +50,6 @@ bool Spritesheet::GenerateSpritesheet(Texture* texture, int spriteWidth, int spr
 		spriteList[i].width = spriteWidth - 1;
 		spriteList[i].height = spriteHeight - 1;
 
-		std::cout<<"Sprite " << i << ":"<<std::endl;
-		std::cout<<"\tX: " << spriteList[i].posX<<std::endl;
-		std::cout<<"\tY: " << spriteList[i].posY<<std::endl;
-		std::cout<<"\tRight: " << spriteList[i].posX + spriteList[i].width - 1 << std::endl;
-		std::cout<<"\tBottom: " << spriteList[i].posY + spriteList[i].height - 1 << std::endl;
-		std::cout<<"\tWidth: " << spriteList[i].width<<std::endl;
-		std::cout<<"\tHeight: " << spriteList[i].height<<std::endl;
 		currentColumn ++;
 		
 	}
@@ -89,4 +83,23 @@ int Spritesheet::GetSpriteHeight()
 int Spritesheet::GetSpriteWidth()
 {
 	return spriteWidth;
+}
+
+std::string Spritesheet::GetName()
+{
+	return name;
+}
+
+void Spritesheet::PrintSpritesheetData()
+{
+	for(int i = 0; i < spriteCount; ++i)
+	{
+		std::cout<<"Sprite " << i << ":"<<std::endl;
+		std::cout<<"\tX: " << spriteList[i].posX<<std::endl;
+		std::cout<<"\tY: " << spriteList[i].posY<<std::endl;
+		std::cout<<"\tRight: " << spriteList[i].posX + spriteList[i].width - 1 << std::endl;
+		std::cout<<"\tBottom: " << spriteList[i].posY + spriteList[i].height - 1 << std::endl;
+		std::cout<<"\tWidth: " << spriteList[i].width<<std::endl;
+		std::cout<<"\tHeight: " << spriteList[i].height<<std::endl;
+	}
 }

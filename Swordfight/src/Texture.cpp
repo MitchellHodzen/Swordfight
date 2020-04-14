@@ -13,9 +13,10 @@ Texture::~Texture()
 	FreeTexture();
 }
 
-bool Texture::LoadTexture(std::string path, RenderSystem* renderSystem)
+bool Texture::LoadTexture(std::string path, std::string name, RenderSystem* renderSystem)
 {
 	bool success = true;
+	this->name = name;
 	FreeTexture();
 
 	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
@@ -64,4 +65,8 @@ int Texture::GetHeight()
 SDL_Texture* Texture::GetTexture()
 {
 	return sdlTexture;
+}
+std::string Texture::GetName()
+{
+	return name;
 }

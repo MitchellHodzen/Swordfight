@@ -30,7 +30,7 @@ private:
 	bool LoadSpritesheets();
 	void UnloadTextures();
 	void UnloadSpritesheets();
-	bool LoadTexture(std::string path, TextureKey key, RenderSystem* renderSystem);
-	bool LoadSpritesheet(TextureKey textureKey, int spriteWidth, int spriteHeight, int rows, int columns, int spriteCount, SpritesheetKey spritesheetKey);
+	bool LoadTexture(std::string path, std::string name, TextureKey key, RenderSystem* renderSystem);
+	bool LoadSpritesheet(TextureKey textureKey, std::string name, int spriteWidth, int spriteHeight, int rows, int columns, int spriteCount, SpritesheetKey spritesheetKey);
 };
 
