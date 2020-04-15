@@ -11,6 +11,7 @@ Texture::Texture()
 Texture::~Texture()
 {
 	FreeTexture();
+
 }
 
 bool Texture::LoadTexture(std::string path, std::string name, RenderSystem* renderSystem)
@@ -49,9 +50,10 @@ void Texture::FreeTexture()
 	{
 		SDL_DestroyTexture(sdlTexture);
 		sdlTexture = NULL;
-		width = 0;
-		height = 0;
 	}
+	width = 0;
+	height = 0;
+	name.clear();
 }
 
 int Texture::GetWidth()

@@ -16,6 +16,7 @@ Spritesheet::~Spritesheet()
 	int rows = 0;
 	int columns = 0;
 	int spriteCount = 0;
+	name.clear();
 }
 
 bool Spritesheet::GenerateSpritesheet(Texture* texture, std::string name, int spriteWidth, int spriteHeight, int rows, int columns, int spriteCount)
