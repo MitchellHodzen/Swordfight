@@ -5,6 +5,11 @@
 
 Spritesheet::~Spritesheet()
 {
+	ClearSpritesheet();
+}
+
+void Spritesheet::ClearSpritesheet()
+{
 	//Delete all the sprite rectangles
 	delete[] spriteList;
 	spriteList = nullptr;
@@ -19,42 +24,85 @@ Spritesheet::~Spritesheet()
 	name.clear();
 }
 
-bool Spritesheet::GenerateSpritesheet(Texture* texture, std::string name, int spriteWidth, int spriteHeight, int rows, int columns, int spriteCount)
+bool Spritesheet::GenerateSpritesheet(Texture& texture, std::string name, int spriteWidth, int spriteHeight, int rows, int columns, int spriteCount)
 {
-	//Set all the class level variables for the spritesheet
-	this->texture = texture;
-	this->spriteWidth = spriteWidth;
-	this->spriteHeight = spriteHeight;
-	this->rows = rows;
-	this->columns = columns;
-	this->spriteCount = spriteCount;
-	this->name = name;
+	bool success = true;
 
-	//Instantiate our list of sprite rectangles
-	spriteList = new Rectangle[spriteCount];
+	this->texture = &texture;
 
-	//Starting at the top left of the spritesheet, move left to right
-	int currentRow = 0;
-	int currentColumn = 0;
-	for(int i = 0; i < spriteCount; ++i)
+	if (!name.empty())
 	{
-		//If we've passed the last column in the spritesheet, go to the next row
-		if (currentColumn >= columns)
+		this->name = name;
+		if (spriteWidth > 0 && spriteHeight > 0)
 		{
-			currentRow++;
-			currentColumn = 0;
+			this->spriteWidth = spriteWidth;
+			this->spriteHeight = spriteHeight;
+
+			if (rows > 0 && columns > 0)
+			{
+				this->rows = rows;
+				this->columns = columns;
+
+				if (spriteCount > 0)
+				{
+					this->spriteCount = spriteCount;
+
+					//Instantiate our list of sprite rectangles
+					spriteList = new Rectangle[spriteCount];
+
+					//Starting at the top left of the spritesheet, move left to right
+					int currentRow = 0;
+					int currentColumn = 0;
+					for(int i = 0; i < spriteCount; ++i)
+					{
+						//If we've passed the last column in the spritesheet, go to the next row
+						if (currentColumn >= columns)
+						{
+							currentRow++;
+							currentColumn = 0;
+						}
+
+						//For each sprite in the spritesheet, find the sprite rectangle
+						spriteList[i].posX = currentColumn * spriteWidth;
+						spriteList[i].posY = currentRow * spriteHeight;
+						spriteList[i].width = spriteWidth - 1;
+						spriteList[i].height = spriteHeight - 1;
+
+						currentColumn ++;
+						
+					}
+				}
+				else
+				{
+					std::cout<<"Spritesheet " << name << " must have at least one sprite"<<std::endl;
+					success = false;
+				}
+			}
+			else
+			{
+				std::cout<< "Must supply non-zero rows and columns to spritesheet " << name << std::endl;
+				success = false;
+			}
 		}
-
-		//For each sprite in the spritesheet, find the sprite rectangle
-		spriteList[i].posX = currentColumn * spriteWidth;
-		spriteList[i].posY = currentRow * spriteHeight;
-		spriteList[i].width = spriteWidth - 1;
-		spriteList[i].height = spriteHeight - 1;
-
-		currentColumn ++;
-		
+		else
+		{
+			std::cout<< "Must supply non-zero sprite dimensions to spritesheet " << name << std::endl;
+			success = false;
+		}
 	}
-	return true;
+	else
+	{
+		std::cout<< "No name supplied to spritesheet" << std::endl;
+		success = false;
+	}
+
+	if (!success)
+	{
+		//If creating the spritesheet was not successful, clear the spritesheet
+		ClearSpritesheet();
+	}
+	
+	return success;
 }
 
 

@@ -9,7 +9,7 @@ class Spritesheet
 public:
 	~Spritesheet();
 
-	bool GenerateSpritesheet(Texture* texture, std::string name, int spriteWidth, int spriteHeight, int rows, int columns, int spriteCount);
+	bool GenerateSpritesheet(Texture& texture, std::string name, int spriteWidth, int spriteHeight, int rows, int columns, int spriteCount);
 
 
 	Texture* GetTexture();
@@ -24,6 +24,8 @@ public:
 
 private:
 
+	void ClearSpritesheet();
+	
 	Rectangle* spriteList = nullptr;
 	Texture* texture = nullptr;
 	int spriteWidth = 0;

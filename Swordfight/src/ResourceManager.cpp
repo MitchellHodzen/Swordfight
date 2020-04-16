@@ -57,7 +57,8 @@ bool ResourceManager::LoadSpritesheet(TextureKey textureKey, std::string name, i
 	if (texture != nullptr)
 	{
 		std::cout<< "\tAssigning spritesheet " << name << " texture " << texture->GetName() <<std::endl;
-		if (spritesheet->GenerateSpritesheet(GetTexture(textureKey), name, spriteWidth, spriteHeight, rows, columns, spriteCount))
+
+		if (spritesheet->GenerateSpritesheet(*texture, name, spriteWidth, spriteHeight, rows, columns, spriteCount))
 		{
 			spritesheetPointerMap->insert_or_assign(spritesheetKey, spritesheet);
 			return true;
