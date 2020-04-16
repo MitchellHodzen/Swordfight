@@ -14,33 +14,57 @@ Texture::~Texture()
 
 }
 
-bool Texture::LoadTexture(std::string path, std::string name, RenderSystem* renderSystem)
+bool Texture::LoadTexture(std::string path, std::string name, RenderSystem& renderSystem)
 {
 	bool success = true;
-	this->name = name;
 	FreeTexture();
 
-	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
-	if (loadedSurface == NULL)
+	if (!name.empty())
 	{
-		std::cout << "Unable to load image at path: " << path << " SDL_Error: " << SDL_GetError() << std::endl;
-		success = false;
-	}
-	else
-	{
-		sdlTexture = SDL_CreateTextureFromSurface(renderSystem->GetSdlRenderer(), loadedSurface);
-		if (sdlTexture == NULL)
+		this->name = name;
+
+		if (!path.empty())
 		{
-			std::cout << "Unable to create texture. SDL error: " << SDL_GetError() << std::endl;
-			success = false;
+			SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+			if (loadedSurface != NULL)
+			{
+				sdlTexture = SDL_CreateTextureFromSurface(renderSystem.GetSdlRenderer(), loadedSurface);
+				if (sdlTexture != NULL)
+				{
+					width = loadedSurface->w;
+					height = loadedSurface->h;
+				}
+				else
+				{
+					std::cout << "Unable to create texture. SDL error: " << SDL_GetError() << std::endl;
+					success = false;
+				}
+				SDL_FreeSurface(loadedSurface);
+			}
+			else
+			{
+				std::cout << "Unable to load image at path: " << path << " SDL_Error: " << SDL_GetError() << std::endl;
+				success = false;
+			}
 		}
 		else
 		{
-			width = loadedSurface->w;
-			height = loadedSurface->h;
+			std::cout<<"No texture path supplied for " << name << std::endl;
+			success = false;
 		}
-		SDL_FreeSurface(loadedSurface);
 	}
+	else
+	{
+		std::cout<<"No name supplied for texture"<<std::endl;
+		success = false;
+	}
+
+	if (!success)
+	{
+		//If  not successful, free the texture
+		FreeTexture();
+	}
+	
 	return success;
 }
 

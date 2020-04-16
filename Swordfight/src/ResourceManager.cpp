@@ -41,7 +41,7 @@ bool ResourceManager::LoadTexture(std::string path, std::string name, TextureKey
 {
 	std::cout << "Loading " << name << " texture at " << path << std::endl;
 	Texture* texture = new Texture();
-	bool success = texture->LoadTexture(path, name, renderSystem);
+	bool success = texture->LoadTexture(path, name, *renderSystem);
 	if (success)
 	{
 		texturePointerMap->insert_or_assign(key, texture);

@@ -11,7 +11,7 @@ class Texture
 public:
 	Texture();
 	~Texture();
-	bool LoadTexture(std::string path, std::string name, RenderSystem* renderSystem);
+	bool LoadTexture(std::string path, std::string name, RenderSystem& renderSystem);
 	void FreeTexture();
 	int GetWidth();
 	int GetHeight();
