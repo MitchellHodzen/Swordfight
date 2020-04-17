@@ -1,5 +1,6 @@
 #include "Animation.h"
 #include <iostream>
+#include <vector>
 
 Animation::Animation()
 {

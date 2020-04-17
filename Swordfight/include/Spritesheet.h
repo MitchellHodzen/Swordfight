@@ -1,8 +1,10 @@
 #pragma once
 #include <string>
-
+#include <unordered_map>
+#include <vector>
 class Texture;
 class Rectangle;
+class Animation;
 
 class Spritesheet
 {
@@ -11,9 +13,11 @@ public:
 
 	bool GenerateSpritesheet(Texture& texture, std::string name, int spriteWidth, int spriteHeight, int rows, int columns, int spriteCount);
 
+	bool GenerateAnimation(const std::string animationName, const std::vector<int> animationSpriteIndicies, const unsigned int framesPerSecond, const bool looping);
 
 	Texture* GetTexture();
 	Rectangle* GetSprite(unsigned int spriteIndex);
+	Animation* GetAnimation(std::string animationName);
 
 	int GetSpriteCount();
 	int GetSpriteHeight();
@@ -26,6 +30,8 @@ private:
 
 	void ClearSpritesheet();
 	
+	std::unordered_map<std::string, Animation*>* animationPointerMap = new std::unordered_map<std::string, Animation*>();;
+
 	Rectangle* spriteList = nullptr;
 	Texture* texture = nullptr;
 	int spriteWidth = 0;

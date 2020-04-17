@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Spritesheet.h"
 #include "Rectangle.h"
-
+#include "Animation.h"
 
 Spritesheet::~Spritesheet()
 {
@@ -105,6 +105,17 @@ bool Spritesheet::GenerateSpritesheet(Texture& texture, std::string name, int sp
 	return success;
 }
 
+bool Spritesheet::GenerateAnimation(const std::string animationName, const std::vector<int> animationSpriteIndicies, const unsigned int framesPerSecond, const bool looping)
+{
+	std::cout << "Loading animation " << animationName << " for spritesheet " << this->GetName() << std::endl;
+	Animation* animation = new Animation();
+	bool success = animation->GenerateAnimation(animationName, animationSpriteIndicies, framesPerSecond, looping);
+	if (success)
+	{
+		animationPointerMap->insert_or_assign(animationName, animation);
+	}
+	return success;
+}
 
 Texture* Spritesheet::GetTexture()
 {
@@ -118,6 +129,16 @@ Rectangle* Spritesheet::GetSprite(unsigned int spriteIndex)
 	}
 	return nullptr;
 }
+
+Animation* Spritesheet::GetAnimation(std::string animationName)
+{
+	if (animationPointerMap->count(animationName))
+	{
+		return animationPointerMap->at(animationName);
+	}
+	return nullptr;
+}
+
 
 int Spritesheet::GetSpriteCount()
 {
