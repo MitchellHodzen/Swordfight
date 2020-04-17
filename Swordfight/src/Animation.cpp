@@ -10,6 +10,11 @@ Animation::Animation()
 
 Animation::~Animation()
 {
+	ClearAnimation();
+}
+
+void Animation::ClearAnimation()
+{
 	animationSpriteIndicies.clear();
 	animationLength = 0;
 	name.clear();
@@ -41,6 +46,12 @@ bool Animation::GenerateAnimation(const std::string name, const int animationSpr
 	{
 		std::cout<<"No name supplied to animation"<<std::endl;
 		success = false;
+	}
+
+	if (!success)
+	{
+		//If not successful, clear animation
+		ClearAnimation();
 	}
 
 	return success;

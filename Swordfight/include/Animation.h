@@ -18,7 +18,8 @@ public:
 	std::string GetName();
 
 private:
-
+	void ClearAnimation();
+	
 	std::vector<int> animationSpriteIndicies;
 	unsigned int animationLength;
 	unsigned int framesPerSecond;
