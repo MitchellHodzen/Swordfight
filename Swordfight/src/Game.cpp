@@ -66,7 +66,7 @@ void Game::Run(){
 
 void Game::SetUp() {
 	renderSystem = new RenderSystem(screenWidth, screenHeight);
-	ResourceManager::GetInstance().Initialize(renderSystem);
+	ResourceManager::GetInstance().Initialize(*renderSystem);
 	inputSystem = new InputSystem();
 	collisionSystem = new CollisionSystem();
 	physicsSystem = new PhysicsSystem();

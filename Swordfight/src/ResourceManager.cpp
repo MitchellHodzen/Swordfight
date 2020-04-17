@@ -17,17 +17,18 @@ ResourceManager& ResourceManager::GetInstance()
 	return instance;
 }
 
-bool ResourceManager::Initialize(RenderSystem* renderSystem) {
+bool ResourceManager::Initialize(RenderSystem& renderSystem) {
 	return LoadTextures(renderSystem) && LoadSpritesheets();
 }
 
-bool ResourceManager::LoadTextures(RenderSystem* renderSystem)
+bool ResourceManager::LoadTextures(RenderSystem& renderSystem)
 {
-
-	return LoadTexture("./resources/sprites/ship1.png", "Ship", TextureKey::Player, renderSystem)
-	&& LoadTexture("./resources/sprites/bullet1.png", "Bullet", TextureKey::Bullet, renderSystem)
-	&& LoadTexture("./resources/sprites/enemy1.png", "Enemy", TextureKey::Enemy, renderSystem)
-	&& LoadTexture("./resources/sprites/SwordfightCharacterSpritesheet.png", "Fighter Spritesheet", TextureKey::FighterSpritesheet, renderSystem);
+	std::cout<<"Loading textures"<<std::endl;
+	return 
+		LoadTexture("./resources/sprites/ship1.png", "Ship", TextureKey::Player, renderSystem) && 
+		LoadTexture("./resources/sprites/bullet1.png", "Bullet", TextureKey::Bullet, renderSystem) && 
+		LoadTexture("./resources/sprites/enemy1.png", "Enemy", TextureKey::Enemy, renderSystem) && 
+		LoadTexture("./resources/sprites/SwordfightCharacterSpritesheet.png", "Fighter Spritesheet", TextureKey::FighterSpritesheet, renderSystem);
 
 }
 
@@ -37,11 +38,11 @@ bool ResourceManager::LoadSpritesheets()
 	return LoadSpritesheet(TextureKey::FighterSpritesheet, "Fighter", 310, 249, 5, 4, 18, SpritesheetKey::Fighter);
 }
 
-bool ResourceManager::LoadTexture(std::string path, std::string name, TextureKey key, RenderSystem* renderSystem)
+bool ResourceManager::LoadTexture(std::string path, std::string name, TextureKey key, RenderSystem& renderSystem)
 {
 	std::cout << "Loading " << name << " texture at " << path << std::endl;
 	Texture* texture = new Texture();
-	bool success = texture->LoadTexture(path, name, *renderSystem);
+	bool success = texture->LoadTexture(path, name, renderSystem);
 	if (success)
 	{
 		texturePointerMap->insert_or_assign(key, texture);
