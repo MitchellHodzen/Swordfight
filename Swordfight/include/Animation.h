@@ -6,14 +6,11 @@
 class Animation
 {
 public:
-	Animation();
 	~Animation();
 
-	bool GenerateAnimation(const std::string name, const std::vector<int> animationSpriteIndicies, const unsigned int framesPerSecond, const bool looping);
+	bool GenerateAnimation(const std::string name, const std::vector<int> animationSpriteIndicies);
 
 	unsigned int GetAnimationLength();
-	unsigned int GetFramesPerSecond();
-	bool IsLooping();
 
 	std::string GetName();
 
@@ -21,9 +18,13 @@ private:
 	void ClearAnimation();
 	
 	std::vector<int> animationSpriteIndicies;
-	unsigned int animationLength;
-	unsigned int framesPerSecond;
-	bool looping;
+	unsigned int animationLength = 0;
 	std::string name;
 };
 
+struct AnimationInstance{
+	std::string animationName;
+	unsigned int currentAnimationFrame = 0;
+	unsigned int framesPerSecond = 0;
+	bool looping = false;
+};

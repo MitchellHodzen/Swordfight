@@ -37,7 +37,7 @@ bool ResourceManager::LoadSpritesheets()
 	std::cout<<"Loading spritesheets"<<std::endl;
 	return 
 		LoadSpritesheet(TextureKey::FighterSpritesheet, "Fighter", 310, 249, 5, 4, 18, SpritesheetKey::Fighter) &&
-		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("idle", {9,10,11,12,13,14}, 15, true);
+		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("idle", {9,10,11,12,13,14});
 }
 
 bool ResourceManager::LoadTexture(std::string path, std::string name, TextureKey key, RenderSystem& renderSystem)

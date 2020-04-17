@@ -1,6 +1,7 @@
 #pragma once
 //forward declaration
 class Spritesheet;
+#include "Animation.h"
 
 struct Render
 {
@@ -11,4 +12,5 @@ struct Render
 	};
 	Spritesheet* spritesheet;
 	int spriteIndex;
+	AnimationInstance animationIndex;
 };

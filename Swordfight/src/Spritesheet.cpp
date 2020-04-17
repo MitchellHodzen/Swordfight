@@ -105,11 +105,11 @@ bool Spritesheet::GenerateSpritesheet(Texture& texture, std::string name, int sp
 	return success;
 }
 
-bool Spritesheet::GenerateAnimation(const std::string animationName, const std::vector<int> animationSpriteIndicies, const unsigned int framesPerSecond, const bool looping)
+bool Spritesheet::GenerateAnimation(const std::string animationName, const std::vector<int> animationSpriteIndicies)
 {
 	std::cout << "Loading animation " << animationName << " for spritesheet " << this->GetName() << std::endl;
 	Animation* animation = new Animation();
-	bool success = animation->GenerateAnimation(animationName, animationSpriteIndicies, framesPerSecond, looping);
+	bool success = animation->GenerateAnimation(animationName, animationSpriteIndicies);
 	if (success)
 	{
 		animationPointerMap->insert_or_assign(animationName, animation);

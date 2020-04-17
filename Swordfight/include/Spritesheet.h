@@ -13,7 +13,7 @@ public:
 
 	bool GenerateSpritesheet(Texture& texture, std::string name, int spriteWidth, int spriteHeight, int rows, int columns, int spriteCount);
 
-	bool GenerateAnimation(const std::string animationName, const std::vector<int> animationSpriteIndicies, const unsigned int framesPerSecond, const bool looping);
+	bool GenerateAnimation(const std::string animationName, const std::vector<int> animationSpriteIndicies);
 
 	Texture* GetTexture();
 	Rectangle* GetSprite(unsigned int spriteIndex);
