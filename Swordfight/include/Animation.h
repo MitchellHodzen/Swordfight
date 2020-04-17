@@ -9,7 +9,7 @@ public:
 	Animation();
 	~Animation();
 
-	bool GenerateAnimation(const std::string name, const int animationSpriteIndiciesArray[], const unsigned int animationLength, const unsigned int framesPerSecond, const bool looping);
+	bool GenerateAnimation(const std::string name, const std::vector<int> animationSpriteIndicies, const unsigned int framesPerSecond, const bool looping);
 
 	unsigned int GetAnimationLength();
 	unsigned int GetFramesPerSecond();

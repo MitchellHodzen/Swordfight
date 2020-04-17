@@ -20,25 +20,25 @@ void Animation::ClearAnimation()
 	name.clear();
 }
 
-bool Animation::GenerateAnimation(const std::string name, const int animationSpriteIndiciesArray[], const unsigned int animationLength, const unsigned int framesPerSecond, const bool looping)
+bool Animation::GenerateAnimation(const std::string name, const std::vector<int> animationSpriteIndicies, const unsigned int framesPerSecond, const bool looping)
 {
 	bool success = true;
 	if (!name.empty())
 	{
 		this->name = name;
-		this->animationLength = animationLength;
+		this->animationLength = animationSpriteIndicies.size();
 		this->framesPerSecond = framesPerSecond;
 		this->looping = looping;
-		if (animationLength > 0 && animationSpriteIndiciesArray != nullptr)
+		if (animationLength > 0)
 		{
 			for(int i = 0; i < animationLength; ++i)
 			{
-				this->animationSpriteIndicies.push_back(animationSpriteIndiciesArray[i]);
+				this->animationSpriteIndicies.push_back(animationSpriteIndicies.at(i));
 			}
 		}
 		else
 		{
-			std::cout<<"Empty or null animation sprite index array supplied"<<std::endl;
+			std::cout<<"Empty animation sprite index vector supplied"<<std::endl;
 			success = false;
 		}
 	}
