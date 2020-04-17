@@ -9,11 +9,10 @@ class BulletSystem;
 class Game
 {
 public:
-	Game(int screenWidth, int screenHeight);
+	bool SetUp(int screenWidth, int screenHeight);
 	void Run();
 	~Game();
 private:
-	void SetUp();
 
 	int screenWidth;
 	int screenHeight;

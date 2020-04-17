@@ -8,7 +8,6 @@ class Texture;
 class RenderSystem
 {
 public:
-	RenderSystem(int screenWidth, int screenHeight);
 	~RenderSystem();
 	void Draw();
 	bool Initialize(int screenWidth, int screenHeight);
@@ -21,7 +20,7 @@ private:
 
 	SDL_Renderer* sdlRenderer = nullptr;
 	SDL_Window* sdlWindow = nullptr;
-	int screenWidth;
-	int screenHeight;
+	int screenWidth = 0;
+	int screenHeight = 0;
 };
 

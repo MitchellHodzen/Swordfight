@@ -7,12 +7,6 @@
 #include "Spritesheet.h"
 #include "Rectangle.h"
 
-RenderSystem::RenderSystem(int screenWidth, int screenHeight)
-{
-	bool success = Initialize(screenWidth, screenHeight);
-}
-
-
 RenderSystem::~RenderSystem()
 {
 	SDL_DestroyRenderer(sdlRenderer);

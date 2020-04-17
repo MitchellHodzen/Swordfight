@@ -19,14 +19,6 @@
 #include "BulletSystem.h"
 #include "InputManager.h"
 
-Game::Game(int screenWidth, int screenHeight)
-{
-	this->screenWidth = screenWidth;
-	this->screenHeight = screenHeight;
-	SetUp();
-}
-
-
 Game::~Game()
 {
 	delete inputSystem;
@@ -64,11 +56,31 @@ void Game::Run(){
 	}
 }
 
-void Game::SetUp() {
-	renderSystem = new RenderSystem(screenWidth, screenHeight);
-	ResourceManager::GetInstance().Initialize(*renderSystem);
-	inputSystem = new InputSystem();
-	collisionSystem = new CollisionSystem();
-	physicsSystem = new PhysicsSystem();
-	bulletSystem = new BulletSystem();
+bool Game::SetUp(int screenWidth, int screenHeight) {
+	bool success = true;
+	this->screenWidth = screenWidth;
+	this->screenHeight = screenHeight;
+	renderSystem = new RenderSystem();
+	if (renderSystem->Initialize(screenWidth, screenHeight))
+	{
+		if (ResourceManager::GetInstance().Initialize(*renderSystem))
+		{
+			inputSystem = new InputSystem();
+			collisionSystem = new CollisionSystem();
+			physicsSystem = new PhysicsSystem();
+			bulletSystem = new BulletSystem();
+		}
+		else
+		{
+			std::cout<<"Could not initialize resource manager"<<std::endl;
+			success = false;
+		}
+	}
+	else
+	{
+		std::cout<<"Could not initialize render system"<<std::endl;
+		success = false;
+	}
+
+	return success;
 }
