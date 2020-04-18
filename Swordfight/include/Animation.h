@@ -45,6 +45,11 @@ struct AnimationInstance{
 		frameTime = 0;
 	}
 
+	int GetCurrentAnimSprite()
+	{
+		return animation->GetSpriteAtIndex(currentAnimationFrame);
+	}
+
 	std::string animationName;
 	Animation* animation;
 	unsigned int currentAnimationFrame = 0;
