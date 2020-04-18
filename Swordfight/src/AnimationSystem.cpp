@@ -25,7 +25,7 @@ void AnimationSystem::AdvanceAnimations()
 
 		animInstance->frameTime += currentFrameTime - lastFrameTime;
 
-		int animationLength = render->spritesheet->GetAnimation(animInstance->animationName)->GetAnimationLength(); //God this is ugly
+		int animationLength = animInstance->animation->GetAnimationLength();
 
 		unsigned int currentAnimationFrame = animInstance->currentAnimationFrame;
 
