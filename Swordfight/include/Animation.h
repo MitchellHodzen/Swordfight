@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-
+#include <cstdint>
 
 class Animation
 {
@@ -11,6 +11,7 @@ public:
 	bool GenerateAnimation(const std::string name, const std::vector<int> animationSpriteIndicies);
 
 	unsigned int GetAnimationLength();
+	int GetSpriteAtIndex(int spriteIndex);
 
 	std::string GetName();
 
@@ -27,4 +28,6 @@ struct AnimationInstance{
 	unsigned int currentAnimationFrame = 0;
 	unsigned int framesPerSecond = 0;
 	bool looping = false;
+	uint32_t lastFrameTime = 0;
+	uint32_t frameTime = 0;
 };

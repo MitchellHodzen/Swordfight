@@ -18,6 +18,7 @@
 #include "Components/c_cannon.h"
 #include "BulletSystem.h"
 #include "InputManager.h"
+#include "AnimationSystem.h"
 
 Game::~Game()
 {
@@ -34,7 +35,7 @@ void Game::Run(){
 	EntityManager::SetUpComponents<Transform, Rect, UserInput, Render, Physics, Cannon>();
 	EntityManager::SetUpTags<Player, Enemy, Wall>();
 
-	Entity player1 = PlayerShipFactory::ConstructPlayerShip(500, 500);
+	Entity player1 = PlayerShipFactory::ConstructPlayerShip(300, 300);
 
 	Entity enemy = EnemyFactory::ConstructEnemy(100, 100);
 
@@ -52,6 +53,7 @@ void Game::Run(){
 		bulletSystem->FireBullets();
 		collisionSystem->CheckCollisions();
 		physicsSystem->HandleCollisions();
+		animationSystem->AdvanceAnimations();
 		renderSystem->Draw();
 	}
 }
@@ -69,6 +71,7 @@ bool Game::SetUp(int screenWidth, int screenHeight) {
 			collisionSystem = new CollisionSystem();
 			physicsSystem = new PhysicsSystem();
 			bulletSystem = new BulletSystem();
+			animationSystem = new AnimationSystem();
 		}
 		else
 		{

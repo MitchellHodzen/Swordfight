@@ -5,6 +5,7 @@ class RenderSystem;
 class CollisionSystem;
 class PhysicsSystem;
 class BulletSystem;
+class AnimationSystem;
 
 class Game
 {
@@ -23,5 +24,6 @@ private:
 	CollisionSystem* collisionSystem;
 	PhysicsSystem* physicsSystem;
 	BulletSystem* bulletSystem;
+	AnimationSystem* animationSystem;
 };
 

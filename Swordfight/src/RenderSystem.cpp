@@ -35,7 +35,8 @@ void RenderSystem::Draw()//std::vector<Entity*>* entityList, std::vector<TextEle
 		Transform* trans = EntityManager::GetComponent<Transform>(entity);
 		Render* render = EntityManager::GetComponent<Render>(entity);
 		Texture* text = render->spritesheet->GetTexture();
-		Rectangle* rect = render->spritesheet->GetSprite(render->spriteIndex);
+		Animation* animation = render->spritesheet->GetAnimation(render->animationInstance->animationName);
+		Rectangle* rect = render->spritesheet->GetSprite(animation->GetSpriteAtIndex(render->animationInstance->currentAnimationFrame));
 
 		SDL_Rect sdlRect{ rect->posX, rect->posY, rect->width, rect->height };
 		RenderTexture(text, trans->position.GetX() - rect->width / 2, trans->position.GetY() - rect->height / 2, sdlRect);

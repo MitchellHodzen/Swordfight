@@ -22,10 +22,12 @@ Entity BulletFactory::ConstructBullet(int posX, int posY, float speed)
 		bulletSprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::TextureKey::Bullet);
 		EntityManager::SetComponent<Render>(bullet, bulletSprite);
 		*/
+		/*
 		Render render;
 		render.spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
 		render.spriteIndex = 7;
 		EntityManager::SetComponent<Render>(bullet, render);
+		*/
 
 		Physics bulletPhysics;
 		bulletPhysics.velocity.SetValues(0, -speed);

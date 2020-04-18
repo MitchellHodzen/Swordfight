@@ -8,6 +8,7 @@
 #include "Components/c_cannon.h"
 #include "Tags.h"
 #include "ResourceManager.h"
+#include "Animation.h"
 
 
 Entity PlayerShipFactory::ConstructPlayerShip(int posX, int posY)
@@ -36,6 +37,10 @@ Entity PlayerShipFactory::ConstructPlayerShip(int posX, int posY)
 		Render render;
 		render.spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
 		render.spriteIndex = 0;
+		render.animationInstance = new AnimationInstance();
+		render.animationInstance->animationName = "idle";
+		render.animationInstance->framesPerSecond = 15;
+		render.animationInstance->looping = true;
 		//sprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::TextureKey::Player);
 		EntityManager::SetComponent<Render>(playerShip, render);
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include <cstdint>
 
 class Time
 {
@@ -24,6 +25,13 @@ public:
 	{
 		return Time::deltaTime;
 	}
+
+	static uint32_t GetCurrentFrameTime()
+	{
+		Uint32 currentFrameTime = SDL_GetTicks();
+		return (uint32_t) currentFrameTime;
+	}
+	
 private:
 	Time() {}
 	static inline float deltaTime = 0.0f;

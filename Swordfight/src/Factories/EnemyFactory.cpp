@@ -22,10 +22,12 @@ Entity EnemyFactory::ConstructEnemy(int posX, int posY)
 		enemySprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::TextureKey::Enemy);
 		EntityManager::SetComponent<Render>(enemy, enemySprite);
 		*/
+		/*
 		Render render;
 		render.spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
 		render.spriteIndex = 3;
 		EntityManager::SetComponent<Render>(enemy, render);
+		*/
 
 		Physics enemyPhysics;
 		enemyPhysics.maxSpeed = 100;

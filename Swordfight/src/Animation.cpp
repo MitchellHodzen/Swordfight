@@ -1,6 +1,8 @@
 #include "Animation.h"
 #include <iostream>
 #include <vector>
+#include <cstdint>
+#include "Time.h"
 
 Animation::~Animation()
 {
@@ -48,6 +50,11 @@ bool Animation::GenerateAnimation(const std::string name, const std::vector<int>
 
 	return success;
 
+}
+
+int Animation::GetSpriteAtIndex(int spriteIndex)
+{
+	return animationSpriteIndicies.at(spriteIndex);
 }
 
 unsigned int Animation::GetAnimationLength()
