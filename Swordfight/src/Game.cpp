@@ -14,8 +14,7 @@
 #include "systems/InputSystem.h"
 #include "systems/CollisionSystem.h"
 #include "systems/PhysicsSystem.h"
-#include "Factories/PlayerShipFactory.h"
-#include "Factories/EnemyFactory.h"
+#include "Factories/FighterFactory.h"
 #include "Components/c_cannon.h"
 #include "systems/BulletSystem.h"
 #include "InputManager.h"
@@ -27,7 +26,6 @@ Game::~Game()
 	delete renderSystem;
 	delete collisionSystem;
 	delete physicsSystem;
-	delete bulletSystem;
 	delete kRenderer;
 }
 
@@ -37,9 +35,7 @@ void Game::Run(){
 	EntityManager::SetUpComponents<Transform, Rect, UserInput, Render, Physics, Cannon>();
 	EntityManager::SetUpTags<Player, Enemy, Wall>();
 
-	Entity player1 = PlayerShipFactory::ConstructPlayerShip(300, 300);
-
-	Entity enemy = EnemyFactory::ConstructEnemy(100, 100);
+	Entity player1 = FighterFactory::ConstructFighter(300, 300);
 
 	std::cout<<"Starting game"<<std::endl;
 	while (!quit)
@@ -52,7 +48,6 @@ void Game::Run(){
 		inputSystem->GetUserInput();
 		inputSystem->HandleUserInput();
 		physicsSystem->ApplyPhysics();
-		bulletSystem->FireBullets();
 		collisionSystem->CheckCollisions();
 		physicsSystem->HandleCollisions();
 		animationSystem->AdvanceAnimations();
@@ -74,7 +69,6 @@ bool Game::SetUp(int screenWidth, int screenHeight) {
 			inputSystem = new InputSystem();
 			collisionSystem = new CollisionSystem();
 			physicsSystem = new PhysicsSystem();
-			bulletSystem = new BulletSystem();
 			animationSystem = new AnimationSystem();
 		}
 		else

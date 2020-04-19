@@ -24,7 +24,6 @@ private:
 	RenderSystem* renderSystem;
 	CollisionSystem* collisionSystem;
 	PhysicsSystem* physicsSystem;
-	BulletSystem* bulletSystem;
 	AnimationSystem* animationSystem;
 
 	KRenderer* kRenderer;

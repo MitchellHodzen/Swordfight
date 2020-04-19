@@ -96,11 +96,12 @@ void InputSystem::HandleUserInput()
 			phys->velocity.SetMagnitude(phys->maxSpeed);
 		}
 
-
+		/*
 		if (uin->keyStates[UserInput::InputType::SPACE] && EntityManager::HasComponent<Cannon>(entity))
 		{
 			BulletFiredMessage message(entity);
 			MessageManager::PushMessage<BulletFiredMessage>(message);
 		}
+		*/
 	}
 }

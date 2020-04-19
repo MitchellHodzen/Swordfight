@@ -1,4 +1,4 @@
-#include "Factories/PlayerShipFactory.h"
+#include "Factories/FighterFactory.h"
 #include "kecs/KECS.h"
 #include "Components/c_transform.h"
 #include "Components/c_rect.h"
@@ -12,7 +12,7 @@
 #include "rendering/Animation.h"
 
 
-Entity PlayerShipFactory::ConstructPlayerShip(int posX, int posY)
+Entity FighterFactory::ConstructFighter(int posX, int posY)
 {
 	Entity playerShip = EntityManager::CreateEntity();
 	if (playerShip != -1)
