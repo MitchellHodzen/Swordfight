@@ -37,8 +37,20 @@ bool ResourceManager::LoadSpritesheets()
 	std::cout<<"Loading spritesheets"<<std::endl;
 	return 
 		LoadSpritesheet(TextureKey::FighterSpritesheet, "Fighter", 310, 249, 5, 4, 18, SpritesheetKey::Fighter) &&
-		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("idle", {0,1,2,3,12,13,14,0,4,5,6,7,12,13,14,0,8,9,10,11,12,13,14}) &&
-		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("walk", {16, 17});
+		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("animTest", {0,1,2,3,12,13,14,0,4,5,6,7,12,13,14,0,8,9,10,11,12,13,14}) &&
+		//Fighter animations
+		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("midGuard", {0}) &&
+		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("midReady", {1}) &&
+		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("midAttack", {2,3,12}) &&
+		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("highGuard", {4}) &&
+		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("highReady", {5}) &&
+		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("highAttack", {6,7,12}) &&
+		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("lowGuard", {8}) &&
+		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("lowReady", {9}) &&
+		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("lowAttack", {10,11,12}) &&
+		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("attackRecovery", {13,14,12}) &&
+		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("feetWalk", {16, 17}) &&
+		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("feetIdle", {16});
 }
 
 bool ResourceManager::LoadTexture(std::string path, std::string name, TextureKey key, KRenderer& kRenderer)

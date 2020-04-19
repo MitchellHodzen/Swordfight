@@ -15,7 +15,7 @@
 #include "systems/CollisionSystem.h"
 #include "systems/PhysicsSystem.h"
 #include "Factories/FighterFactory.h"
-#include "Components/c_cannon.h"
+#include "Components/c_fighter.h"
 #include "systems/BulletSystem.h"
 #include "InputManager.h"
 #include "systems/AnimationSystem.h"
@@ -32,7 +32,7 @@ Game::~Game()
 
 void Game::Run(){
 
-	EntityManager::SetUpComponents<Transform, Rect, UserInput, Render, Physics, Cannon>();
+	EntityManager::SetUpComponents<Transform, Rect, UserInput, Render, Physics, Fighter>();
 	EntityManager::SetUpTags<Player, Enemy, Wall>();
 
 	Entity player1 = FighterFactory::ConstructFighter(300, 300);
@@ -43,8 +43,6 @@ void Game::Run(){
 		Time::CalculateDeltaTime();
 		InputManager::GetInstance().UpdateInput();
 		quit = InputManager::GetInstance().ShouldQuit();
-		//Render* render = EntityManager::GetComponent<Render>(player1);
-		//render->spriteIndex = (render->spriteIndex + 1) % 18;
 		inputSystem->GetUserInput();
 		inputSystem->HandleUserInput();
 		physicsSystem->ApplyPhysics();

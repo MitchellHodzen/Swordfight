@@ -6,6 +6,7 @@
 #include "Components/c_physics.h"
 #include "Components/c_Render.h"
 #include "Components/c_cannon.h"
+#include "Components/c_fighter.h"
 #include "Tags.h"
 #include "ResourceManager.h"
 #include "rendering/Spritesheet.h"
@@ -21,6 +22,12 @@ Entity FighterFactory::ConstructFighter(int posX, int posY)
 	{
 		EntityManager::AddTag<Player>(playerFighter);
 		EntityManager::AddComponent<UserInput>(playerFighter);
+
+		Fighter fighter;
+		fighter.lowerBody = lowerBody;
+		fighter.upperBody = upperBody;
+		fighter.moveSpeed = 500;
+		EntityManager::AddComponent<Fighter>(playerFighter);
 
 		Transform playerTrans;
 		playerTrans.position.SetValues(posX, posY);
@@ -47,13 +54,13 @@ Entity FighterFactory::ConstructFighter(int posX, int posY)
 
 		Render lowerBodyRender;
 		lowerBodyRender.spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
-		lowerBodyRender.animationInstance = new AnimationInstance(*lowerBodyRender.spritesheet->GetAnimation("walk"), 0, 5, true);
+		lowerBodyRender.animationInstance = new AnimationInstance(*lowerBodyRender.spritesheet->GetAnimation("feetIdle"), 0, 5, true);
 		EntityManager::SetComponent<Render>(lowerBody, lowerBodyRender);
 
 
 		Render upperBodyRender;
 		upperBodyRender.spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
-		upperBodyRender.animationInstance = new AnimationInstance(*upperBodyRender.spritesheet->GetAnimation("idle"), 0, 16, true);
+		upperBodyRender.animationInstance = new AnimationInstance(*upperBodyRender.spritesheet->GetAnimation("animTest"), 0, 16, true);
 		EntityManager::SetComponent<Render>(upperBody, upperBodyRender);
 
 		Physics physics;
