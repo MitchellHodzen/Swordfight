@@ -1,7 +1,7 @@
 #include "ResourceManager.h"
 #include "rendering/Texture.h"
 #include "rendering/Spritesheet.h"
-#include "RenderSystem.h"
+#include "systems/RenderSystem.h"
 #include <vector>
 ResourceManager::~ResourceManager()
 {
