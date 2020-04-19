@@ -4,7 +4,7 @@
 
 //Forward declarations
 class Texture;
-class RenderSystem;
+class KRenderer;
 class Spritesheet;
 
 class ResourceManager
@@ -14,7 +14,7 @@ public:
 	enum class SpritesheetKey { Fighter };
 
 	static ResourceManager& GetInstance();
-	bool Initialize(RenderSystem& renderSystem);
+	bool Initialize(KRenderer& kRenderer);
 
 	~ResourceManager();
 	Texture* GetTexture(TextureKey key);
@@ -26,11 +26,11 @@ private:
 	std::unordered_map<SpritesheetKey, Spritesheet*>* spritesheetPointerMap = new std::unordered_map<SpritesheetKey, Spritesheet*>();;
 
 	ResourceManager() {}
-	bool LoadTextures(RenderSystem& renderSystem);
+	bool LoadTextures(KRenderer& kRenderer);
 	bool LoadSpritesheets();
 	void UnloadTextures();
 	void UnloadSpritesheets();
-	bool LoadTexture(std::string path, std::string name, TextureKey key, RenderSystem& renderSystem);
+	bool LoadTexture(std::string path, std::string name, TextureKey key, KRenderer& kRenderer);
 	bool LoadSpritesheet(TextureKey textureKey, std::string name, int spriteWidth, int spriteHeight, int rows, int columns, int spriteCount, SpritesheetKey spritesheetKey);
 };
 

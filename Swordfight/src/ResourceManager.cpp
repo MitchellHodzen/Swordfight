@@ -1,7 +1,7 @@
 #include "ResourceManager.h"
 #include "rendering/Texture.h"
 #include "rendering/Spritesheet.h"
-#include "systems/RenderSystem.h"
+#include "rendering/KRenderer.h"
 #include <vector>
 ResourceManager::~ResourceManager()
 {
@@ -17,18 +17,18 @@ ResourceManager& ResourceManager::GetInstance()
 	return instance;
 }
 
-bool ResourceManager::Initialize(RenderSystem& renderSystem) {
-	return LoadTextures(renderSystem) && LoadSpritesheets();
+bool ResourceManager::Initialize(KRenderer& kRenderer) {
+	return LoadTextures(kRenderer) && LoadSpritesheets();
 }
 
-bool ResourceManager::LoadTextures(RenderSystem& renderSystem)
+bool ResourceManager::LoadTextures(KRenderer& kRenderer)
 {
 	std::cout<<"Loading textures"<<std::endl;
 	return 
-		LoadTexture("./resources/sprites/ship1.png", "Ship", TextureKey::Player, renderSystem) && 
-		LoadTexture("./resources/sprites/bullet1.png", "Bullet", TextureKey::Bullet, renderSystem) && 
-		LoadTexture("./resources/sprites/enemy1.png", "Enemy", TextureKey::Enemy, renderSystem) && 
-		LoadTexture("./resources/sprites/SwordfightCharacterSpritesheet.png", "Fighter Spritesheet", TextureKey::FighterSpritesheet, renderSystem);
+		LoadTexture("./resources/sprites/ship1.png", "Ship", TextureKey::Player, kRenderer) && 
+		LoadTexture("./resources/sprites/bullet1.png", "Bullet", TextureKey::Bullet, kRenderer) && 
+		LoadTexture("./resources/sprites/enemy1.png", "Enemy", TextureKey::Enemy, kRenderer) && 
+		LoadTexture("./resources/sprites/SwordfightCharacterSpritesheet.png", "Fighter Spritesheet", TextureKey::FighterSpritesheet, kRenderer);
 
 }
 
@@ -40,11 +40,11 @@ bool ResourceManager::LoadSpritesheets()
 		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("idle", {0,1,2,3,12,13,14,0,4,5,6,7,12,13,14,0,8,9,10,11,12,13,14});
 }
 
-bool ResourceManager::LoadTexture(std::string path, std::string name, TextureKey key, RenderSystem& renderSystem)
+bool ResourceManager::LoadTexture(std::string path, std::string name, TextureKey key, KRenderer& kRenderer)
 {
 	std::cout << "Loading " << name << " texture at " << path << std::endl;
 	Texture* texture = new Texture();
-	bool success = texture->LoadTexture(path, name, renderSystem);
+	bool success = texture->LoadTexture(path, name, kRenderer);
 	if (success)
 	{
 		texturePointerMap->insert_or_assign(key, texture);

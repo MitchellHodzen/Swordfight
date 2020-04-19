@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <iostream>
 #include "kecs/KECS.h"
+#include "rendering/KRenderer.h"
 #include "Components/c_transform.h"
 #include "Components/c_rect.h"
 #include "Tags.h"
@@ -27,6 +28,7 @@ Game::~Game()
 	delete collisionSystem;
 	delete physicsSystem;
 	delete bulletSystem;
+	delete kRenderer;
 }
 
 
@@ -54,7 +56,7 @@ void Game::Run(){
 		collisionSystem->CheckCollisions();
 		physicsSystem->HandleCollisions();
 		animationSystem->AdvanceAnimations();
-		renderSystem->Draw();
+		renderSystem->Draw(*kRenderer);
 	}
 }
 
@@ -62,11 +64,13 @@ bool Game::SetUp(int screenWidth, int screenHeight) {
 	bool success = true;
 	this->screenWidth = screenWidth;
 	this->screenHeight = screenHeight;
-	renderSystem = new RenderSystem();
-	if (renderSystem->Initialize(screenWidth, screenHeight))
+	kRenderer = new KRenderer();
+	if (kRenderer->Initialize(screenWidth, screenHeight))
 	{
-		if (ResourceManager::GetInstance().Initialize(*renderSystem))
+		if (ResourceManager::GetInstance().Initialize(*kRenderer))
 		{
+			//Initialize systems
+			renderSystem = new RenderSystem();
 			inputSystem = new InputSystem();
 			collisionSystem = new CollisionSystem();
 			physicsSystem = new PhysicsSystem();
@@ -81,7 +85,7 @@ bool Game::SetUp(int screenWidth, int screenHeight) {
 	}
 	else
 	{
-		std::cout<<"Could not initialize render system"<<std::endl;
+		std::cout<<"Could not initialize renderer"<<std::endl;
 		success = false;
 	}
 

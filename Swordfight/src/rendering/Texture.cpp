@@ -1,5 +1,5 @@
 #include "rendering/Texture.h"
-#include "systems/RenderSystem.h"
+#include "rendering/KRenderer.h"
 
 Texture::Texture()
 {
@@ -14,7 +14,7 @@ Texture::~Texture()
 
 }
 
-bool Texture::LoadTexture(std::string path, std::string name, RenderSystem& renderSystem)
+bool Texture::LoadTexture(std::string path, std::string name, KRenderer& kRenderer)
 {
 	bool success = true;
 	FreeTexture();
@@ -28,7 +28,7 @@ bool Texture::LoadTexture(std::string path, std::string name, RenderSystem& rend
 			SDL_Surface* loadedSurface = IMG_Load(path.c_str());
 			if (loadedSurface != NULL)
 			{
-				sdlTexture = SDL_CreateTextureFromSurface(renderSystem.GetSdlRenderer(), loadedSurface);
+				sdlTexture = SDL_CreateTextureFromSurface(kRenderer.GetSdlRenderer(), loadedSurface);
 				if (sdlTexture != NULL)
 				{
 					width = loadedSurface->w;

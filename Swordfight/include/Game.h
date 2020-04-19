@@ -6,6 +6,7 @@ class CollisionSystem;
 class PhysicsSystem;
 class BulletSystem;
 class AnimationSystem;
+class KRenderer;
 
 class Game
 {
@@ -25,5 +26,7 @@ private:
 	PhysicsSystem* physicsSystem;
 	BulletSystem* bulletSystem;
 	AnimationSystem* animationSystem;
+
+	KRenderer* kRenderer;
 };
 
