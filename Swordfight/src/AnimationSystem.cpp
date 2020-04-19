@@ -1,8 +1,8 @@
 #include "AnimationSystem.h"
 #include "kecs/KECS.h"
 #include "Components/c_render.h"
-#include "Animation.h"
-#include "Spritesheet.h"
+#include "rendering/Animation.h"
+#include "rendering/Spritesheet.h"
 #include "Time.h"
 
 void AnimationSystem::AdvanceAnimations()

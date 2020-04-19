@@ -3,8 +3,9 @@
 #include "Components/c_transform.h"
 #include "Components/c_rect.h"
 #include "Components/c_render.h"
-#include "Texture.h"
-#include "Spritesheet.h"
+#include "rendering/Texture.h"
+#include "rendering/Spritesheet.h"
+#include "rendering/Animation.h"
 #include "Rectangle.h"
 
 RenderSystem::~RenderSystem()

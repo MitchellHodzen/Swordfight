@@ -1,7 +1,7 @@
 #pragma once
 //forward declaration
 class Spritesheet;
-#include "Animation.h"
+struct AnimationInstance;
 
 struct Render
 {

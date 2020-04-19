@@ -8,8 +8,8 @@
 #include "Components/c_cannon.h"
 #include "Tags.h"
 #include "ResourceManager.h"
-#include "Spritesheet.h"
-#include "Animation.h"
+#include "rendering/Spritesheet.h"
+#include "rendering/Animation.h"
 
 
 Entity PlayerShipFactory::ConstructPlayerShip(int posX, int posY)

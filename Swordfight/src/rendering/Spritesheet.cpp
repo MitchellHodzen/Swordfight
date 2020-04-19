@@ -1,7 +1,7 @@
+#include "rendering/Spritesheet.h"
 #include <iostream>
-#include "Spritesheet.h"
 #include "Rectangle.h"
-#include "Animation.h"
+#include "rendering/Animation.h"
 
 Spritesheet::~Spritesheet()
 {

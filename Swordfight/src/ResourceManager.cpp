@@ -1,6 +1,6 @@
 #include "ResourceManager.h"
-#include "Texture.h"
-#include "Spritesheet.h"
+#include "rendering/Texture.h"
+#include "rendering/Spritesheet.h"
 #include "RenderSystem.h"
 #include <vector>
 ResourceManager::~ResourceManager()
