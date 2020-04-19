@@ -14,39 +14,54 @@
 
 Entity FighterFactory::ConstructFighter(int posX, int posY)
 {
-	Entity playerShip = EntityManager::CreateEntity();
-	if (playerShip != -1)
+	Entity playerFighter = EntityManager::CreateEntity();
+	Entity lowerBody = EntityManager::CreateEntity();
+	Entity upperBody = EntityManager::CreateEntity();
+	if (playerFighter != -1 && upperBody != -1 && lowerBody != -1)
 	{
-		EntityManager::AddTag<Player>(playerShip);
-		EntityManager::AddComponent<UserInput>(playerShip);
+		EntityManager::AddTag<Player>(playerFighter);
+		EntityManager::AddComponent<UserInput>(playerFighter);
 
-		Transform trans;
-		trans.position.SetValues(posX, posY);
-		EntityManager::SetComponent<Transform>(playerShip, trans);
+		Transform playerTrans;
+		playerTrans.position.SetValues(posX, posY);
+		EntityManager::SetComponent<Transform>(playerFighter, playerTrans);
+		
+		Transform lowerBodyTrans;
+		lowerBodyTrans.position.SetValues(0,0);
+		lowerBodyTrans.parentEntity = playerFighter;
+		EntityManager::SetComponent<Transform>(lowerBody, lowerBodyTrans);
 
-		Cannon cannon;
-		cannon.bulletSpeed = 100;
-		EntityManager::SetComponent<Cannon>(playerShip, cannon);
+		Transform upperBodyTrans;
+		upperBodyTrans.position.SetValues(0,0);
+		upperBodyTrans.parentEntity = playerFighter;
+		EntityManager::SetComponent<Transform>(upperBody, upperBodyTrans);
 
+		/*
 		Rect rect;
 		rect.width = 50;
 		rect.height = 50;
 		rect.offsetX = -rect.width / 2;
 		rect.offsetY = -rect.height / 2;
 		EntityManager::SetComponent<Rect>(playerShip, rect);
+		*/
 
-		Render render;
-		render.spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
-		render.animationInstance = new AnimationInstance(*render.spritesheet->GetAnimation("idle"), 0, 16, true);
-		//sprite.texture = ResourceManager::GetInstance().GetTexture(ResourceManager::TextureKey::Player);
-		EntityManager::SetComponent<Render>(playerShip, render);
+		Render lowerBodyRender;
+		lowerBodyRender.spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
+		lowerBodyRender.animationInstance = new AnimationInstance(*lowerBodyRender.spritesheet->GetAnimation("walk"), 0, 5, true);
+		EntityManager::SetComponent<Render>(lowerBody, lowerBodyRender);
+
+
+		Render upperBodyRender;
+		upperBodyRender.spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
+		upperBodyRender.animationInstance = new AnimationInstance(*upperBodyRender.spritesheet->GetAnimation("idle"), 0, 16, true);
+		EntityManager::SetComponent<Render>(upperBody, upperBodyRender);
 
 		Physics physics;
 		physics.maxSpeed = 100;
 		physics.acceleration = 500;
 		physics.friction = 700;
-		EntityManager::SetComponent<Physics>(playerShip, physics);
+		EntityManager::SetComponent<Physics>(playerFighter, physics);
 	}
 
-	return playerShip;
+	return playerFighter;
 }

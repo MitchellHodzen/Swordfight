@@ -18,12 +18,23 @@ void RenderSystem::Draw(KRenderer& kRenderer)//std::vector<Entity*>* entityList,
 	for (Entity entity : entities)
 	{
 
+		//Most optimal way to do position memory wise? Take another look
 		Transform* trans = EntityManager::GetComponent<Transform>(entity);
+		Vector2 position = trans->position;
+		if (EntityManager::IsValidEntity(trans->parentEntity))
+		{
+			//If there is a parent entity, add the transform
+			Transform* parentTrans = EntityManager::GetComponent<Transform>(trans->parentEntity);
+			if (parentTrans != nullptr)
+			{
+				position = Vector2::ComponentWiseAddition(trans->position, parentTrans->position);
+			}
+		}
 		Render* render = EntityManager::GetComponent<Render>(entity);
 		Texture* text = render->spritesheet->GetTexture();
 		Rectangle* spriteCutRect = render->spritesheet->GetSprite(render->animationInstance->GetCurrentAnimSprite());
 
-		kRenderer.RenderTexture(*text, trans->position.GetX(), trans->position.GetY(), *spriteCutRect, false);
+		kRenderer.RenderTexture(*text, position.GetX(), position.GetY(), *spriteCutRect, false);
 	}
 	kRenderer.DrawScreen();
 }

@@ -5,14 +5,9 @@
 
 struct Fighter
 {
-	Fighter(Entity upperBody, Entity lowerBody, float moveSpeed)
-	{
-		this->upperBody = upperBody;
-		this->lowerBody = lowerBody;
-		this->moveSpeed = moveSpeed;
-	};
-	Entity upperBody;
-	Entity lowerBody;
-	float moveSpeed;
+
+	Entity upperBody = -1;
+	Entity lowerBody = -1;
+	float moveSpeed = 0;
 
 };
