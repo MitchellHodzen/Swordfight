@@ -27,7 +27,7 @@ Entity FighterFactory::ConstructFighter(int posX, int posY)
 		fighter.lowerBody = lowerBody;
 		fighter.upperBody = upperBody;
 		fighter.moveSpeed = 500;
-		EntityManager::AddComponent<Fighter>(playerFighter);
+		EntityManager::SetComponent<Fighter>(playerFighter, fighter);
 
 		Transform playerTrans;
 		playerTrans.position.SetValues(posX, posY);

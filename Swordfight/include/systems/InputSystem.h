@@ -6,5 +6,4 @@ public:
 	InputSystem();
 	~InputSystem();
 	void GetUserInput();
-	void HandleUserInput();
 };

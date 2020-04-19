@@ -14,6 +14,7 @@
 #include "systems/InputSystem.h"
 #include "systems/CollisionSystem.h"
 #include "systems/PhysicsSystem.h"
+#include "systems/FighterSystem.h"
 #include "Factories/FighterFactory.h"
 #include "Components/c_fighter.h"
 #include "systems/BulletSystem.h"
@@ -44,7 +45,7 @@ void Game::Run(){
 		InputManager::GetInstance().UpdateInput();
 		quit = InputManager::GetInstance().ShouldQuit();
 		inputSystem->GetUserInput();
-		inputSystem->HandleUserInput();
+		fighterSystem->HandleUserInput();
 		physicsSystem->ApplyPhysics();
 		collisionSystem->CheckCollisions();
 		physicsSystem->HandleCollisions();
@@ -68,6 +69,7 @@ bool Game::SetUp(int screenWidth, int screenHeight) {
 			collisionSystem = new CollisionSystem();
 			physicsSystem = new PhysicsSystem();
 			animationSystem = new AnimationSystem();
+			fighterSystem = new FighterSystem();
 		}
 		else
 		{
