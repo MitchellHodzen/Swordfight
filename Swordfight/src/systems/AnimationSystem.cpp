@@ -11,7 +11,7 @@ void AnimationSystem::AdvanceAnimations()
 	for (Entity entity : entities)
 	{
 		Render* render = EntityManager::GetComponent<Render>(entity);
-		AnimationInstance* animInstance = render->animationInstance;
+		AnimationInstance* animInstance = render->GetAnimationInstance();
 
 		float millisecondsPerFrame = 1000.0f / animInstance->framesPerSecond;
 

@@ -64,14 +64,14 @@ Entity FighterFactory::ConstructFighter(int posX, int posY)
 		if (lowerBodyRender != nullptr)
 		{
 			lowerBodyRender->spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
-			lowerBodyRender->animationInstance = new AnimationInstance(*lowerBodyRender->spritesheet->GetAnimation("feetIdle"), 0, 5, true);
+			lowerBodyRender->SetAnimationInstance("feetIdle", 0, 5, true);
 		}
 
 		Render* upperBodyRender = EntityManager::AddComponent<Render>(upperBody);
 		if (upperBodyRender != nullptr)
 		{
 			upperBodyRender->spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
-			upperBodyRender->animationInstance = new AnimationInstance(*upperBodyRender->spritesheet->GetAnimation("animTest"), 0, 16, true);
+			upperBodyRender->SetAnimationInstance("animTest", 0, 16, true);
 		}
 
 		Physics* physics = EntityManager::AddComponent<Physics>(playerFighter);
