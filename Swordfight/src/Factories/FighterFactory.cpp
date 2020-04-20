@@ -65,7 +65,6 @@ Entity FighterFactory::ConstructFighter(int posX, int posY)
 
 		Physics physics;
 		physics.maxSpeed = 100;
-		physics.acceleration = 500;
 		physics.friction = 700;
 		EntityManager::SetComponent<Physics>(playerFighter, physics);
 	}
