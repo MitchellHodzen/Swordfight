@@ -23,25 +23,33 @@ Entity FighterFactory::ConstructFighter(int posX, int posY)
 		EntityManager::AddTag<Player>(playerFighter);
 		EntityManager::AddComponent<UserInput>(playerFighter);
 
-		Fighter fighter;
-		fighter.lowerBody = lowerBody;
-		fighter.upperBody = upperBody;
-		fighter.moveSpeed = 500;
-		EntityManager::SetComponent<Fighter>(playerFighter, fighter);
+		Fighter* fighter = EntityManager::AddComponent<Fighter>(playerFighter);
+		if (fighter != nullptr)
+		{
+			fighter->lowerBody = lowerBody;
+			fighter->upperBody = upperBody;
+			fighter->moveSpeed = 500;
+		}
 
-		Transform playerTrans;
-		playerTrans.position.SetValues(posX, posY);
-		EntityManager::SetComponent<Transform>(playerFighter, playerTrans);
+		Transform* playerTrans = EntityManager::AddComponent<Transform>(playerFighter);
+		if (playerTrans != nullptr)
+		{
+			playerTrans->position.SetValues(posX, posY);
+		}
 		
-		Transform lowerBodyTrans;
-		lowerBodyTrans.position.SetValues(0,0);
-		lowerBodyTrans.parentEntity = playerFighter;
-		EntityManager::SetComponent<Transform>(lowerBody, lowerBodyTrans);
+		Transform* lowerBodyTrans = EntityManager::AddComponent<Transform>(lowerBody);
+		if (lowerBodyTrans != nullptr)
+		{
+			lowerBodyTrans->position.SetValues(0,0);
+			lowerBodyTrans->parentEntity = playerFighter;
+		}
 
-		Transform upperBodyTrans;
-		upperBodyTrans.position.SetValues(0,0);
-		upperBodyTrans.parentEntity = playerFighter;
-		EntityManager::SetComponent<Transform>(upperBody, upperBodyTrans);
+		Transform* upperBodyTrans = EntityManager::AddComponent<Transform>(upperBody);
+		if (upperBodyTrans != nullptr)
+		{
+			upperBodyTrans->position.SetValues(0,0);
+			upperBodyTrans->parentEntity = playerFighter;			
+		}
 
 		/*
 		Rect rect;
@@ -52,21 +60,26 @@ Entity FighterFactory::ConstructFighter(int posX, int posY)
 		EntityManager::SetComponent<Rect>(playerShip, rect);
 		*/
 
-		Render lowerBodyRender;
-		lowerBodyRender.spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
-		lowerBodyRender.animationInstance = new AnimationInstance(*lowerBodyRender.spritesheet->GetAnimation("feetIdle"), 0, 5, true);
-		EntityManager::SetComponent<Render>(lowerBody, lowerBodyRender);
+		Render* lowerBodyRender = EntityManager::AddComponent<Render>(lowerBody);
+		if (lowerBodyRender != nullptr)
+		{
+			lowerBodyRender->spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
+			lowerBodyRender->animationInstance = new AnimationInstance(*lowerBodyRender->spritesheet->GetAnimation("feetIdle"), 0, 5, true);
+		}
 
+		Render* upperBodyRender = EntityManager::AddComponent<Render>(upperBody);
+		if (upperBodyRender != nullptr)
+		{
+			upperBodyRender->spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
+			upperBodyRender->animationInstance = new AnimationInstance(*upperBodyRender->spritesheet->GetAnimation("animTest"), 0, 16, true);
+		}
 
-		Render upperBodyRender;
-		upperBodyRender.spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
-		upperBodyRender.animationInstance = new AnimationInstance(*upperBodyRender.spritesheet->GetAnimation("animTest"), 0, 16, true);
-		EntityManager::SetComponent<Render>(upperBody, upperBodyRender);
-
-		Physics physics;
-		physics.maxSpeed = 100;
-		physics.friction = 700;
-		EntityManager::SetComponent<Physics>(playerFighter, physics);
+		Physics* physics = EntityManager::AddComponent<Physics>(playerFighter);
+		if (physics != nullptr)
+		{
+			physics->maxSpeed = 100;
+			physics->friction = 700;
+		}
 	}
 
 	return playerFighter;
