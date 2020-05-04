@@ -46,6 +46,7 @@ void Game::Run(){
 		quit = InputManager::GetInstance().ShouldQuit();
 		inputSystem->GetUserInput();
 		fighterSystem->HandleUserInput();
+		fighterSystem->ResolveActions();
 		physicsSystem->ApplyPhysics();
 		collisionSystem->CheckCollisions();
 		physicsSystem->HandleCollisions();

@@ -3,4 +3,5 @@ class FighterSystem
 {
 public:
 	void HandleUserInput();
+	void ResolveActions();
 };

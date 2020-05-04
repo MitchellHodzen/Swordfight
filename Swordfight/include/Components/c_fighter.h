@@ -30,6 +30,11 @@ struct Fighter
 		actions[action] = true;
 	};
 
+	bool HasAction(Action action)
+	{
+		return actions[action];
+	};
+
 	void ClearActions()
 	{
 		//Zeroing out actions

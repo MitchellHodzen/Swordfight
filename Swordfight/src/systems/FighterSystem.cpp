@@ -7,18 +7,41 @@
 
 void FighterSystem::HandleUserInput()
 {
-	std::vector<Entity> entities = EntityManager::GetEntitiesWithComponent<Physics, UserInput, Fighter>();
+	std::vector<Entity> entities = EntityManager::GetEntitiesWithComponent<UserInput, Fighter>();
+
+	for (Entity entity : entities)
+	{
+		UserInput* uin = EntityManager::GetComponent<UserInput>(entity);
+		Fighter* fighter = EntityManager::GetComponent<Fighter>(entity);
+
+		//Clear all actions
+		fighter->ClearActions();
+
+		//Movement is left and right
+		if (uin->keyStates[UserInput::InputType::LEFT])
+		{
+			fighter->TakeAction(Fighter::Action::MoveLeft);
+		}
+		else if (uin->keyStates[UserInput::InputType::RIGHT])
+		{
+			fighter->TakeAction(Fighter::Action::MoveRight);
+		}
+	}
+}
+
+void FighterSystem::ResolveActions()
+{
+	std::vector<Entity> entities = EntityManager::GetEntitiesWithComponent<Physics, Fighter>();
 
 	for (Entity entity : entities)
 	{
 		Physics* phys = EntityManager::GetComponent<Physics>(entity);
-		UserInput* uin = EntityManager::GetComponent<UserInput>(entity);
 		Fighter* fighter = EntityManager::GetComponent<Fighter>(entity);
 
 		float moveSpeed = fighter->moveSpeed;
 		
 		//Movement is left and right
-		if (uin->keyStates[UserInput::InputType::LEFT])
+		if (fighter->HasAction(Fighter::Action::MoveLeft))
 		{
 			float currentVelocityX = phys->velocity.GetX();
 			float newVelocityX = currentVelocityX - moveSpeed * Time::GetDeltaTime();
@@ -28,7 +51,7 @@ void FighterSystem::HandleUserInput()
 			}
 			phys->velocity.SetX(newVelocityX);
 		}
-		else if (uin->keyStates[UserInput::InputType::RIGHT])
+		else if (fighter->HasAction(Fighter::Action::MoveRight))
 		{
 			float currentVelocityX = phys->velocity.GetX();
 			float newVelocityX = currentVelocityX + moveSpeed * Time::GetDeltaTime();
