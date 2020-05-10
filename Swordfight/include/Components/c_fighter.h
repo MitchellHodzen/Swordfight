@@ -8,9 +8,13 @@
 struct Fighter
 {
 	enum Action { MoveLeft, MoveRight, SwordUp, SwordDown, SwordCenter, ReadyAttack };
+
+	enum State {Blocking, Readying, Attacking, Clashing};
 	Fighter()
 	{
 		ClearActions();
+		lastState = State::Blocking;
+		currentState = State::Blocking;
 	};
 
 	Entity upperBody = -1;
@@ -24,6 +28,17 @@ struct Fighter
 			std::cout<<actions[i]<<std::endl;
 		}
 	};
+
+	void ChangeState(State newState)
+	{
+		lastState = currentState;
+		currentState = newState;
+	};
+
+	State GetState()
+	{
+		return currentState;
+	}
 
 	void TakeAction(Action action)
 	{
@@ -47,4 +62,6 @@ struct Fighter
 private:
 	const static int actionCount = 6;
 	bool actions[actionCount];
+	State currentState;
+	State lastState;
 };

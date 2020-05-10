@@ -14,6 +14,8 @@ void FighterSystem::HandleUserInput()
 		UserInput* uin = EntityManager::GetComponent<UserInput>(entity);
 		Fighter* fighter = EntityManager::GetComponent<Fighter>(entity);
 
+		Fighter::State fighterState = fighter->GetState();
+
 		//Clear all actions
 		fighter->ClearActions();
 
