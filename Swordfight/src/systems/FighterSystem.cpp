@@ -19,14 +19,23 @@ void FighterSystem::HandleUserInput()
 		//Clear all actions
 		fighter->ClearActions();
 
-		//Movement is left and right
-		if (uin->keyStates[UserInput::InputType::LEFT])
+		//Make input queue instead?
+		switch(fighterState)
 		{
-			fighter->TakeAction(Fighter::Action::MoveLeft);
-		}
-		else if (uin->keyStates[UserInput::InputType::RIGHT])
-		{
-			fighter->TakeAction(Fighter::Action::MoveRight);
+			case Fighter::State::Blocking:
+				HandleBlockingStateInput(*uin, *fighter);
+				break;
+			case Fighter::State::Readying:
+				HandleReadyingStateInput(*uin, *fighter);
+				break;
+			case Fighter::State::Attacking:
+				HandleAttackingStateInput(*uin, *fighter);
+				break;
+			case Fighter::State::Clashing:
+				HandleClashingStateInput(*uin, *fighter);
+				break;
+			default:
+				break;
 		}
 	}
 }
@@ -100,4 +109,72 @@ void FighterSystem::ResolveActions()
 		}
 		*/
 	}
+}
+
+void FighterSystem::HandleBlockingStateInput(UserInput& userInput, Fighter& fighter)
+{
+	HandleMovementInput(userInput, fighter);
+	HandleAttackDirectionInput(userInput, fighter);
+}
+void FighterSystem::HandleReadyingStateInput(UserInput& userInput, Fighter& fighter)
+{
+	HandleMovementInput(userInput, fighter);
+	HandleAttackDirectionInput(userInput, fighter);
+}
+void FighterSystem::HandleAttackingStateInput(UserInput& userInput, Fighter& fighter)
+{
+	HandleAttackDirectionInput(userInput, fighter);
+}
+void FighterSystem::HandleClashingStateInput(UserInput& userInput, Fighter& fighter)
+{
+	HandleAttackDirectionInput(userInput, fighter);
+}
+
+
+void FighterSystem::HandleMovementInput(UserInput& userInput, Fighter& fighter)
+{
+	//Movement is left and right
+	if (userInput.keyStates[UserInput::InputType::LEFT])
+	{
+		fighter.TakeAction(Fighter::Action::MoveLeft);
+	}
+	else if (userInput.keyStates[UserInput::InputType::RIGHT])
+	{
+		fighter.TakeAction(Fighter::Action::MoveRight);
+	}
+}
+
+void FighterSystem::HandleAttackDirectionInput(UserInput& userInput, Fighter& fighter)
+{
+	//Choose sword direction
+	if (userInput.keyStates[UserInput::InputType::UP])
+	{
+		fighter.TakeAction(Fighter::Action::SwordUp);
+	}
+	else if (userInput.keyStates[UserInput::InputType::DOWN])
+	{
+		fighter.TakeAction(Fighter::Action::SwordDown);
+	}
+	else
+	{
+		//If no input is selected, default to center
+		fighter.TakeAction(Fighter::Action::SwordCenter);
+	}
+}
+
+
+void FighterSystem::TransitionState(Fighter& fighter, Fighter::State nextState)
+{
+	TransitionFromState(fighter);
+	TransitionToState(fighter, nextState);
+	fighter.ChangeState(nextState);
+}
+void FighterSystem::TransitionFromState(Fighter& fighter)
+{
+	//Do transition from current fighter state
+	Fighter::State previousState = fighter.GetState();
+}
+void FighterSystem::TransitionToState(Fighter& fighter, Fighter::State nextState)
+{
+	//Do transition to next state
 }
