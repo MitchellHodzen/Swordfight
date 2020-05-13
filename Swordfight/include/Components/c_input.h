@@ -7,12 +7,17 @@ struct UserInput
 
 	UserInput()
 	{
-		for (int i = 0; i < 5; ++i)
+		for (int i = 0; i < inputTypesCount; ++i)
 		{
 			keyStates[i] = false;
+			keyPressed[i] = false;
+			keyReleased[i] = false;
 		}
 	}
 
-	bool keyStates[5];
+	const static int inputTypesCount = 6;
+	bool keyStates[inputTypesCount];
+	bool keyPressed[inputTypesCount];
+	bool keyReleased[inputTypesCount];
 
 };

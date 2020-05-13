@@ -101,6 +101,17 @@ void FighterSystem::ResolveActions()
 			phys->velocity.SetMagnitude(phys->maxSpeed);
 		}
 
+
+		//std::cout<<"Checking attack actions release: " << fighter->HasAction(Fighter::Action::ReleaseAttack) <<std::endl;
+		//Is this the right place to handle state transitions? Maybe a different system?
+		if (fighter->HasAction(Fighter::Action::ReadyAttack))
+		{
+			TransitionState(*fighter, Fighter::State::Readying);
+		}
+		if (fighter->HasAction(Fighter::Action::ReleaseAttack))
+		{
+			TransitionState(*fighter, Fighter::State::Attacking);
+		}
 		/*
 		if (uin->keyStates[UserInput::InputType::SPACE] && EntityManager::HasComponent<Cannon>(entity))
 		{
@@ -113,21 +124,33 @@ void FighterSystem::ResolveActions()
 
 void FighterSystem::HandleBlockingStateInput(UserInput& userInput, Fighter& fighter)
 {
+	//std::cout<<"Handling blocking state input" <<std::endl;
 	HandleMovementInput(userInput, fighter);
 	HandleAttackDirectionInput(userInput, fighter);
+
+	//If blocking, we can get into a ready attack state by holding spacebar
+	if (userInput.keyPressed[UserInput::InputType::SPACE])
+	{
+		fighter.TakeAction(Fighter::Action::ReadyAttack);
+	}
 }
 void FighterSystem::HandleReadyingStateInput(UserInput& userInput, Fighter& fighter)
 {
+	//std::cout<<"Handling readying state input" <<std::endl;
 	HandleMovementInput(userInput, fighter);
-	HandleAttackDirectionInput(userInput, fighter);
+
+	if (!(userInput.keyStates[UserInput::InputType::SPACE]))
+	{
+		fighter.TakeAction(Fighter::Action::ReleaseAttack);
+	}
 }
 void FighterSystem::HandleAttackingStateInput(UserInput& userInput, Fighter& fighter)
 {
-	HandleAttackDirectionInput(userInput, fighter);
+
 }
 void FighterSystem::HandleClashingStateInput(UserInput& userInput, Fighter& fighter)
 {
-	HandleAttackDirectionInput(userInput, fighter);
+
 }
 
 
@@ -158,7 +181,7 @@ void FighterSystem::HandleAttackDirectionInput(UserInput& userInput, Fighter& fi
 	else
 	{
 		//If no input is selected, default to center
-		fighter.TakeAction(Fighter::Action::SwordCenter);
+		//fighter.TakeAction(Fighter::Action::SwordCenter);
 	}
 }
 
@@ -173,8 +196,10 @@ void FighterSystem::TransitionFromState(Fighter& fighter)
 {
 	//Do transition from current fighter state
 	Fighter::State previousState = fighter.GetState();
+	std::cout<<"Transitioning from fighter state " << previousState << std::endl;
 }
 void FighterSystem::TransitionToState(Fighter& fighter, Fighter::State nextState)
 {
 	//Do transition to next state
+	std::cout<<"Transitioning to fighter state " << nextState << std::endl;
 }

@@ -7,7 +7,7 @@
 
 struct Fighter
 {
-	enum Action { MoveLeft, MoveRight, SwordUp, SwordDown, SwordCenter, ReadyAttack };
+	enum Action { MoveLeft, MoveRight, SwordUp, SwordDown, SwordCenter, ReadyAttack, ReleaseAttack};
 
 	enum State {Blocking, Readying, Attacking, Clashing};
 	Fighter()
@@ -31,6 +31,7 @@ struct Fighter
 
 	void ChangeState(State newState)
 	{
+		std::cout<<"Changing state from " << currentState << " to " << newState<<std::endl;
 		lastState = currentState;
 		currentState = newState;
 	};
@@ -60,7 +61,7 @@ struct Fighter
 	};
 
 private:
-	const static int actionCount = 6;
+	const static int actionCount = 7;
 	bool actions[actionCount];
 	State currentState;
 	State lastState;
