@@ -4,6 +4,8 @@
 #include "Components/c_fighter.h"
 #include "Components/c_render.h"
 #include "Time.h"
+#include "MessageManager.h"
+#include "Messages/m_fighterStateChanged.h"
 
 void FighterActionSystem::ResolveActions()
 {
@@ -66,15 +68,31 @@ void FighterActionSystem::ResolveActions()
 			phys->velocity.SetMagnitude(phys->maxSpeed);
 		}
 
+		//Control attack direction
+		if (fighter->HasAction(Fighter::Action::SwordUp))
+		{
+			fighter->currentStance = Fighter::Stance::UP;
+		}
+		else if (fighter->HasAction(Fighter::Action::SwordCenter))
+		{
+			fighter->currentStance = Fighter::Stance::MIDDLE;
+		}
+		else if (fighter->HasAction(Fighter::Action::SwordDown))
+		{
+			fighter->currentStance = Fighter::Stance::DOWN;
+		}
+
+
 		//Is this the right place to handle state transitions? Maybe a different system?
 		if (fighter->HasAction(Fighter::Action::ReadyAttack))
 		{
-			TransitionState(*fighter, Fighter::State::Readying);
+			TransitionState(entity, *fighter, Fighter::State::Readying);
 		}
-		if (fighter->HasAction(Fighter::Action::ReleaseAttack))
+		else if (fighter->HasAction(Fighter::Action::ReleaseAttack))
 		{
-			TransitionState(*fighter, Fighter::State::Attacking);
+			TransitionState(entity, *fighter, Fighter::State::Attacking);
 		}
+
 		/*
 		if (uin->keyStates[UserInput::InputType::SPACE] && EntityManager::HasComponent<Cannon>(entity))
 		{
@@ -85,11 +103,15 @@ void FighterActionSystem::ResolveActions()
 	}
 }
 
-void FighterActionSystem::TransitionState(Fighter& fighter, Fighter::State nextState)
+void FighterActionSystem::TransitionState(Entity entity, Fighter& fighter, Fighter::State nextState)
 {
+	Fighter::State oldState = fighter.GetState();
 	TransitionFromState(fighter);
 	TransitionToState(fighter, nextState);
 	fighter.ChangeState(nextState);
+	
+	FighterStateChangedMessage message(entity, oldState, nextState);
+	MessageManager::PushMessage<FighterStateChangedMessage>(message);
 }
 void FighterActionSystem::TransitionFromState(Fighter& fighter)
 {

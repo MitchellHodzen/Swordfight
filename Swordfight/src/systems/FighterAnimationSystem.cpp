@@ -4,6 +4,8 @@
 #include "Components/c_fighter.h"
 #include "Components/c_render.h"
 #include "Time.h"
+#include "MessageManager.h"
+#include "Messages/m_fighterStateChanged.h"
 
 void FighterAnimationSystem::ResolveAnimations()
 {
@@ -31,6 +33,63 @@ void FighterAnimationSystem::ResolveAnimations()
 				break;
 			default:
 				break;
+		}
+	}
+
+	//Handle state change messages
+	while(MessageManager::NotEmpty<FighterStateChangedMessage>())
+	{
+		FighterStateChangedMessage msg = MessageManager::PopMessage<FighterStateChangedMessage>();
+		Entity fighterEntity = msg.fighterEntity;
+
+		if (msg.newState == Fighter::State::Attacking)
+		{
+			Fighter* fighter = EntityManager::GetComponent<Fighter>(fighterEntity);
+
+			if (fighter != nullptr)
+			{
+				bool attackAnimationFired = false;
+				std::string animationName;
+				int startFrame = 0;
+				int fps = 0;
+				bool looping = false;
+
+				switch(fighter->currentStance)
+				{
+					case Fighter::Stance::UP:
+						attackAnimationFired = true;
+						animationName = "highAttack";
+						startFrame = 0;
+						fps = 16;
+						looping = false;
+						break;
+					case Fighter::Stance::MIDDLE:
+						attackAnimationFired = true;
+						animationName = "midAttack";
+						startFrame = 0;
+						fps = 16;
+						looping = false;
+						break;
+					case Fighter::Stance::DOWN:
+						attackAnimationFired = true;
+						animationName = "lowAttack";
+						startFrame = 0;
+						fps = 16;
+						looping = false;
+						break;
+					default:
+						break;
+				}
+				if (attackAnimationFired)
+				{
+					Entity fighterUpperBody = fighter->upperBody;
+					Render* upperBodyRender = EntityManager::GetComponent<Render>(fighterUpperBody);
+					if (upperBodyRender != nullptr)
+					{
+						upperBodyRender->SetAnimationInstance(animationName, startFrame, fps, looping);
+					}
+				}
+			}
 		}
 	}
 }

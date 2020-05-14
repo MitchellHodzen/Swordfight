@@ -10,6 +10,9 @@ struct Fighter
 	enum Action { MoveLeft, MoveRight, SwordUp, SwordDown, SwordCenter, ReadyAttack, ReleaseAttack};
 
 	enum State {Blocking, Readying, Attacking, Clashing};
+
+	enum Stance {UP, MIDDLE, DOWN};
+
 	Fighter()
 	{
 		ClearActions();
@@ -20,6 +23,7 @@ struct Fighter
 	Entity upperBody = -1;
 	Entity lowerBody = -1;
 	float moveSpeed = 0;
+	Stance currentStance = Stance::MIDDLE;
 
 	void PrintActions()
 	{

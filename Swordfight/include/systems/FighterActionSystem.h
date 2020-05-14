@@ -6,7 +6,7 @@ class FighterActionSystem
 public:
 	void ResolveActions();
 
-	void TransitionState(Fighter& fighter, Fighter::State nextState);
+	void TransitionState(Entity entity, Fighter& fighter, Fighter::State nextState);
 	void TransitionFromState(Fighter& fighter);
 	void TransitionToState(Fighter& fighter, Fighter::State nextState);
 
