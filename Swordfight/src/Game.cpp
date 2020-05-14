@@ -14,7 +14,9 @@
 #include "systems/InputSystem.h"
 #include "systems/CollisionSystem.h"
 #include "systems/PhysicsSystem.h"
-#include "systems/FighterSystem.h"
+#include "systems/FighterInputSystem.h"
+#include "systems/FighterActionSystem.h"
+#include "systems/FighterAnimationSystem.h"
 #include "Factories/FighterFactory.h"
 #include "Components/c_fighter.h"
 #include "systems/BulletSystem.h"
@@ -27,6 +29,10 @@ Game::~Game()
 	delete renderSystem;
 	delete collisionSystem;
 	delete physicsSystem;
+	delete animationSystem;
+	delete fighterInputSystem;
+	delete fighterActionSystem;
+	delete fighterAnimationSystem;
 	delete kRenderer;
 }
 
@@ -45,9 +51,9 @@ void Game::Run(){
 		InputManager::GetInstance().UpdateInput();
 		quit = InputManager::GetInstance().ShouldQuit();
 		inputSystem->GetUserInput();
-		fighterSystem->HandleUserInput();
-		fighterSystem->ResolveActions();
-		fighterSystem->ResolveAnimations();
+		fighterInputSystem->HandleUserInput();
+		fighterActionSystem->ResolveActions();
+		fighterAnimationSystem->ResolveAnimations();
 		physicsSystem->ApplyPhysics();
 		collisionSystem->CheckCollisions();
 		physicsSystem->HandleCollisions();
@@ -71,7 +77,9 @@ bool Game::SetUp(int screenWidth, int screenHeight) {
 			collisionSystem = new CollisionSystem();
 			physicsSystem = new PhysicsSystem();
 			animationSystem = new AnimationSystem();
-			fighterSystem = new FighterSystem();
+			fighterInputSystem = new FighterInputSystem();
+			fighterActionSystem = new FighterActionSystem();
+			fighterAnimationSystem = new FighterAnimationSystem();
 		}
 		else
 		{
