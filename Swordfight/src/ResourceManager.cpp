@@ -49,7 +49,7 @@ bool ResourceManager::LoadSpritesheets()
 		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("lowReady", {9}) &&
 		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("lowAttack", {10,11,12}) &&
 		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("attackRecovery", {13,14,12}) &&
-		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("feetWalk", {16, 17}) &&
+		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("feetWalk", {17, 16}) &&
 		GetSpritesheet(SpritesheetKey::Fighter)->GenerateAnimation("feetIdle", {16});
 }
 

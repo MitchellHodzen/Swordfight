@@ -3,6 +3,7 @@
 #include "Components/c_input.h"
 #include "Components/c_physics.h"
 #include "Components/c_fighter.h"
+#include "Components/c_render.h"
 #include "Time.h"
 
 void FighterSystem::HandleUserInput()
@@ -101,8 +102,6 @@ void FighterSystem::ResolveActions()
 			phys->velocity.SetMagnitude(phys->maxSpeed);
 		}
 
-
-		//std::cout<<"Checking attack actions release: " << fighter->HasAction(Fighter::Action::ReleaseAttack) <<std::endl;
 		//Is this the right place to handle state transitions? Maybe a different system?
 		if (fighter->HasAction(Fighter::Action::ReadyAttack))
 		{
@@ -120,6 +119,175 @@ void FighterSystem::ResolveActions()
 		}
 		*/
 	}
+}
+
+void FighterSystem::ResolveAnimations()
+{
+	std::vector<Entity> entities = EntityManager::GetEntitiesWithComponent<Physics, Fighter>();
+
+	for (Entity entity : entities)
+	{
+		Fighter* fighter = EntityManager::GetComponent<Fighter>(entity);
+
+		Fighter::State fighterState = fighter->GetState();
+
+		switch(fighterState)
+		{
+			case Fighter::State::Blocking:
+				HandleBlockingAnimations(*fighter);
+				break;
+			case Fighter::State::Readying:
+				HandleReadyingAnimations(*fighter);
+				break;
+			case Fighter::State::Attacking:
+				HandleAttackingAnimations(*fighter);
+				break;
+			case Fighter::State::Clashing:
+				HandleClashingAnimations(*fighter);
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+void FighterSystem::HandleWalkAnimations(Fighter& fighter)
+{
+	bool setWalkAnimation = false;
+	std::string animationName;
+	int startFrame = 0;
+	int fps = 0;
+	bool looping = false;
+
+	if (fighter.HasAction(Fighter::Action::MoveLeft) || fighter.HasAction(Fighter::Action::MoveRight))
+	{
+		animationName = "feetWalk";
+		setWalkAnimation = true;
+		startFrame = 0;
+		fps = 5;
+		looping = true;
+	}
+	else
+	{
+		animationName = "feetIdle";
+		setWalkAnimation = true;
+		startFrame = 0;
+		fps = 0;
+		looping = false;
+	}
+
+	if (setWalkAnimation)
+	{
+		Entity fighterLowerBody = fighter.lowerBody;
+		Render* lowerBodyRender = EntityManager::GetComponent<Render>(fighterLowerBody);
+		if (lowerBodyRender != nullptr)
+		{
+			if (lowerBodyRender->GetAnimationInstance()->animationName.compare(animationName) != 0)
+			{
+				std::cout<<"Different animations. Animation Instance: " << lowerBodyRender->GetAnimationInstance()->animationName << ". New: " << animationName <<std::endl;
+				lowerBodyRender->SetAnimationInstance(animationName, startFrame, fps, looping);
+			}
+		}
+	}
+}
+
+void FighterSystem::HandleBlockingAnimations(Fighter& fighter)
+{	
+	HandleWalkAnimations(fighter);
+
+	bool guardAnimationSet = false;
+	std::string animationName;
+	int startFrame = 0;
+	int fps = 0;
+	bool looping = false;
+
+	if (fighter.HasAction(Fighter::Action::SwordCenter))
+	{
+		animationName = "midGuard";
+		guardAnimationSet = true;
+		startFrame = 0;
+		fps = 0;
+		looping = false;
+	}
+	else if (fighter.HasAction(Fighter::Action::SwordUp))
+	{
+		animationName = "highGuard";
+		guardAnimationSet = true;
+		startFrame = 0;
+		fps = 0;
+		looping = false;
+	}
+	else if (fighter.HasAction(Fighter::Action::SwordDown))
+	{
+		animationName = "lowGuard";
+		guardAnimationSet = true;
+		startFrame = 0;
+		fps = 0;
+		looping = false;
+	}
+
+	if (guardAnimationSet)
+	{
+		Entity fighterUpperBody = fighter.upperBody;
+		Render* upperBodyRender = EntityManager::GetComponent<Render>(fighterUpperBody);
+		if (upperBodyRender != nullptr)
+		{
+			upperBodyRender->SetAnimationInstance(animationName, startFrame, fps, looping);
+		}
+	}
+}
+void FighterSystem::HandleReadyingAnimations(Fighter& fighter)
+{
+	HandleWalkAnimations(fighter);
+
+	bool readyAnimationSet = false;
+	std::string animationName;
+	int startFrame = 0;
+	int fps = 0;
+	bool looping = false;
+
+	if (fighter.HasAction(Fighter::Action::SwordCenter))
+	{
+		animationName = "midReady";
+		readyAnimationSet = true;
+		startFrame = 0;
+		fps = 0;
+		looping = false;
+	}
+	else if (fighter.HasAction(Fighter::Action::SwordUp))
+	{
+		animationName = "highReady";
+		readyAnimationSet = true;
+		startFrame = 0;
+		fps = 0;
+		looping = false;
+	}
+	else if (fighter.HasAction(Fighter::Action::SwordDown))
+	{
+		animationName = "lowReady";
+		readyAnimationSet = true;
+		startFrame = 0;
+		fps = 0;
+		looping = false;
+	}
+
+	if (readyAnimationSet)
+	{
+		Entity fighterUpperBody = fighter.upperBody;
+		Render* upperBodyRender = EntityManager::GetComponent<Render>(fighterUpperBody);
+		if (upperBodyRender != nullptr)
+		{
+			upperBodyRender->SetAnimationInstance(animationName, startFrame, fps, looping);
+		}
+	}
+}
+void FighterSystem::HandleAttackingAnimations(Fighter& fighter)
+{
+
+}
+void FighterSystem::HandleClashingAnimations(Fighter& fighter)
+{
+	
 }
 
 void FighterSystem::HandleBlockingStateInput(UserInput& userInput, Fighter& fighter)
@@ -181,7 +349,7 @@ void FighterSystem::HandleAttackDirectionInput(UserInput& userInput, Fighter& fi
 	else
 	{
 		//If no input is selected, default to center
-		//fighter.TakeAction(Fighter::Action::SwordCenter);
+		fighter.TakeAction(Fighter::Action::SwordCenter);
 	}
 }
 

@@ -47,6 +47,7 @@ void Game::Run(){
 		inputSystem->GetUserInput();
 		fighterSystem->HandleUserInput();
 		fighterSystem->ResolveActions();
+		fighterSystem->ResolveAnimations();
 		physicsSystem->ApplyPhysics();
 		collisionSystem->CheckCollisions();
 		physicsSystem->HandleCollisions();
