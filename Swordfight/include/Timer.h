@@ -1,40 +1,40 @@
 #pragma once
-#include <SDL.h>
+#include <cstdint>
 #include "Time.h"
 
 class Timer
 {
 public:
-	Timer(uint32_t timeLimit)
+
+	void Restart()
 	{
-		this->timeLimit = timeLimit;
-		timerStarted = false;
+		Restart(0);
 	}
 
-	void Start()
+	void Restart(uint32_t initialOffsetMs)
 	{
-		timerStarted = true;
-		timeCounter = 0;
+		//Initial offset is how "late" the timer was started
+		startTimeMs = Time::GetCurrentFrameTimeMs() - initialOffsetMs;
 	}
 
-	bool IsOverTime() 
+	uint32_t GetTimeElapsedMs()
 	{
-		if (timeCounter >= timeLimit)
+
+		if (startTimeMs == 0)
 		{
-
+			//If this is the first time getting the time elapsed, set it to the current frame time
+			Restart();
 		}
+		//Get the current frame time
+		uint32_t currentFrameTimeMs = Time::GetCurrentFrameTimeMs();
+
+		//Calculate the time elapsed since the timer was started
+		uint32_t timeElapsedMs = currentFrameTimeMs - startTimeMs;
+
+		return timeElapsedMs;
 	}
 
 
 private:
-	void IncrementTimer()
-	{
-		if (timerStarted)
-		{
-			timeCounter += Time::GetDeltaTime();
-		}
-	}
-	bool timerStarted;
-	uint32_t timeLimit;
-	uint32_t timeCounter;
+	uint32_t startTimeMs = 0;
 };

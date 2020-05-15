@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <cstdint>
+#include "Timer.h"
 
 class Animation
 {
@@ -41,8 +42,6 @@ struct AnimationInstance{
 		currentAnimationFrame = 0;
 		framesPerSecond = 0;
 		looping = false;
-		lastFrameTime = 0;
-		frameTime = 0;
 	}
 
 	int GetCurrentAnimSprite()
@@ -55,6 +54,6 @@ struct AnimationInstance{
 	unsigned int currentAnimationFrame = 0;
 	unsigned int framesPerSecond = 0;
 	bool looping = false;
-	uint32_t lastFrameTime = 0;
-	uint32_t frameTime = 0;
+
+	Timer timer;
 };

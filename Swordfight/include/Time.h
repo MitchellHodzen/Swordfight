@@ -15,18 +15,18 @@ public:
 		}
 
 		//Calculate the time between the current frame and the last frame. Convert to seconds.
-		lastFrameTime = currentFrameTime;
-		currentFrameTime = SDL_GetTicks();
-		Time::deltaTime = (float)(currentFrameTime - lastFrameTime) / 1000;
+		lastFrameTimeMs = currentFrameTimeMs;
+		currentFrameTimeMs = SDL_GetTicks();
+		Time::deltaTimeMs = (float)(currentFrameTimeMs - lastFrameTimeMs) / 1000;
 	}
 
 	//Get the time between the last frame and the current frame in seconds 
 	static float GetDeltaTime()
 	{
-		return Time::deltaTime;
+		return Time::deltaTimeMs;
 	}
 
-	static uint32_t GetCurrentFrameTime()
+	static uint32_t GetCurrentFrameTimeMs()
 	{
 		Uint32 currentFrameTime = SDL_GetTicks();
 		return (uint32_t) currentFrameTime;
@@ -34,9 +34,9 @@ public:
 	
 private:
 	Time() {}
-	static inline float deltaTime = 0.0f;
-	static inline Uint32 lastFrameTime = 0;
-	static inline Uint32 currentFrameTime = 0;
+	static inline float deltaTimeMs = 0.0f;
+	static inline Uint32 lastFrameTimeMs = 0;
+	static inline Uint32 currentFrameTimeMs = 0;
 	static inline bool timerStarted = false;
 
 };
