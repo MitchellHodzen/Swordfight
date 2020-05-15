@@ -16,7 +16,7 @@ void AnimationSystem::AdvanceAnimations()
 
 		float millisecondsPerFrame = 1000.0f / animInstance->framesPerSecond;
 
-		uint32_t frameTime = animInstance->timer.GetTimeElapsedMs();
+		uint32_t frameTime = animInstance->animationFrameTimer.GetTimeElapsedMs();
 
 		int animationLength = animInstance->animation->GetAnimationLength();
 
@@ -30,7 +30,7 @@ void AnimationSystem::AdvanceAnimations()
 				currentAnimationFrame++;
 			}
 			//Restart the timer, using the leftover frame time
-			animInstance->timer.Restart(frameTime);
+			animInstance->animationFrameTimer.Restart(frameTime);
 			if (currentAnimationFrame >= animationLength)
 			{
 				if (animInstance->looping == true)

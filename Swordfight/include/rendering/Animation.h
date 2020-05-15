@@ -55,5 +55,5 @@ struct AnimationInstance{
 	unsigned int framesPerSecond = 0;
 	bool looping = false;
 
-	Timer timer;
+	Timer animationFrameTimer;
 };
