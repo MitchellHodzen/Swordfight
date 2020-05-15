@@ -2,6 +2,9 @@
 #include "kecs/KECS.h"
 #include <vector>
 #include <iostream>
+#include "Timer.h"
+#include <cstdint>
+
 //forward declaration
 
 
@@ -24,6 +27,8 @@ struct Fighter
 	Entity lowerBody = -1;
 	float moveSpeed = 0;
 	Stance currentStance = Stance::MIDDLE;
+	Timer attackTimer;
+	uint32_t attackTimeMs = 1000;
 
 	void PrintActions()
 	{

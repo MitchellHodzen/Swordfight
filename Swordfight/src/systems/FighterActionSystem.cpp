@@ -4,6 +4,7 @@
 #include "Components/c_fighter.h"
 #include "Components/c_render.h"
 #include "Time.h"
+#include "Timer.h"
 #include "MessageManager.h"
 #include "Messages/m_fighterStateChanged.h"
 
@@ -16,57 +17,7 @@ void FighterActionSystem::ResolveActions()
 		Physics* phys = EntityManager::GetComponent<Physics>(entity);
 		Fighter* fighter = EntityManager::GetComponent<Fighter>(entity);
 
-		float moveSpeed = fighter->moveSpeed;
-		
-		//Movement is left and right
-		if (fighter->HasAction(Fighter::Action::MoveLeft))
-		{
-			float currentVelocityX = phys->velocity.GetX();
-			float newVelocityX = currentVelocityX - moveSpeed * Time::GetDeltaTime();
-			if (phys->velocity.GetX() > 0){
-				//If we're moving right, give left movement a boost
-				newVelocityX -= phys->friction * Time::GetDeltaTime();
-			}
-			phys->velocity.SetX(newVelocityX);
-		}
-		else if (fighter->HasAction(Fighter::Action::MoveRight))
-		{
-			float currentVelocityX = phys->velocity.GetX();
-			float newVelocityX = currentVelocityX + moveSpeed * Time::GetDeltaTime();
-			if (phys->velocity.GetX() < 0){
-				//If we're moving right, give left movement a boost
-				newVelocityX += phys->friction * Time::GetDeltaTime();
-			}
-			phys->velocity.SetX(newVelocityX);
-		}
-		else{
-			//If no input is selected, we apply friction
-			if (phys->velocity.GetX() > 0){
-				//If we're moving right, apply friction to the left
-				phys->velocity.SetX(phys->velocity.GetX() - phys->friction * Time::GetDeltaTime());
-
-				//If after applying friction the velocity direction changed, zero the velocity out
-				if (phys->velocity.GetX() < 0){
-					phys->velocity.SetX(0);
-				}
-
-			}
-			else if (phys->velocity.GetX() < 0){
-				//If we're moving left, apply friction to the right
-				phys->velocity.SetX(phys->velocity.GetX() + phys->friction * Time::GetDeltaTime());
-
-				//If after applying friction the velocity direction changed, zero the velocity out
-				if (phys->velocity.GetX() > 0){
-					phys->velocity.SetX(0);
-				}
-			}
-		}
-
-		//Clamping speed to max speed
-		if (phys->velocity.GetMagnitude() > phys->maxSpeed)
-		{
-			phys->velocity.SetMagnitude(phys->maxSpeed);
-		}
+		ResolveMovement(*fighter, *phys);
 
 		//Control attack direction
 		if (fighter->HasAction(Fighter::Action::SwordUp))
@@ -93,13 +44,85 @@ void FighterActionSystem::ResolveActions()
 			TransitionState(entity, *fighter, Fighter::State::Attacking);
 		}
 
-		/*
-		if (uin->keyStates[UserInput::InputType::SPACE] && EntityManager::HasComponent<Cannon>(entity))
+		//handle state specifics (consolidate?)
+		Fighter::State fighterState = fighter->GetState();
+
+		//Make input queue instead?
+		switch(fighterState)
 		{
-			BulletFiredMessage message(entity);
-			MessageManager::PushMessage<BulletFiredMessage>(message);
+			case Fighter::State::Blocking:
+				break;
+			case Fighter::State::Readying:
+				break;
+			case Fighter::State::Attacking: {
+				uint32_t elapsedAttackTime = fighter->attackTimer.GetTimeElapsedMs();
+				if (elapsedAttackTime >= fighter->attackTimeMs)
+				{
+					//If the attack is over, transition back to block
+					TransitionState(entity, *fighter, Fighter::State::Blocking);
+				}
+				break;
+			}
+			case Fighter::State::Clashing:
+				break;
+			default:
+				break;
 		}
-		*/
+	}
+}
+
+void FighterActionSystem::ResolveMovement(Fighter& fighter, Physics& phys)
+{
+	float moveSpeed = fighter.moveSpeed;
+	
+	//Movement is left and right
+	if (fighter.HasAction(Fighter::Action::MoveLeft))
+	{
+		float currentVelocityX = phys.velocity.GetX();
+		float newVelocityX = currentVelocityX - moveSpeed * Time::GetDeltaTime();
+		if (phys.velocity.GetX() > 0){
+			//If we're moving right, give left movement a boost
+			newVelocityX -= phys.friction * Time::GetDeltaTime();
+		}
+		phys.velocity.SetX(newVelocityX);
+	}
+	else if (fighter.HasAction(Fighter::Action::MoveRight))
+	{
+		float currentVelocityX = phys.velocity.GetX();
+		float newVelocityX = currentVelocityX + moveSpeed * Time::GetDeltaTime();
+		if (phys.velocity.GetX() < 0){
+			//If we're moving right, give left movement a boost
+			newVelocityX += phys.friction * Time::GetDeltaTime();
+		}
+		phys.velocity.SetX(newVelocityX);
+	}
+	else{
+		//If no input is selected, we apply friction
+		if (phys.velocity.GetX() > 0){
+			//If we're moving right, apply friction to the left
+			phys.velocity.SetX(phys.velocity.GetX() - phys.friction * Time::GetDeltaTime());
+
+			//If after applying friction the velocity direction changed, zero the velocity out
+			if (phys.velocity.GetX() < 0){
+				phys.velocity.SetX(0);
+			}
+
+		}
+		else if (phys.velocity.GetX() < 0){
+			//If we're moving left, apply friction to the right
+			phys.velocity.SetX(phys.velocity.GetX() + phys.friction * Time::GetDeltaTime());
+
+			//If after applying friction the velocity direction changed, zero the velocity out
+			if (phys.velocity.GetX() > 0){
+				phys.velocity.SetX(0);
+			}
+		}
+	}
+
+	//Clamping speed to max speed
+	if (phys.velocity.GetMagnitude() > phys.maxSpeed)
+	{
+		phys.velocity.SetMagnitude(phys.maxSpeed);
 	}
 }
 
@@ -123,4 +146,18 @@ void FighterActionSystem::TransitionToState(Fighter& fighter, Fighter::State nex
 {
 	//Do transition to next state
 	std::cout<<"Transitioning to fighter state " << nextState << std::endl;
+	switch(nextState)
+	{
+		case Fighter::State::Blocking:
+			break;
+		case Fighter::State::Readying:
+			break;
+		case Fighter::State::Attacking:
+			fighter.attackTimer.Restart();
+			break;
+		case Fighter::State::Clashing:
+			break;
+		default:
+			break;
+	}
 }
