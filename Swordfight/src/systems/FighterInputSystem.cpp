@@ -63,11 +63,11 @@ void FighterInputSystem::HandleReadyingStateInput(UserInput& userInput, Fighter&
 }
 void FighterInputSystem::HandleAttackingStateInput(UserInput& userInput, Fighter& fighter)
 {
-
+	//No attack specific input
 }
 void FighterInputSystem::HandleClashingStateInput(UserInput& userInput, Fighter& fighter)
 {
-
+	//No clash specific input
 }
 
 
@@ -89,15 +89,15 @@ void FighterInputSystem::HandleAttackDirectionInput(UserInput& userInput, Fighte
 	//Choose sword direction
 	if (userInput.keyStates[UserInput::InputType::UP])
 	{
-		fighter.TakeAction(Fighter::Action::SwordUp);
+		fighter.currentStance = Fighter::Stance::UP;
 	}
 	else if (userInput.keyStates[UserInput::InputType::DOWN])
 	{
-		fighter.TakeAction(Fighter::Action::SwordDown);
+		fighter.currentStance = Fighter::Stance::DOWN;
 	}
 	else
 	{
 		//If no input is selected, default to center
-		fighter.TakeAction(Fighter::Action::SwordCenter);
+		fighter.currentStance = Fighter::Stance::MIDDLE;
 	}
 }

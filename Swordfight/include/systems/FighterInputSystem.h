@@ -1,11 +1,13 @@
 #pragma once
 struct Fighter;
 struct UserInput;
+struct Physics;
 
 
 class FighterInputSystem
 {
 public:
+
 	void HandleUserInput();
 
 	void HandleBlockingStateInput(UserInput& userInput, Fighter& fighter);

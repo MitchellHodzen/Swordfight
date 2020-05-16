@@ -10,7 +10,7 @@
 
 struct Fighter
 {
-	enum Action { MoveLeft, MoveRight, SwordUp, SwordDown, SwordCenter, ReadyAttack, ReleaseAttack};
+	enum Action { MoveLeft, MoveRight, ReadyAttack, ReleaseAttack};
 
 	enum State {Blocking, Readying, Attacking, Clashing};
 

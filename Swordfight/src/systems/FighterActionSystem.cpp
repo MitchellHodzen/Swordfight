@@ -19,21 +19,6 @@ void FighterActionSystem::ResolveActions()
 
 		ResolveMovement(*fighter, *phys);
 
-		//Control attack direction
-		if (fighter->HasAction(Fighter::Action::SwordUp))
-		{
-			fighter->currentStance = Fighter::Stance::UP;
-		}
-		else if (fighter->HasAction(Fighter::Action::SwordCenter))
-		{
-			fighter->currentStance = Fighter::Stance::MIDDLE;
-		}
-		else if (fighter->HasAction(Fighter::Action::SwordDown))
-		{
-			fighter->currentStance = Fighter::Stance::DOWN;
-		}
-
-
 		//Is this the right place to handle state transitions? Maybe a different system?
 		if (fighter->HasAction(Fighter::Action::ReadyAttack))
 		{
@@ -47,13 +32,9 @@ void FighterActionSystem::ResolveActions()
 		//handle state specifics (consolidate?)
 		Fighter::State fighterState = fighter->GetState();
 
-		//Make input queue instead?
+		//Special cases for each case
 		switch(fighterState)
 		{
-			case Fighter::State::Blocking:
-				break;
-			case Fighter::State::Readying:
-				break;
 			case Fighter::State::Attacking: {
 				uint32_t elapsedAttackTime = fighter->attackTimer.GetTimeElapsedMs();
 				if (elapsedAttackTime >= fighter->attackTimeMs)

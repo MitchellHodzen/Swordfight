@@ -144,31 +144,32 @@ void FighterAnimationSystem::HandleBlockingAnimations(Fighter& fighter)
 	int fps = 0;
 	bool looping = false;
 
-	if (fighter.HasAction(Fighter::Action::SwordCenter))
+	switch(fighter.currentStance)
 	{
-		animationName = "midGuard";
-		guardAnimationSet = true;
-		startFrame = 0;
-		fps = 0;
-		looping = false;
+		case Fighter::Stance::UP:
+			animationName = "highGuard";
+			guardAnimationSet = true;
+			startFrame = 0;
+			fps = 0;
+			looping = false;
+			break;
+		case Fighter::Stance::MIDDLE:
+			animationName = "midGuard";
+			guardAnimationSet = true;
+			startFrame = 0;
+			fps = 0;
+			looping = false;
+			break;
+		case Fighter::Stance::DOWN:
+			animationName = "lowGuard";
+			guardAnimationSet = true;
+			startFrame = 0;
+			fps = 0;
+			looping = false;
+			break;
+		default:
+			break;
 	}
-	else if (fighter.HasAction(Fighter::Action::SwordUp))
-	{
-		animationName = "highGuard";
-		guardAnimationSet = true;
-		startFrame = 0;
-		fps = 0;
-		looping = false;
-	}
-	else if (fighter.HasAction(Fighter::Action::SwordDown))
-	{
-		animationName = "lowGuard";
-		guardAnimationSet = true;
-		startFrame = 0;
-		fps = 0;
-		looping = false;
-	}
-
 	if (guardAnimationSet)
 	{
 		Entity fighterUpperBody = fighter.upperBody;
@@ -179,6 +180,7 @@ void FighterAnimationSystem::HandleBlockingAnimations(Fighter& fighter)
 		}
 	}
 }
+
 void FighterAnimationSystem::HandleReadyingAnimations(Fighter& fighter)
 {
 	HandleWalkAnimations(fighter);
@@ -188,32 +190,33 @@ void FighterAnimationSystem::HandleReadyingAnimations(Fighter& fighter)
 	int startFrame = 0;
 	int fps = 0;
 	bool looping = false;
-
-	if (fighter.HasAction(Fighter::Action::SwordCenter))
+	switch(fighter.currentStance)
 	{
-		animationName = "midReady";
-		readyAnimationSet = true;
-		startFrame = 0;
-		fps = 0;
-		looping = false;
+		case Fighter::Stance::UP:
+			animationName = "highReady";
+			readyAnimationSet = true;
+			startFrame = 0;
+			fps = 0;
+			looping = false;
+			break;
+		case Fighter::Stance::MIDDLE:
+			animationName = "midReady";
+			readyAnimationSet = true;
+			startFrame = 0;
+			fps = 0;
+			looping = false;
+			break;
+		case Fighter::Stance::DOWN:
+			animationName = "lowReady";
+			readyAnimationSet = true;
+			startFrame = 0;
+			fps = 0;
+			looping = false;
+			break;
+		default:
+			break;
 	}
-	else if (fighter.HasAction(Fighter::Action::SwordUp))
-	{
-		animationName = "highReady";
-		readyAnimationSet = true;
-		startFrame = 0;
-		fps = 0;
-		looping = false;
-	}
-	else if (fighter.HasAction(Fighter::Action::SwordDown))
-	{
-		animationName = "lowReady";
-		readyAnimationSet = true;
-		startFrame = 0;
-		fps = 0;
-		looping = false;
-	}
-
+	
 	if (readyAnimationSet)
 	{
 		Entity fighterUpperBody = fighter.upperBody;
