@@ -74,6 +74,7 @@ void FighterAnimationSystem::ResolveAnimations()
 				if (attackAnimationFired)
 				{
 					ApplyFighterAnimation(fighter->upperBody, animationName, startFrame, fps, looping);
+					ApplyFighterAnimation(fighter->lowerBody, "feetIdle", 0, 0, false);
 				}
 			}
 		}
