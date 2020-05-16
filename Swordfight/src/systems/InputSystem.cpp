@@ -7,9 +7,17 @@
 #include "Messages/m_bulletFired.h"
 #include "InputManager.h"
 #include "Time.h"
+#include "InputCommandMapper.h"
 
 InputSystem::InputSystem()
 {
+	InputCommandMapper commandMapper = InputCommandMapper::GetInstance();
+	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_DOWN, InputCommandMapper::Command::StanceDown);
+	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_UP, InputCommandMapper::Command::StanceUp);
+	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_LEFT, InputCommandMapper::Command::MoveLeft);
+	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_RIGHT, InputCommandMapper::Command::MoveRight);
+	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_SPACE, InputCommandMapper::Command::Attack);
+	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_SHIFT, InputCommandMapper::Command::Dash);
 }
 
 
@@ -21,34 +29,32 @@ void InputSystem::GetUserInput()
 {
 	std::vector<Entity> entities = EntityManager::GetEntitiesWithComponent<UserInput>();
 
-	InputManager inputManager = InputManager::GetInstance();
+	InputCommandMapper commandMapper = InputCommandMapper::GetInstance();
 
 	//For every entity which captures user input, record user input
 	for (Entity entity : entities)
 	{
 		UserInput* uin = EntityManager::GetComponent<UserInput>(entity);
 
-		uin->keyStates[UserInput::InputType::UP] = inputManager.GetKeyDown(InputManager::KeyboardKey::KEY_UP);
-		uin->keyStates[UserInput::InputType::DOWN] = inputManager.GetKeyDown(InputManager::KeyboardKey::KEY_DOWN);
-		uin->keyStates[UserInput::InputType::LEFT] = inputManager.GetKeyDown(InputManager::KeyboardKey::KEY_LEFT);
-		uin->keyStates[UserInput::InputType::RIGHT] = inputManager.GetKeyDown(InputManager::KeyboardKey::KEY_RIGHT);
-		uin->keyStates[UserInput::InputType::SPACE] = inputManager.GetKeyDown(InputManager::KeyboardKey::KEY_SPACE);
-		uin->keyStates[UserInput::InputType::SHIFT] = inputManager.GetKeyDown(InputManager::KeyboardKey::KEY_SHIFT);
+		uin->keyStates[InputCommandMapper::Command::Attack] = commandMapper.GetCommandDown(InputCommandMapper::Command::Attack);
+		uin->keyStates[InputCommandMapper::Command::MoveLeft] = commandMapper.GetCommandDown(InputCommandMapper::Command::MoveLeft);
+		uin->keyStates[InputCommandMapper::Command::MoveRight] = commandMapper.GetCommandDown(InputCommandMapper::Command::MoveRight);
+		uin->keyStates[InputCommandMapper::Command::Dash] = commandMapper.GetCommandDown(InputCommandMapper::Command::Dash);
+		uin->keyStates[InputCommandMapper::Command::StanceDown] = commandMapper.GetCommandDown(InputCommandMapper::Command::StanceDown);
+		uin->keyStates[InputCommandMapper::Command::StanceUp] = commandMapper.GetCommandDown(InputCommandMapper::Command::StanceUp);
 
-		//wipe keys pressed
-		uin->keyPressed[UserInput::InputType::UP] = inputManager.GetKeyPressed(InputManager::KeyboardKey::KEY_UP);
-		uin->keyPressed[UserInput::InputType::DOWN] = inputManager.GetKeyPressed(InputManager::KeyboardKey::KEY_DOWN);
-		uin->keyPressed[UserInput::InputType::LEFT] = inputManager.GetKeyPressed(InputManager::KeyboardKey::KEY_LEFT);
-		uin->keyPressed[UserInput::InputType::RIGHT] = inputManager.GetKeyPressed(InputManager::KeyboardKey::KEY_RIGHT);
-		uin->keyPressed[UserInput::InputType::SPACE] = inputManager.GetKeyPressed(InputManager::KeyboardKey::KEY_SPACE);
-		uin->keyPressed[UserInput::InputType::SHIFT] = inputManager.GetKeyPressed(InputManager::KeyboardKey::KEY_SHIFT);
+		uin->keyPressed[InputCommandMapper::Command::Attack] = commandMapper.GetCommandPressed(InputCommandMapper::Command::Attack);
+		uin->keyPressed[InputCommandMapper::Command::MoveLeft] = commandMapper.GetCommandPressed(InputCommandMapper::Command::MoveLeft);
+		uin->keyPressed[InputCommandMapper::Command::MoveRight] = commandMapper.GetCommandPressed(InputCommandMapper::Command::MoveRight);
+		uin->keyPressed[InputCommandMapper::Command::Dash] = commandMapper.GetCommandPressed(InputCommandMapper::Command::Dash);
+		uin->keyPressed[InputCommandMapper::Command::StanceDown] = commandMapper.GetCommandPressed(InputCommandMapper::Command::StanceDown);
+		uin->keyPressed[InputCommandMapper::Command::StanceUp] = commandMapper.GetCommandPressed(InputCommandMapper::Command::StanceUp);
 
-		//wipe keys released
-		uin->keyReleased[UserInput::InputType::UP] = inputManager.GetKeyReleased(InputManager::KeyboardKey::KEY_UP);
-		uin->keyReleased[UserInput::InputType::DOWN] = inputManager.GetKeyReleased(InputManager::KeyboardKey::KEY_DOWN);
-		uin->keyReleased[UserInput::InputType::LEFT] = inputManager.GetKeyReleased(InputManager::KeyboardKey::KEY_LEFT);
-		uin->keyReleased[UserInput::InputType::RIGHT] = inputManager.GetKeyReleased(InputManager::KeyboardKey::KEY_RIGHT);
-		uin->keyReleased[UserInput::InputType::SPACE] = inputManager.GetKeyReleased(InputManager::KeyboardKey::KEY_SPACE);
-		uin->keyReleased[UserInput::InputType::SHIFT] = inputManager.GetKeyReleased(InputManager::KeyboardKey::KEY_SHIFT);
+		uin->keyReleased[InputCommandMapper::Command::Attack] = commandMapper.GetCommandReleased(InputCommandMapper::Command::Attack);
+		uin->keyReleased[InputCommandMapper::Command::MoveLeft] = commandMapper.GetCommandReleased(InputCommandMapper::Command::MoveLeft);
+		uin->keyReleased[InputCommandMapper::Command::MoveRight] = commandMapper.GetCommandReleased(InputCommandMapper::Command::MoveRight);
+		uin->keyReleased[InputCommandMapper::Command::Dash] = commandMapper.GetCommandReleased(InputCommandMapper::Command::Dash);
+		uin->keyReleased[InputCommandMapper::Command::StanceDown] = commandMapper.GetCommandReleased(InputCommandMapper::Command::StanceDown);
+		uin->keyReleased[InputCommandMapper::Command::StanceUp] = commandMapper.GetCommandReleased(InputCommandMapper::Command::StanceUp);
 	}
 }

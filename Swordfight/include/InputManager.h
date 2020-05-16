@@ -5,7 +5,7 @@ class InputManager
 {
 public:
 
-	enum class KeyboardKey{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, KEY_SHIFT};
+	enum KeyboardKey{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, KEY_SHIFT, UNMAPPED};
 
 	static InputManager& GetInstance()
 	{

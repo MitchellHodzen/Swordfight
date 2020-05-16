@@ -1,13 +1,13 @@
 #pragma once
 #include <stack>
 #include <vector>
+#include "InputCommandMapper.h"
 struct UserInput
 {
-	enum InputType { LEFT, RIGHT, UP, DOWN, SPACE, CLOSE, SHIFT};
 
 	UserInput()
 	{
-		for (int i = 0; i < inputTypesCount; ++i)
+		for (int i = 0; i < InputCommandMapper::commandSize; ++i)
 		{
 			keyStates[i] = false;
 			keyPressed[i] = false;
@@ -15,9 +15,8 @@ struct UserInput
 		}
 	}
 
-	const static int inputTypesCount = 7;
-	bool keyStates[inputTypesCount];
-	bool keyPressed[inputTypesCount];
-	bool keyReleased[inputTypesCount];
+	bool keyStates[InputCommandMapper::commandSize];
+	bool keyPressed[InputCommandMapper::commandSize];
+	bool keyReleased[InputCommandMapper::commandSize];
 
 };
