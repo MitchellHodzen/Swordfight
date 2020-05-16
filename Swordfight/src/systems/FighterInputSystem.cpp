@@ -73,6 +73,11 @@ void FighterInputSystem::HandleClashingStateInput(UserInput& userInput, Fighter&
 
 void FighterInputSystem::HandleMovementInput(UserInput& userInput, Fighter& fighter)
 {
+	//Check if dash is clicked
+	if (userInput.keyPressed[UserInput::InputType::SHIFT])
+	{
+		fighter.TakeAction(Fighter::Action::Dash);
+	}
 	//Movement is left and right
 	if (userInput.keyStates[UserInput::InputType::LEFT])
 	{

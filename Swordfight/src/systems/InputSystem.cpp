@@ -33,6 +33,7 @@ void InputSystem::GetUserInput()
 		uin->keyStates[UserInput::InputType::LEFT] = inputManager.GetKeyDown(InputManager::KeyboardKey::KEY_LEFT);
 		uin->keyStates[UserInput::InputType::RIGHT] = inputManager.GetKeyDown(InputManager::KeyboardKey::KEY_RIGHT);
 		uin->keyStates[UserInput::InputType::SPACE] = inputManager.GetKeyDown(InputManager::KeyboardKey::KEY_SPACE);
+		uin->keyStates[UserInput::InputType::SHIFT] = inputManager.GetKeyDown(InputManager::KeyboardKey::KEY_SHIFT);
 
 		//wipe keys pressed
 		uin->keyPressed[UserInput::InputType::UP] = inputManager.GetKeyPressed(InputManager::KeyboardKey::KEY_UP);
@@ -40,6 +41,7 @@ void InputSystem::GetUserInput()
 		uin->keyPressed[UserInput::InputType::LEFT] = inputManager.GetKeyPressed(InputManager::KeyboardKey::KEY_LEFT);
 		uin->keyPressed[UserInput::InputType::RIGHT] = inputManager.GetKeyPressed(InputManager::KeyboardKey::KEY_RIGHT);
 		uin->keyPressed[UserInput::InputType::SPACE] = inputManager.GetKeyPressed(InputManager::KeyboardKey::KEY_SPACE);
+		uin->keyPressed[UserInput::InputType::SHIFT] = inputManager.GetKeyPressed(InputManager::KeyboardKey::KEY_SHIFT);
 
 		//wipe keys released
 		uin->keyReleased[UserInput::InputType::UP] = inputManager.GetKeyReleased(InputManager::KeyboardKey::KEY_UP);
@@ -47,5 +49,6 @@ void InputSystem::GetUserInput()
 		uin->keyReleased[UserInput::InputType::LEFT] = inputManager.GetKeyReleased(InputManager::KeyboardKey::KEY_LEFT);
 		uin->keyReleased[UserInput::InputType::RIGHT] = inputManager.GetKeyReleased(InputManager::KeyboardKey::KEY_RIGHT);
 		uin->keyReleased[UserInput::InputType::SPACE] = inputManager.GetKeyReleased(InputManager::KeyboardKey::KEY_SPACE);
+		uin->keyReleased[UserInput::InputType::SHIFT] = inputManager.GetKeyReleased(InputManager::KeyboardKey::KEY_SHIFT);
 	}
 }

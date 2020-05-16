@@ -3,7 +3,7 @@
 #include <vector>
 struct UserInput
 {
-	enum InputType { LEFT, RIGHT, UP, DOWN, SPACE, CLOSE};
+	enum InputType { LEFT, RIGHT, UP, DOWN, SPACE, CLOSE, SHIFT};
 
 	UserInput()
 	{
@@ -15,7 +15,7 @@ struct UserInput
 		}
 	}
 
-	const static int inputTypesCount = 6;
+	const static int inputTypesCount = 7;
 	bool keyStates[inputTypesCount];
 	bool keyPressed[inputTypesCount];
 	bool keyReleased[inputTypesCount];

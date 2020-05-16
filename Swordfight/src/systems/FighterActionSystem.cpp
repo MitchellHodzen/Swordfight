@@ -22,6 +22,11 @@ void FighterActionSystem::ResolveActions()
 		{
 			TransitionState(entity, *fighter, Fighter::State::Readying);
 		}
+
+		if (fighter->HasAction(Fighter::Action::Dash))
+		{
+			TransitionState(entity, *fighter, Fighter::State::Dashing);
+		}
 		else if (fighter->HasAction(Fighter::Action::ReleaseAttack))
 		{
 			TransitionState(entity, *fighter, Fighter::State::Attacking);
@@ -33,6 +38,27 @@ void FighterActionSystem::ResolveActions()
 		//Special cases for each case
 		switch(fighterState)
 		{
+			case Fighter::State::Dashing: {
+				uint32_t elapsedDashTimeMs = fighter->dashTimer.GetTimeElapsedMs();
+				if (elapsedDashTimeMs <= fighter->dashTimeMs / 2.0f)
+				{			
+					if (fighter->currentDashDirection == Fighter::DashDirection::LEFT)
+					{
+						fighter->TakeAction(Fighter::Action::MoveLeft);
+					}
+					else
+					{
+						fighter->TakeAction(Fighter::Action::MoveRight);
+					}
+				}
+				else if (elapsedDashTimeMs >= fighter->dashTimeMs)
+				{
+					//If the dash is over, transition back to previous state
+					TransitionState(entity, *fighter, fighter->GetPreviousState());
+				}
+				break;
+
+			}
 			case Fighter::State::Attacking: {
 				uint32_t elapsedAttackTime = fighter->attackTimer.GetTimeElapsedMs();
 				if (elapsedAttackTime <= fighter->attackTimeMs / 2.0f)
@@ -62,8 +88,13 @@ void FighterActionSystem::ResolveMovement(Fighter& fighter, Physics& phys)
 	float maxSpeed = phys.maxSpeed;
 	if (fighter.GetState() == Fighter::State::Attacking)
 	{
-		maxSpeed += fighter.bigMoveMaxOffset;
-		moveSpeed = fighter.bigMoveSpeed;
+		maxSpeed += fighter.attackMaxMoveOffset;
+		moveSpeed = fighter.attackMoveSpeed;
+	}
+	else if (fighter.GetState() == Fighter::State::Dashing)
+	{
+		maxSpeed += fighter.dashMaxMoveOffset;
+		moveSpeed = fighter.dashMoveSpeed;
 	}
 	
 	//Movement is left and right
@@ -131,12 +162,12 @@ void FighterActionSystem::TransitionFromState(Fighter& fighter)
 {
 	//Do transition from current fighter state
 	Fighter::State previousState = fighter.GetState();
-	std::cout<<"Transitioning from fighter state " << previousState << std::endl;
+	//std::cout<<"Transitioning from fighter state " << previousState << std::endl;
 }
 void FighterActionSystem::TransitionToState(Fighter& fighter, Fighter::State nextState)
 {
 	//Do transition to next state
-	std::cout<<"Transitioning to fighter state " << nextState << std::endl;
+	//std::cout<<"Transitioning to fighter state " << nextState << std::endl;
 	switch(nextState)
 	{
 		case Fighter::State::Blocking:
@@ -148,6 +179,16 @@ void FighterActionSystem::TransitionToState(Fighter& fighter, Fighter::State nex
 			break;
 		case Fighter::State::Clashing:
 			break;
+		case Fighter::State::Dashing:
+			fighter.dashTimer.Restart();
+			if (fighter.HasAction(Fighter::Action::MoveRight))
+			{
+				fighter.currentDashDirection = Fighter::DashDirection::RIGHT;
+			}
+			else
+			{
+				fighter.currentDashDirection = Fighter::DashDirection::LEFT;
+			}
 		default:
 			break;
 	}

@@ -10,11 +10,13 @@
 
 struct Fighter
 {
-	enum Action { MoveLeft, MoveRight, ReadyAttack, ReleaseAttack};
+	enum Action { MoveLeft, MoveRight, ReadyAttack, ReleaseAttack, Dash};
 
-	enum State {Blocking, Readying, Attacking, Clashing};
+	enum State {Blocking, Readying, Attacking, Clashing, Dashing};
 
 	enum Stance {UP, MIDDLE, DOWN};
+
+	enum DashDirection {LEFT, RIGHT};
 
 	Fighter()
 	{
@@ -26,11 +28,16 @@ struct Fighter
 	Entity upperBody = -1;
 	Entity lowerBody = -1;
 	float moveSpeed = 0;
-	float bigMoveSpeed = 0;
-	float bigMoveMaxOffset = 0;
+	float attackMoveSpeed = 0;
+	float attackMaxMoveOffset = 0;
 	Stance currentStance = Stance::MIDDLE;
 	Timer attackTimer;
 	uint32_t attackTimeMs = 0;
+	Timer dashTimer;
+	uint32_t dashTimeMs = 0;
+	float dashMoveSpeed = 0;
+	float dashMaxMoveOffset = 0;
+	DashDirection currentDashDirection = DashDirection::LEFT;
 
 	void PrintActions()
 	{
@@ -42,7 +49,7 @@ struct Fighter
 
 	void ChangeState(State newState)
 	{
-		std::cout<<"Changing state from " << currentState << " to " << newState<<std::endl;
+		//std::cout<<"Changing state from " << currentState << " to " << newState<<std::endl;
 		lastState = currentState;
 		currentState = newState;
 	};
@@ -50,6 +57,11 @@ struct Fighter
 	State GetState()
 	{
 		return currentState;
+	}
+
+	State GetPreviousState()
+	{
+		return lastState;
 	}
 
 	void TakeAction(Action action)
@@ -72,7 +84,7 @@ struct Fighter
 	};
 
 private:
-	const static int actionCount = 4;
+	const static int actionCount = 5;
 	bool actions[actionCount];
 	State currentState;
 	State lastState;

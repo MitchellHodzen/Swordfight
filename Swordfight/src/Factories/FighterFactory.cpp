@@ -29,9 +29,12 @@ Entity FighterFactory::ConstructFighter(int posX, int posY)
 			fighter->lowerBody = lowerBody;
 			fighter->upperBody = upperBody;
 			fighter->moveSpeed = 500;
-			fighter->bigMoveSpeed = 5000;
-			fighter->bigMoveMaxOffset = 150;
+			fighter->attackMoveSpeed = 5000;
+			fighter->attackMaxMoveOffset = 150;
 			fighter->attackTimeMs = 500;
+			fighter->dashTimeMs = 500;
+			fighter->dashMoveSpeed = 7000;
+			fighter->dashMaxMoveOffset = 100;
 		}
 
 		Transform* playerTrans = EntityManager::AddComponent<Transform>(playerFighter);
