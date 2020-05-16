@@ -29,6 +29,8 @@ Entity FighterFactory::ConstructFighter(int posX, int posY)
 			fighter->lowerBody = lowerBody;
 			fighter->upperBody = upperBody;
 			fighter->moveSpeed = 500;
+			fighter->bigMoveSpeed = 5000;
+			fighter->bigMoveMaxOffset = 150;
 			fighter->attackTimeMs = 500;
 		}
 

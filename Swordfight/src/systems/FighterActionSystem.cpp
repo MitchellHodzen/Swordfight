@@ -17,8 +17,6 @@ void FighterActionSystem::ResolveActions()
 		Physics* phys = EntityManager::GetComponent<Physics>(entity);
 		Fighter* fighter = EntityManager::GetComponent<Fighter>(entity);
 
-		ResolveMovement(*fighter, *phys);
-
 		//Is this the right place to handle state transitions? Maybe a different system?
 		if (fighter->HasAction(Fighter::Action::ReadyAttack))
 		{
@@ -37,7 +35,11 @@ void FighterActionSystem::ResolveActions()
 		{
 			case Fighter::State::Attacking: {
 				uint32_t elapsedAttackTime = fighter->attackTimer.GetTimeElapsedMs();
-				if (elapsedAttackTime >= fighter->attackTimeMs)
+				if (elapsedAttackTime <= fighter->attackTimeMs / 2.0f)
+				{
+					fighter->TakeAction(Fighter::Action::MoveRight);
+				}
+				else if (elapsedAttackTime >= fighter->attackTimeMs)
 				{
 					//If the attack is over, transition back to block
 					TransitionState(entity, *fighter, Fighter::State::Blocking);
@@ -49,12 +51,20 @@ void FighterActionSystem::ResolveActions()
 			default:
 				break;
 		}
+
+		ResolveMovement(*fighter, *phys);
 	}
 }
 
 void FighterActionSystem::ResolveMovement(Fighter& fighter, Physics& phys)
 {
 	float moveSpeed = fighter.moveSpeed;
+	float maxSpeed = phys.maxSpeed;
+	if (fighter.GetState() == Fighter::State::Attacking)
+	{
+		maxSpeed += fighter.bigMoveMaxOffset;
+		moveSpeed = fighter.bigMoveSpeed;
+	}
 	
 	//Movement is left and right
 	if (fighter.HasAction(Fighter::Action::MoveLeft))
@@ -101,9 +111,9 @@ void FighterActionSystem::ResolveMovement(Fighter& fighter, Physics& phys)
 	}
 
 	//Clamping speed to max speed
-	if (phys.velocity.GetMagnitude() > phys.maxSpeed)
+	if (phys.velocity.GetMagnitude() > maxSpeed)
 	{
-		phys.velocity.SetMagnitude(phys.maxSpeed);
+		phys.velocity.SetMagnitude(maxSpeed);
 	}
 }
 

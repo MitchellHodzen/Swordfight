@@ -26,6 +26,8 @@ struct Fighter
 	Entity upperBody = -1;
 	Entity lowerBody = -1;
 	float moveSpeed = 0;
+	float bigMoveSpeed = 0;
+	float bigMoveMaxOffset = 0;
 	Stance currentStance = Stance::MIDDLE;
 	Timer attackTimer;
 	uint32_t attackTimeMs = 0;
@@ -70,7 +72,7 @@ struct Fighter
 	};
 
 private:
-	const static int actionCount = 7;
+	const static int actionCount = 4;
 	bool actions[actionCount];
 	State currentState;
 	State lastState;
