@@ -51,7 +51,7 @@ void FighterAnimationSystem::ResolveAnimations()
 				bool attackAnimationFired = false;
 				std::string animationName;
 				int startFrame = 0;
-				int fps = 0;
+				int fps = 16;
 				bool looping = false;
 
 				switch(fighter->currentStance)
@@ -59,35 +59,21 @@ void FighterAnimationSystem::ResolveAnimations()
 					case Fighter::Stance::UP:
 						attackAnimationFired = true;
 						animationName = "highAttack";
-						startFrame = 0;
-						fps = 16;
-						looping = false;
 						break;
 					case Fighter::Stance::MIDDLE:
 						attackAnimationFired = true;
 						animationName = "midAttack";
-						startFrame = 0;
-						fps = 16;
-						looping = false;
 						break;
 					case Fighter::Stance::DOWN:
 						attackAnimationFired = true;
 						animationName = "lowAttack";
-						startFrame = 0;
-						fps = 16;
-						looping = false;
 						break;
 					default:
 						break;
 				}
 				if (attackAnimationFired)
 				{
-					Entity fighterUpperBody = fighter->upperBody;
-					Render* upperBodyRender = EntityManager::GetComponent<Render>(fighterUpperBody);
-					if (upperBodyRender != nullptr)
-					{
-						upperBodyRender->SetAnimationInstance(animationName, startFrame, fps, looping);
-					}
+					ApplyFighterAnimation(fighter->upperBody, animationName, startFrame, fps, looping);
 				}
 			}
 		}
@@ -106,7 +92,6 @@ void FighterAnimationSystem::HandleWalkAnimations(Fighter& fighter)
 	{
 		animationName = "feetWalk";
 		setWalkAnimation = true;
-		startFrame = 0;
 		fps = 5;
 		looping = true;
 	}
@@ -114,23 +99,13 @@ void FighterAnimationSystem::HandleWalkAnimations(Fighter& fighter)
 	{
 		animationName = "feetIdle";
 		setWalkAnimation = true;
-		startFrame = 0;
 		fps = 0;
 		looping = false;
 	}
 
 	if (setWalkAnimation)
 	{
-		Entity fighterLowerBody = fighter.lowerBody;
-		Render* lowerBodyRender = EntityManager::GetComponent<Render>(fighterLowerBody);
-		if (lowerBodyRender != nullptr)
-		{
-			if (lowerBodyRender->GetAnimationInstance()->animationName.compare(animationName) != 0)
-			{
-				std::cout<<"Different animations. Animation Instance: " << lowerBodyRender->GetAnimationInstance()->animationName << ". New: " << animationName <<std::endl;
-				lowerBodyRender->SetAnimationInstance(animationName, startFrame, fps, looping);
-			}
-		}
+		ApplyFighterAnimation(fighter.lowerBody, animationName, startFrame, fps, looping);
 	}
 }
 
@@ -149,35 +124,21 @@ void FighterAnimationSystem::HandleBlockingAnimations(Fighter& fighter)
 		case Fighter::Stance::UP:
 			animationName = "highGuard";
 			guardAnimationSet = true;
-			startFrame = 0;
-			fps = 0;
-			looping = false;
 			break;
 		case Fighter::Stance::MIDDLE:
 			animationName = "midGuard";
 			guardAnimationSet = true;
-			startFrame = 0;
-			fps = 0;
-			looping = false;
 			break;
 		case Fighter::Stance::DOWN:
 			animationName = "lowGuard";
 			guardAnimationSet = true;
-			startFrame = 0;
-			fps = 0;
-			looping = false;
 			break;
 		default:
 			break;
 	}
 	if (guardAnimationSet)
 	{
-		Entity fighterUpperBody = fighter.upperBody;
-		Render* upperBodyRender = EntityManager::GetComponent<Render>(fighterUpperBody);
-		if (upperBodyRender != nullptr)
-		{
-			upperBodyRender->SetAnimationInstance(animationName, startFrame, fps, looping);
-		}
+		ApplyFighterAnimation(fighter.upperBody, animationName, startFrame, fps, looping);
 	}
 }
 
@@ -195,36 +156,22 @@ void FighterAnimationSystem::HandleReadyingAnimations(Fighter& fighter)
 		case Fighter::Stance::UP:
 			animationName = "highReady";
 			readyAnimationSet = true;
-			startFrame = 0;
-			fps = 0;
-			looping = false;
 			break;
 		case Fighter::Stance::MIDDLE:
 			animationName = "midReady";
 			readyAnimationSet = true;
-			startFrame = 0;
-			fps = 0;
-			looping = false;
 			break;
 		case Fighter::Stance::DOWN:
 			animationName = "lowReady";
 			readyAnimationSet = true;
-			startFrame = 0;
-			fps = 0;
-			looping = false;
 			break;
 		default:
 			break;
 	}
-	
+
 	if (readyAnimationSet)
 	{
-		Entity fighterUpperBody = fighter.upperBody;
-		Render* upperBodyRender = EntityManager::GetComponent<Render>(fighterUpperBody);
-		if (upperBodyRender != nullptr)
-		{
-			upperBodyRender->SetAnimationInstance(animationName, startFrame, fps, looping);
-		}
+		ApplyFighterAnimation(fighter.upperBody, animationName, startFrame, fps, looping);
 	}
 }
 void FighterAnimationSystem::HandleAttackingAnimations(Fighter& fighter)
@@ -234,4 +181,13 @@ void FighterAnimationSystem::HandleAttackingAnimations(Fighter& fighter)
 void FighterAnimationSystem::HandleClashingAnimations(Fighter& fighter)
 {
 	
+}
+
+void FighterAnimationSystem::ApplyFighterAnimation(Entity fighterPart, std::string animationName, int startFrame, int fps, bool looping)
+{
+	Render* render = EntityManager::GetComponent<Render>(fighterPart);
+	if (render != nullptr && render->GetAnimationInstance()->animationName.compare(animationName) != 0)
+	{
+		render->SetAnimationInstance(animationName, startFrame, fps, looping);
+	}
 }

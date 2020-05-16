@@ -29,6 +29,7 @@ Entity FighterFactory::ConstructFighter(int posX, int posY)
 			fighter->lowerBody = lowerBody;
 			fighter->upperBody = upperBody;
 			fighter->moveSpeed = 500;
+			fighter->attackTimeMs = 500;
 		}
 
 		Transform* playerTrans = EntityManager::AddComponent<Transform>(playerFighter);

@@ -28,7 +28,7 @@ struct Fighter
 	float moveSpeed = 0;
 	Stance currentStance = Stance::MIDDLE;
 	Timer attackTimer;
-	uint32_t attackTimeMs = 1000;
+	uint32_t attackTimeMs = 0;
 
 	void PrintActions()
 	{
