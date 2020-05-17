@@ -1,4 +1,3 @@
-KECS: Rewrite adding components such that a component can safely delete a pointer (no deconstructor called during adding)
 input manager mapping keys to scancodes returns 0 if it doesn't know the key, but that's a valid scancode. Find another solution
 Add sprite ordering
 Add sprite offset (if you dont want the sprite centered/left corner)
