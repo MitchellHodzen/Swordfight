@@ -11,20 +11,19 @@
 
 InputSystem::InputSystem()
 {
-	InputCommandMapper commandMapper = InputCommandMapper::GetInstance();
-	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_S, InputCommandMapper::Command::StanceDown);
-	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_W, InputCommandMapper::Command::StanceUp);
-	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_A, InputCommandMapper::Command::MoveLeft);
-	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_D, InputCommandMapper::Command::MoveRight);
-	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_SPACE, InputCommandMapper::Command::Attack);
-	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_SHIFT, InputCommandMapper::Command::Dash);
+	InputCommandMapper::GetInstance().MapInputToCommand(InputManager::KeyboardKey::KEY_S, InputCommandMapper::Command::StanceDown);
+	InputCommandMapper::GetInstance().MapInputToCommand(InputManager::KeyboardKey::KEY_W, InputCommandMapper::Command::StanceUp);
+	InputCommandMapper::GetInstance().MapInputToCommand(InputManager::KeyboardKey::KEY_A, InputCommandMapper::Command::MoveLeft);
+	InputCommandMapper::GetInstance().MapInputToCommand(InputManager::KeyboardKey::KEY_D, InputCommandMapper::Command::MoveRight);
+	InputCommandMapper::GetInstance().MapInputToCommand(InputManager::KeyboardKey::KEY_SPACE, InputCommandMapper::Command::Attack);
+	InputCommandMapper::GetInstance().MapInputToCommand(InputManager::KeyboardKey::KEY_SHIFT, InputCommandMapper::Command::Dash);
 
-	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_DOWN, InputCommandMapper::Command::StanceDownP2);
-	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_UP, InputCommandMapper::Command::StanceUpP2);
-	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_LEFT, InputCommandMapper::Command::MoveLeftP2);
-	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_RIGHT, InputCommandMapper::Command::MoveRightP2);
-	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_CTRL_R, InputCommandMapper::Command::AttackP2);
-	commandMapper.MapInputToCommand(InputManager::KeyboardKey::KEY_NUM_0, InputCommandMapper::Command::DashP2);
+	InputCommandMapper::GetInstance().MapInputToCommand(InputManager::KeyboardKey::KEY_DOWN, InputCommandMapper::Command::StanceDownP2);
+	InputCommandMapper::GetInstance().MapInputToCommand(InputManager::KeyboardKey::KEY_UP, InputCommandMapper::Command::StanceUpP2);
+	InputCommandMapper::GetInstance().MapInputToCommand(InputManager::KeyboardKey::KEY_LEFT, InputCommandMapper::Command::MoveLeftP2);
+	InputCommandMapper::GetInstance().MapInputToCommand(InputManager::KeyboardKey::KEY_RIGHT, InputCommandMapper::Command::MoveRightP2);
+	InputCommandMapper::GetInstance().MapInputToCommand(InputManager::KeyboardKey::KEY_CTRL_R, InputCommandMapper::Command::AttackP2);
+	InputCommandMapper::GetInstance().MapInputToCommand(InputManager::KeyboardKey::KEY_NUM_0, InputCommandMapper::Command::DashP2);
 }
 
 
@@ -35,8 +34,6 @@ InputSystem::~InputSystem()
 void InputSystem::GetUserInput()
 {
 	std::vector<Entity> entities = EntityManager::GetEntitiesWithComponent<UserInput>();
-
-	InputCommandMapper commandMapper = InputCommandMapper::GetInstance();
 
 	//For every entity which captures user input, record user input
 	for (Entity entity : entities)
@@ -73,25 +70,25 @@ void InputSystem::GetUserInput()
 		}
 		
 
-		uin->keyStates[InputCommandMapper::Command::Attack] = commandMapper.GetCommandDown(attackCommand);
-		uin->keyStates[InputCommandMapper::Command::MoveLeft] = commandMapper.GetCommandDown(moveLeftCommand);
-		uin->keyStates[InputCommandMapper::Command::MoveRight] = commandMapper.GetCommandDown(moveRightCommand);
-		uin->keyStates[InputCommandMapper::Command::Dash] = commandMapper.GetCommandDown(dashCommand);
-		uin->keyStates[InputCommandMapper::Command::StanceDown] = commandMapper.GetCommandDown(stanceDownCommand);
-		uin->keyStates[InputCommandMapper::Command::StanceUp] = commandMapper.GetCommandDown(stanceUpCommand);
+		uin->keyStates[InputCommandMapper::Command::Attack] = InputCommandMapper::GetInstance().GetCommandDown(attackCommand);
+		uin->keyStates[InputCommandMapper::Command::MoveLeft] = InputCommandMapper::GetInstance().GetCommandDown(moveLeftCommand);
+		uin->keyStates[InputCommandMapper::Command::MoveRight] = InputCommandMapper::GetInstance().GetCommandDown(moveRightCommand);
+		uin->keyStates[InputCommandMapper::Command::Dash] = InputCommandMapper::GetInstance().GetCommandDown(dashCommand);
+		uin->keyStates[InputCommandMapper::Command::StanceDown] = InputCommandMapper::GetInstance().GetCommandDown(stanceDownCommand);
+		uin->keyStates[InputCommandMapper::Command::StanceUp] = InputCommandMapper::GetInstance().GetCommandDown(stanceUpCommand);
 
-		uin->keyPressed[InputCommandMapper::Command::Attack] = commandMapper.GetCommandPressed(attackCommand);
-		uin->keyPressed[InputCommandMapper::Command::MoveLeft] = commandMapper.GetCommandPressed(moveLeftCommand);
-		uin->keyPressed[InputCommandMapper::Command::MoveRight] = commandMapper.GetCommandPressed(moveRightCommand);
-		uin->keyPressed[InputCommandMapper::Command::Dash] = commandMapper.GetCommandPressed(dashCommand);
-		uin->keyPressed[InputCommandMapper::Command::StanceDown] = commandMapper.GetCommandPressed(stanceDownCommand);
-		uin->keyPressed[InputCommandMapper::Command::StanceUp] = commandMapper.GetCommandPressed(stanceUpCommand);
+		uin->keyPressed[InputCommandMapper::Command::Attack] = InputCommandMapper::GetInstance().GetCommandPressed(attackCommand);
+		uin->keyPressed[InputCommandMapper::Command::MoveLeft] = InputCommandMapper::GetInstance().GetCommandPressed(moveLeftCommand);
+		uin->keyPressed[InputCommandMapper::Command::MoveRight] = InputCommandMapper::GetInstance().GetCommandPressed(moveRightCommand);
+		uin->keyPressed[InputCommandMapper::Command::Dash] = InputCommandMapper::GetInstance().GetCommandPressed(dashCommand);
+		uin->keyPressed[InputCommandMapper::Command::StanceDown] = InputCommandMapper::GetInstance().GetCommandPressed(stanceDownCommand);
+		uin->keyPressed[InputCommandMapper::Command::StanceUp] = InputCommandMapper::GetInstance().GetCommandPressed(stanceUpCommand);
 
-		uin->keyReleased[InputCommandMapper::Command::Attack] = commandMapper.GetCommandReleased(attackCommand);
-		uin->keyReleased[InputCommandMapper::Command::MoveLeft] = commandMapper.GetCommandReleased(moveLeftCommand);
-		uin->keyReleased[InputCommandMapper::Command::MoveRight] = commandMapper.GetCommandReleased(moveRightCommand);
-		uin->keyReleased[InputCommandMapper::Command::Dash] = commandMapper.GetCommandReleased(dashCommand);
-		uin->keyReleased[InputCommandMapper::Command::StanceDown] = commandMapper.GetCommandReleased(stanceDownCommand);
-		uin->keyReleased[InputCommandMapper::Command::StanceUp] = commandMapper.GetCommandReleased(stanceUpCommand);
+		uin->keyReleased[InputCommandMapper::Command::Attack] = InputCommandMapper::GetInstance().GetCommandReleased(attackCommand);
+		uin->keyReleased[InputCommandMapper::Command::MoveLeft] = InputCommandMapper::GetInstance().GetCommandReleased(moveLeftCommand);
+		uin->keyReleased[InputCommandMapper::Command::MoveRight] = InputCommandMapper::GetInstance().GetCommandReleased(moveRightCommand);
+		uin->keyReleased[InputCommandMapper::Command::Dash] = InputCommandMapper::GetInstance().GetCommandReleased(dashCommand);
+		uin->keyReleased[InputCommandMapper::Command::StanceDown] = InputCommandMapper::GetInstance().GetCommandReleased(stanceDownCommand);
+		uin->keyReleased[InputCommandMapper::Command::StanceUp] = InputCommandMapper::GetInstance().GetCommandReleased(stanceUpCommand);
 	}
 }

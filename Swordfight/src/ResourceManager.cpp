@@ -6,7 +6,9 @@
 ResourceManager::~ResourceManager()
 {
 	UnloadSpritesheets();
+	delete spritesheetPointerMap;
 	UnloadTextures();
+	delete texturePointerMap;
 }
 
 ResourceManager& ResourceManager::GetInstance()

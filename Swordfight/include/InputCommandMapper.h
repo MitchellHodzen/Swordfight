@@ -18,6 +18,12 @@ public:
 		return instance;
 	}
 
+	~InputCommandMapper()
+	{
+		commandInputMap->clear();
+		delete commandInputMap;
+	}
+
 	void MapInputToCommand(InputManager::KeyboardKey key, Command command)
 	{
 		commandInputMap->insert_or_assign(command, key);
@@ -66,7 +72,7 @@ public:
 
 private:
 	InputCommandMapper() {}
-	static InputCommandMapper instance;
+	//static InputCommandMapper instance;
 
 	std::unordered_map<Command, InputManager::KeyboardKey>* commandInputMap = new std::unordered_map<Command, InputManager::KeyboardKey>();
 };
