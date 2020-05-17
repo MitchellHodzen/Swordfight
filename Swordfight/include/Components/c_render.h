@@ -18,6 +18,8 @@ struct Render
 	};
 	Spritesheet* spritesheet;
 
+	bool isFlipped = false;
+
 	void SetAnimationInstance(std::string animationName, unsigned int startingAnimationFrame, unsigned int framesPerSecond, bool looping)
 	{
 		AnimationInstance* newAnimationInstance = new AnimationInstance(*spritesheet->GetAnimation(animationName), startingAnimationFrame, framesPerSecond, looping);

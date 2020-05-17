@@ -20,6 +20,22 @@ Entity FighterFactory::ConstructFighter(int posX, int posY, bool isPlayerOne)
 	Entity upperBody = EntityManager::CreateEntity();
 	if (playerFighter != -1 && upperBody != -1 && lowerBody != -1)
 	{
+		bool isFlipped;
+		Fighter::Direction primaryDirection;
+		Fighter::Direction dashDirection;
+		if (isPlayerOne)
+		{
+			primaryDirection = Fighter::Direction::RIGHT;
+			dashDirection = Fighter::Direction::LEFT;
+			isFlipped = false;
+		}
+		else
+		{
+			primaryDirection = Fighter::Direction::LEFT;
+			dashDirection = Fighter::Direction::RIGHT;
+			isFlipped = true;
+		}
+		
 		EntityManager::AddTag<Player>(playerFighter);
 		UserInput* userInput = EntityManager::AddComponent<UserInput>(playerFighter);
 		userInput->isPlayerOne = isPlayerOne;
@@ -36,6 +52,8 @@ Entity FighterFactory::ConstructFighter(int posX, int posY, bool isPlayerOne)
 			fighter->dashTimeMs = 500;
 			fighter->dashMoveSpeed = 7000;
 			fighter->dashMaxMoveOffset = 100;
+			fighter->defaultDashDirection = dashDirection;
+			fighter->primaryDirection = primaryDirection;
 		}
 
 		Transform* playerTrans = EntityManager::AddComponent<Transform>(playerFighter);
@@ -72,6 +90,7 @@ Entity FighterFactory::ConstructFighter(int posX, int posY, bool isPlayerOne)
 		{
 			lowerBodyRender->spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
 			lowerBodyRender->SetAnimationInstance("feetIdle", 0, 5, true);
+			lowerBodyRender->isFlipped = isFlipped;
 		}
 
 		Render* upperBodyRender = EntityManager::AddComponent<Render>(upperBody);
@@ -79,6 +98,7 @@ Entity FighterFactory::ConstructFighter(int posX, int posY, bool isPlayerOne)
 		{
 			upperBodyRender->spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
 			upperBodyRender->SetAnimationInstance("animTest", 0, 16, true);
+			upperBodyRender->isFlipped = isFlipped;
 		}
 
 		Physics* physics = EntityManager::AddComponent<Physics>(playerFighter);

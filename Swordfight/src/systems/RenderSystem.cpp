@@ -34,7 +34,7 @@ void RenderSystem::Draw(KRenderer& kRenderer)//std::vector<Entity*>* entityList,
 		Texture* text = render->spritesheet->GetTexture();
 		Rectangle* spriteCutRect = render->spritesheet->GetSprite(render->GetAnimationInstance()->GetCurrentAnimSprite());
 
-		kRenderer.RenderTexture(*text, position.GetX(), position.GetY(), *spriteCutRect, false);
+		kRenderer.RenderTexture(*text, position.GetX(), position.GetY(), *spriteCutRect, render->isFlipped);
 	}
 	kRenderer.DrawScreen();
 }

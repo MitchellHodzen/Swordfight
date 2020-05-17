@@ -16,7 +16,7 @@ struct Fighter
 
 	enum Stance {UP, MIDDLE, DOWN};
 
-	enum DashDirection {LEFT, RIGHT};
+	enum Direction {LEFT, RIGHT};
 
 	Fighter()
 	{
@@ -37,7 +37,9 @@ struct Fighter
 	uint32_t dashTimeMs = 0;
 	float dashMoveSpeed = 0;
 	float dashMaxMoveOffset = 0;
-	DashDirection currentDashDirection = DashDirection::LEFT;
+	Direction defaultDashDirection = Direction::LEFT;
+	Direction currentDashDirection = Direction::LEFT;
+	Direction primaryDirection = Direction::RIGHT;
 
 	void PrintActions()
 	{

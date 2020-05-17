@@ -42,7 +42,7 @@ void FighterActionSystem::ResolveActions()
 				uint32_t elapsedDashTimeMs = fighter->dashTimer.GetTimeElapsedMs();
 				if (elapsedDashTimeMs <= fighter->dashTimeMs / 2.0f)
 				{			
-					if (fighter->currentDashDirection == Fighter::DashDirection::LEFT)
+					if (fighter->currentDashDirection == Fighter::Direction::LEFT)
 					{
 						fighter->TakeAction(Fighter::Action::MoveLeft);
 					}
@@ -63,6 +63,15 @@ void FighterActionSystem::ResolveActions()
 				uint32_t elapsedAttackTime = fighter->attackTimer.GetTimeElapsedMs();
 				if (elapsedAttackTime <= fighter->attackTimeMs / 2.0f)
 				{
+					if (fighter->primaryDirection == Fighter::Direction::RIGHT)
+					{
+						fighter->TakeAction(Fighter::Action::MoveRight);
+					}
+					else
+					{
+						fighter->TakeAction(Fighter::Action::MoveLeft);
+					}
+					
 					fighter->TakeAction(Fighter::Action::MoveRight);
 				}
 				else if (elapsedAttackTime >= fighter->attackTimeMs)
@@ -183,12 +192,18 @@ void FighterActionSystem::TransitionToState(Fighter& fighter, Fighter::State nex
 			fighter.dashTimer.Restart();
 			if (fighter.HasAction(Fighter::Action::MoveRight))
 			{
-				fighter.currentDashDirection = Fighter::DashDirection::RIGHT;
+				fighter.currentDashDirection = Fighter::Direction::RIGHT;
+			}
+			else if (fighter.HasAction(Fighter::Action::MoveLeft))
+			{
+				fighter.currentDashDirection = Fighter::Direction::LEFT;
 			}
 			else
 			{
-				fighter.currentDashDirection = Fighter::DashDirection::LEFT;
+				//If no input pressed for the dash, go backwards
+				fighter.currentDashDirection = fighter.defaultDashDirection;
 			}
+			
 		default:
 			break;
 	}
