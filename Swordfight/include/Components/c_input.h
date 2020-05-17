@@ -7,7 +7,7 @@ struct UserInput
 
 	UserInput()
 	{
-		for (int i = 0; i < InputCommandMapper::commandSize; ++i)
+		for (int i = 0; i < InputCommandMapper::commandTypeSize; ++i)
 		{
 			keyStates[i] = false;
 			keyPressed[i] = false;
@@ -15,8 +15,10 @@ struct UserInput
 		}
 	}
 
-	bool keyStates[InputCommandMapper::commandSize];
-	bool keyPressed[InputCommandMapper::commandSize];
-	bool keyReleased[InputCommandMapper::commandSize];
+	bool isPlayerOne = false;
+
+	bool keyStates[InputCommandMapper::commandTypeSize];
+	bool keyPressed[InputCommandMapper::commandTypeSize];
+	bool keyReleased[InputCommandMapper::commandTypeSize];
 
 };

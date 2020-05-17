@@ -42,7 +42,9 @@ void Game::Run(){
 	EntityManager::SetUpComponents<Transform, Rect, UserInput, Render, Physics, Fighter>();
 	EntityManager::SetUpTags<Player, Enemy, Wall>();
 
-	Entity player1 = FighterFactory::ConstructFighter(300, 300);
+	Entity player1 = FighterFactory::ConstructFighter(300, 300, true);
+
+	Entity player2 = FighterFactory::ConstructFighter(500, 300, false);
 
 	std::cout<<"Starting game"<<std::endl;
 	while (!quit)

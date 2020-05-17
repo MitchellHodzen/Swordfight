@@ -7,7 +7,8 @@
 class InputCommandMapper
 {
 public:
-	enum Command{MoveLeft, MoveRight, Dash, Attack, StanceUp, StanceDown};
+	enum Command{MoveLeft, MoveRight, Dash, Attack, StanceUp, StanceDown,
+				MoveLeftP2, MoveRightP2, DashP2, AttackP2, StanceUpP2, StanceDownP2};
 
 	static InputCommandMapper& GetInstance()
 	{
@@ -61,7 +62,7 @@ public:
 		return false;
 	}
 
-	static const unsigned int commandSize = 6;
+	static const unsigned int commandTypeSize = 6;
 
 private:
 	InputCommandMapper() {}

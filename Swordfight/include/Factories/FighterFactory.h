@@ -3,7 +3,7 @@
 class FighterFactory
 {
 public:
-	static Entity ConstructFighter(int posX, int posY);
+	static Entity ConstructFighter(int posX, int posY, bool isPlayerOne);
 private:
 	FighterFactory() {}
 	~FighterFactory() {}

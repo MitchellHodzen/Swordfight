@@ -5,7 +5,8 @@ class InputManager
 {
 public:
 
-	enum KeyboardKey{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, KEY_SHIFT, UNMAPPED};
+	enum KeyboardKey{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, KEY_SHIFT, KEY_W, KEY_S,
+						KEY_A, KEY_D, KEY_NUM_0, KEY_CTRL_R, UNMAPPED};
 
 	static InputManager& GetInstance()
 	{
@@ -101,6 +102,18 @@ private:
 				return SDL_SCANCODE_SPACE;
 			case KeyboardKey::KEY_SHIFT:
 				return SDL_SCANCODE_LSHIFT;
+			case KeyboardKey::KEY_W:
+				return SDL_SCANCODE_W;
+			case KeyboardKey::KEY_S:
+				return SDL_SCANCODE_S;
+			case KeyboardKey::KEY_A:
+				return SDL_SCANCODE_A;
+			case KeyboardKey::KEY_D:
+				return SDL_SCANCODE_D;
+			case KeyboardKey::KEY_NUM_0:
+				return SDL_SCANCODE_KP_0;
+			case KeyboardKey::KEY_CTRL_R:
+				return SDL_SCANCODE_RCTRL;
 		}
 		return 0; //Find a better value for error? 
 	}

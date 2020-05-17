@@ -13,7 +13,7 @@
 #include "rendering/Animation.h"
 
 
-Entity FighterFactory::ConstructFighter(int posX, int posY)
+Entity FighterFactory::ConstructFighter(int posX, int posY, bool isPlayerOne)
 {
 	Entity playerFighter = EntityManager::CreateEntity();
 	Entity lowerBody = EntityManager::CreateEntity();
@@ -21,7 +21,8 @@ Entity FighterFactory::ConstructFighter(int posX, int posY)
 	if (playerFighter != -1 && upperBody != -1 && lowerBody != -1)
 	{
 		EntityManager::AddTag<Player>(playerFighter);
-		EntityManager::AddComponent<UserInput>(playerFighter);
+		UserInput* userInput = EntityManager::AddComponent<UserInput>(playerFighter);
+		userInput->isPlayerOne = isPlayerOne;
 
 		Fighter* fighter = EntityManager::AddComponent<Fighter>(playerFighter);
 		if (fighter != nullptr)
