@@ -2,9 +2,9 @@
 #include "kecs/KECS.h"
 #include "Components/c_transform.h"
 #include "Components/c_physics.h"
-#include "Components/c_boxcollider.h"
+#include "Components/c_horizontalcollider.h"
 #include "Components/c_input.h"
-#include "Time.h"
+#include "KTime.h"
 #include "MessageManager.h"
 #include "Messages/m_collision.h"
 
@@ -24,8 +24,42 @@ void PhysicsSystem::HandleCollisions()
 	while (MessageManager::NotEmpty<CollisionMessage>())
 	{
 		CollisionMessage message = MessageManager::PopMessage<CollisionMessage>();
-		BoxCollider* col1 = EntityManager::GetComponent<BoxCollider>(message.entityOne);
-		BoxCollider* col2 = EntityManager::GetComponent<BoxCollider>(message.entityTwo);
+		HorizontalCollider* col1 = EntityManager::GetComponent<HorizontalCollider>(message.entity);
+		Transform* trans1 = EntityManager::GetComponent<Transform>(message.entity);
+
+		float posX1 = trans1->position.GetX() + col1->offsetX;
+		float posX2 = message.collidedWithX;
+		float col2Width = message.collidedWithWidth;
+
+		float newPosX1;
+
+		//Handle horizontal collisions
+		//Recalculation, send this data with the message?
+		if (posX1 < posX2)
+		{
+			//If colliding on the left
+			newPosX1 = posX2 - col1->width - col1->offsetX;
+		}
+		else
+		{
+			//If colliding on the right
+			newPosX1 =  posX2 + col2Width - col1->offsetX;
+		}
+
+		trans1->position.SetX(newPosX1);
+
+		/*
+		float posX1 = pos1.GetX() + col1.offsetX;
+		float posX2 = pos2.GetX() + col1.offsetX;
+
+		if ((posX1 < posX2 + col2.width) &&
+			(posX1 + col1.width > posX2))
+		{
+			return true;
+		}
+		*/
+
+
 
 		//Do collision handling here
 		/*
@@ -52,7 +86,7 @@ void PhysicsSystem::ApplyPhysics()
 		Physics* phys = EntityManager::GetComponent<Physics>(entity);
 
 		//Apply delta time to velocity and assign the resulting vector to the movement vector
-		Vector2 movementVector = phys->velocity * Time::GetDeltaTime();
+		Vector2 movementVector = phys->velocity * KTime::GetDeltaTime();
 
 		//Delta time has already been applied
 		trans->position += movementVector;

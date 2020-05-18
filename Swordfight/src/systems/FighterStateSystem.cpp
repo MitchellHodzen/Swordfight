@@ -3,7 +3,7 @@
 #include "Components/c_input.h"
 #include "Components/c_fighter.h"
 #include "Components/c_physics.h"
-#include "Time.h"
+#include "KTime.h"
 #include "Timer.h"
 #include "MessageManager.h"
 #include "InputCommandMapper.h"
@@ -240,20 +240,20 @@ void FighterStateSystem::ResolveMovement(Fighter& fighter, Physics& phys)
 	if (fighter.HasAction(Fighter::Action::MoveLeft))
 	{
 		float currentVelocityX = phys.velocity.GetX();
-		float newVelocityX = currentVelocityX - moveSpeed * Time::GetDeltaTime();
+		float newVelocityX = currentVelocityX - moveSpeed * KTime::GetDeltaTime();
 		if (phys.velocity.GetX() > 0){
 			//If we're moving right, give left movement a boost
-			newVelocityX -= phys.friction * Time::GetDeltaTime();
+			newVelocityX -= phys.friction * KTime::GetDeltaTime();
 		}
 		phys.velocity.SetX(newVelocityX);
 	}
 	else if (fighter.HasAction(Fighter::Action::MoveRight))
 	{
 		float currentVelocityX = phys.velocity.GetX();
-		float newVelocityX = currentVelocityX + moveSpeed * Time::GetDeltaTime();
+		float newVelocityX = currentVelocityX + moveSpeed * KTime::GetDeltaTime();
 		if (phys.velocity.GetX() < 0){
 			//If we're moving right, give left movement a boost
-			newVelocityX += phys.friction * Time::GetDeltaTime();
+			newVelocityX += phys.friction * KTime::GetDeltaTime();
 		}
 		phys.velocity.SetX(newVelocityX);
 	}
@@ -261,7 +261,7 @@ void FighterStateSystem::ResolveMovement(Fighter& fighter, Physics& phys)
 		//If no input is selected, we apply friction
 		if (phys.velocity.GetX() > 0){
 			//If we're moving right, apply friction to the left
-			phys.velocity.SetX(phys.velocity.GetX() - phys.friction * Time::GetDeltaTime());
+			phys.velocity.SetX(phys.velocity.GetX() - phys.friction * KTime::GetDeltaTime());
 
 			//If after applying friction the velocity direction changed, zero the velocity out
 			if (phys.velocity.GetX() < 0){
@@ -271,7 +271,7 @@ void FighterStateSystem::ResolveMovement(Fighter& fighter, Physics& phys)
 		}
 		else if (phys.velocity.GetX() < 0){
 			//If we're moving left, apply friction to the right
-			phys.velocity.SetX(phys.velocity.GetX() + phys.friction * Time::GetDeltaTime());
+			phys.velocity.SetX(phys.velocity.GetX() + phys.friction * KTime::GetDeltaTime());
 
 			//If after applying friction the velocity direction changed, zero the velocity out
 			if (phys.velocity.GetX() > 0){

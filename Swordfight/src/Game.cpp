@@ -7,7 +7,7 @@
 #include "Tags.h"
 #include "Components/c_input.h"
 #include "Components/c_physics.h"
-#include "Time.h"
+#include "KTime.h"
 #include "systems/RenderSystem.h"
 #include "ResourceManager.h"
 #include "Components/c_render.h"
@@ -22,6 +22,8 @@
 #include "systems/BulletSystem.h"
 #include "InputManager.h"
 #include "systems/AnimationSystem.h"
+#include <chrono>
+#include <thread>
 
 Game::~Game()
 {
@@ -42,13 +44,15 @@ void Game::Run(){
 	EntityManager::SetUpTags<Player, Enemy, Wall>();
 
 	Entity player1 = FighterFactory::ConstructFighter(300, 300, true);
+	//Entity player1 = FighterFactory::ConstructFighter(500, 300, true);
 
 	Entity player2 = FighterFactory::ConstructFighter(500, 300, false);
+	//Entity player2 = FighterFactory::ConstructFighter(300, 300, false);
 
 	std::cout<<"Starting game"<<std::endl;
 	while (!quit)
 	{
-		Time::CalculateDeltaTime();
+		KTime::CalculateDeltaTime();
 		InputManager::GetInstance().UpdateInput();
 		quit = InputManager::GetInstance().ShouldQuit();
 		inputSystem->GetUserInput();
@@ -59,6 +63,7 @@ void Game::Run(){
 		physicsSystem->HandleCollisions();
 		animationSystem->AdvanceAnimations();
 		renderSystem->Draw(*kRenderer);
+		//std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 }
 

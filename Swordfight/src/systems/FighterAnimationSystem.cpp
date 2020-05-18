@@ -3,7 +3,7 @@
 #include "Components/c_physics.h"
 #include "Components/c_fighter.h"
 #include "Components/c_render.h"
-#include "Time.h"
+#include "KTime.h"
 #include "MessageManager.h"
 #include "Messages/m_fighterStateChanged.h"
 

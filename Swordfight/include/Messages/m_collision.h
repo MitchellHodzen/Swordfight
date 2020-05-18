@@ -2,11 +2,13 @@
 #include "kecs/KECS.h"
 struct CollisionMessage
 {
-	CollisionMessage(Entity entityOne, Entity entityTwo)
+	CollisionMessage(Entity entity, float collidedWithX, float collidedWithWidth)
 	{
-		this->entityOne = entityOne;
-		this->entityTwo = entityTwo;
+		this->entity = entity;
+		this->collidedWithX = collidedWithX;
+		this->collidedWithWidth = collidedWithWidth;
 	};
-	Entity entityOne;
-	Entity entityTwo;
+	Entity entity;
+	float collidedWithX;
+	float collidedWithWidth;
 };

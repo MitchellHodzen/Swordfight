@@ -2,7 +2,7 @@
 #include <SDL.h>
 #include <cstdint>
 
-class Time
+class KTime
 {
 public:
 	static void CalculateDeltaTime()
@@ -17,13 +17,13 @@ public:
 		//Calculate the time between the current frame and the last frame. Convert to seconds.
 		lastFrameTimeMs = currentFrameTimeMs;
 		currentFrameTimeMs = SDL_GetTicks();
-		Time::deltaTimeMs = (float)(currentFrameTimeMs - lastFrameTimeMs) / 1000;
+		KTime::deltaTimeMs = (float)(currentFrameTimeMs - lastFrameTimeMs) / 1000;
 	}
 
 	//Get the time between the last frame and the current frame in seconds 
 	static float GetDeltaTime()
 	{
-		return Time::deltaTimeMs;
+		return KTime::deltaTimeMs;
 	}
 
 	static uint32_t GetCurrentFrameTimeMs()
@@ -33,7 +33,7 @@ public:
 	}
 	
 private:
-	Time() {}
+	KTime() {}
 	static inline float deltaTimeMs = 0.0f;
 	static inline Uint32 lastFrameTimeMs = 0;
 	static inline Uint32 currentFrameTimeMs = 0;

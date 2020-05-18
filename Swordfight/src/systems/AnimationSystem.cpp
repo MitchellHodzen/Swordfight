@@ -3,7 +3,7 @@
 #include "Components/c_render.h"
 #include "rendering/Animation.h"
 #include "rendering/Spritesheet.h"
-#include "Time.h"
+#include "KTime.h"
 #include "Timer.h"
 
 void AnimationSystem::AdvanceAnimations()

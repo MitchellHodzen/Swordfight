@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdint>
-#include "Time.h"
+#include "KTime.h"
 
 class Timer
 {
@@ -14,7 +14,7 @@ public:
 	void Restart(uint32_t initialOffsetMs)
 	{
 		//Initial offset is how "late" the timer was started
-		startTimeMs = Time::GetCurrentFrameTimeMs() - initialOffsetMs;
+		startTimeMs = KTime::GetCurrentFrameTimeMs() - initialOffsetMs;
 	}
 
 	uint32_t GetTimeElapsedMs()
@@ -26,7 +26,7 @@ public:
 			Restart();
 		}
 		//Get the current frame time
-		uint32_t currentFrameTimeMs = Time::GetCurrentFrameTimeMs();
+		uint32_t currentFrameTimeMs = KTime::GetCurrentFrameTimeMs();
 
 		//Calculate the time elapsed since the timer was started
 		uint32_t timeElapsedMs = currentFrameTimeMs - startTimeMs;

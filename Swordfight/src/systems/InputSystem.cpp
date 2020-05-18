@@ -6,7 +6,7 @@
 #include "MessageManager.h"
 #include "Messages/m_bulletFired.h"
 #include "InputManager.h"
-#include "Time.h"
+#include "KTime.h"
 #include "InputCommandMapper.h"
 
 InputSystem::InputSystem()
