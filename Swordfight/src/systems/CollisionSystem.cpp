@@ -45,7 +45,7 @@ void CollisionSystem::CheckCollisions()
 
 				if (HorizontalColliding(*col1, trans1->position, *col2, trans2->position))
 				{
-					CollisionMessage message(entity, trans2->position.GetX() + col2->offsetX, col2->width);
+					CollisionMessage message(entity, trans2->position.GetX() + col2->offsetX, col2->width, col2->isTrigger);
 					MessageManager::PushMessage<CollisionMessage>(message);
 				}
 

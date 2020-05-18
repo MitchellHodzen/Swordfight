@@ -2,11 +2,7 @@
 struct HorizontalCollider
 {
 	//Defines the left and right bounds for horizontal collision
-	HorizontalCollider()
-	{
-		offsetX = 0;
-		width = 0; 
-	};
-	int offsetX;
-	int width;
+	int offsetX = 0;
+	int width = 0;
+	bool isTrigger = false;
 };

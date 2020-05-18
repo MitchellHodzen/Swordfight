@@ -31,49 +31,25 @@ void PhysicsSystem::HandleCollisions()
 		float posX2 = message.collidedWithX;
 		float col2Width = message.collidedWithWidth;
 
-		float newPosX1;
-
-		//Handle horizontal collisions
-		//Recalculation, send this data with the message?
-		if (posX1 < posX2)
+		if (!message.collidedWithIsTrigger)
 		{
-			//If colliding on the left
-			newPosX1 = posX2 - col1->width - col1->offsetX;
+			//If the collider wasn't a trigger, effect position
+			float newPosX1;
+
+			//Handle horizontal collisions
+			if (posX1 < posX2)
+			{
+				//If colliding on the left
+				newPosX1 = posX2 - col1->width - col1->offsetX;
+			}
+			else
+			{
+				//If colliding on the right
+				newPosX1 =  posX2 + col2Width - col1->offsetX;
+			}
+
+			trans1->position.SetX(newPosX1);
 		}
-		else
-		{
-			//If colliding on the right
-			newPosX1 =  posX2 + col2Width - col1->offsetX;
-		}
-
-		trans1->position.SetX(newPosX1);
-
-		/*
-		float posX1 = pos1.GetX() + col1.offsetX;
-		float posX2 = pos2.GetX() + col1.offsetX;
-
-		if ((posX1 < posX2 + col2.width) &&
-			(posX1 + col1.width > posX2))
-		{
-			return true;
-		}
-		*/
-
-
-
-		//Do collision handling here
-		/*
-		//Handle horizontal collisions
-		if (rectPos1.x < rectPos2.x && rectPos1.x + rect1.width > rectPos2.x)
-		{
-			pos1.x = rectPos2.x - rect1.width - rect1.offsetX;
-		}
-		else if (rectPos1.x  < rectPos2.x + rect2.width && rectPos1.x + rect1.width > rectPos2.x + rect2.width)
-		{
-			pos1.x = rectPos2.x + rect2.width - rect1.offsetX;
-		}
-		*/
-
 	}
 }
 
