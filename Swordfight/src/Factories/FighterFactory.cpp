@@ -29,15 +29,16 @@ Entity FighterFactory::ConstructFighter(int posX, int posY, bool isPlayerOne)
 			primaryDirection = Fighter::Direction::RIGHT;
 			dashDirection = Fighter::Direction::LEFT;
 			isFlipped = false;
+			EntityManager::AddTag<Player1>(playerFighter);
 		}
 		else
 		{
 			primaryDirection = Fighter::Direction::LEFT;
 			dashDirection = Fighter::Direction::RIGHT;
 			isFlipped = true;
+			EntityManager::AddTag<Player2>(playerFighter);
 		}
 		
-		EntityManager::AddTag<Player>(playerFighter);
 		UserInput* userInput = EntityManager::AddComponent<UserInput>(playerFighter);
 		userInput->isPlayerOne = isPlayerOne;
 

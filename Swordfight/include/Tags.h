@@ -1,4 +1,3 @@
 #pragma once
-struct Player {};
-struct Enemy {};
-struct Wall {};
+struct Player1 {};
+struct Player2 {};

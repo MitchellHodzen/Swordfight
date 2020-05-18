@@ -41,7 +41,7 @@ Game::~Game()
 void Game::Run(){
 
 	EntityManager::SetUpComponents<Transform, BoxCollider, UserInput, Render, Physics, Fighter, HorizontalCollider>();
-	EntityManager::SetUpTags<Player, Enemy, Wall>();
+	EntityManager::SetUpTags<Player1, Player2>();
 
 	Entity player1 = FighterFactory::ConstructFighter(300, 300, true);
 	//Entity player1 = FighterFactory::ConstructFighter(500, 300, true);
