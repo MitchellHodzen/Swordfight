@@ -14,8 +14,6 @@
 #include "systems/InputSystem.h"
 #include "systems/CollisionSystem.h"
 #include "systems/PhysicsSystem.h"
-#include "systems/FighterInputSystem.h"
-#include "systems/FighterActionSystem.h"
 #include "systems/FighterAnimationSystem.h"
 #include "systems/FighterStateSystem.h"
 #include "Factories/FighterFactory.h"
@@ -31,8 +29,6 @@ Game::~Game()
 	delete collisionSystem;
 	delete physicsSystem;
 	delete animationSystem;
-	delete fighterInputSystem;
-	delete fighterActionSystem;
 	delete fighterAnimationSystem;
 	delete fighterStateSystem;
 	delete kRenderer;
@@ -55,8 +51,6 @@ void Game::Run(){
 		InputManager::GetInstance().UpdateInput();
 		quit = InputManager::GetInstance().ShouldQuit();
 		inputSystem->GetUserInput();
-		//fighterInputSystem->HandleUserInput();
-		//fighterActionSystem->ResolveActions();
 		fighterStateSystem->UpdateFighterState();
 		fighterAnimationSystem->ResolveAnimations();
 		physicsSystem->ApplyPhysics();
@@ -82,8 +76,6 @@ bool Game::SetUp(int screenWidth, int screenHeight) {
 			collisionSystem = new CollisionSystem();
 			physicsSystem = new PhysicsSystem();
 			animationSystem = new AnimationSystem();
-			fighterInputSystem = new FighterInputSystem();
-			fighterActionSystem = new FighterActionSystem();
 			fighterAnimationSystem = new FighterAnimationSystem();
 			fighterStateSystem = new FighterStateSystem();
 		}

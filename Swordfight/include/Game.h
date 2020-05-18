@@ -6,8 +6,6 @@ class CollisionSystem;
 class PhysicsSystem;
 class BulletSystem;
 class AnimationSystem;
-class FighterInputSystem;
-class FighterActionSystem;
 class FighterAnimationSystem;
 class FighterStateSystem;
 class KRenderer;
@@ -29,8 +27,6 @@ private:
 	CollisionSystem* collisionSystem;
 	PhysicsSystem* physicsSystem;
 	AnimationSystem* animationSystem;
-	FighterInputSystem* fighterInputSystem;
-	FighterActionSystem* fighterActionSystem;
 	FighterAnimationSystem* fighterAnimationSystem;
 	FighterStateSystem* fighterStateSystem;
 	KRenderer* kRenderer;
