@@ -9,6 +9,7 @@ class AnimationSystem;
 class FighterInputSystem;
 class FighterActionSystem;
 class FighterAnimationSystem;
+class FighterStateSystem;
 class KRenderer;
 
 class Game
@@ -31,6 +32,7 @@ private:
 	FighterInputSystem* fighterInputSystem;
 	FighterActionSystem* fighterActionSystem;
 	FighterAnimationSystem* fighterAnimationSystem;
+	FighterStateSystem* fighterStateSystem;
 	KRenderer* kRenderer;
 };
 

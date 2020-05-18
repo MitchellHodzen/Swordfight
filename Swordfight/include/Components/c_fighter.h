@@ -24,6 +24,10 @@ struct Fighter
 		lastState = State::Blocking;
 		currentState = State::Blocking;
 	};
+	~Fighter()
+	{
+		std::cout<<"Destroying fighter"<<std::endl;
+	}
 
 	Entity upperBody = -1;
 	Entity lowerBody = -1;
