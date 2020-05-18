@@ -7,6 +7,7 @@
 #include "Components/c_Render.h"
 #include "Components/c_cannon.h"
 #include "Components/c_fighter.h"
+#include "Components/c_horizontalcollider.h"
 #include "Tags.h"
 #include "ResourceManager.h"
 #include "rendering/Spritesheet.h"

@@ -18,6 +18,7 @@
 #include "systems/FighterStateSystem.h"
 #include "Factories/FighterFactory.h"
 #include "Components/c_fighter.h"
+#include "Components/c_horizontalcollider.h"
 #include "systems/BulletSystem.h"
 #include "InputManager.h"
 #include "systems/AnimationSystem.h"
@@ -37,7 +38,7 @@ Game::~Game()
 
 void Game::Run(){
 
-	EntityManager::SetUpComponents<Transform, BoxCollider, UserInput, Render, Physics, Fighter>();
+	EntityManager::SetUpComponents<Transform, BoxCollider, UserInput, Render, Physics, Fighter, HorizontalCollider>();
 	EntityManager::SetUpTags<Player, Enemy, Wall>();
 
 	Entity player1 = FighterFactory::ConstructFighter(300, 300, true);
