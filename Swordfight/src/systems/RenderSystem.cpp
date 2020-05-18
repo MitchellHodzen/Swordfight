@@ -1,7 +1,7 @@
 #include "systems/RenderSystem.h"
 #include "kecs/KECS.h"
 #include "Components/c_transform.h"
-#include "Components/c_rect.h"
+#include "Components/c_boxcollider.h"
 #include "Components/c_render.h"
 #include "rendering/Texture.h"
 #include "rendering/Spritesheet.h"

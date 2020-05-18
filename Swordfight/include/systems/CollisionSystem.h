@@ -1,6 +1,6 @@
 #pragma once
 
-struct Rect;
+struct BoxCollider;
 struct Vector2;
 
 class CollisionSystem
@@ -10,7 +10,7 @@ public:
 	~CollisionSystem();
 	void CheckCollisions();
 private:
-	bool RectsColliding(Rect& rect1, Vector2& pos1, Rect& rect2, Vector2& pos2);
+	bool RectsColliding(BoxCollider& col1, Vector2& pos1, BoxCollider& col2, Vector2& pos2);
 
 };
 

@@ -1,7 +1,7 @@
 #pragma once
-struct Rect
+struct BoxCollider
 {
-	Rect()
+	BoxCollider()
 	{
 		offsetX = 0;
 		offsetY = 0;

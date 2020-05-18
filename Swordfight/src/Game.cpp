@@ -3,7 +3,7 @@
 #include "kecs/KECS.h"
 #include "rendering/KRenderer.h"
 #include "Components/c_transform.h"
-#include "Components/c_rect.h"
+#include "Components/c_boxcollider.h"
 #include "Tags.h"
 #include "Components/c_input.h"
 #include "Components/c_physics.h"
@@ -37,7 +37,7 @@ Game::~Game()
 
 void Game::Run(){
 
-	EntityManager::SetUpComponents<Transform, Rect, UserInput, Render, Physics, Fighter>();
+	EntityManager::SetUpComponents<Transform, BoxCollider, UserInput, Render, Physics, Fighter>();
 	EntityManager::SetUpTags<Player, Enemy, Wall>();
 
 	Entity player1 = FighterFactory::ConstructFighter(300, 300, true);

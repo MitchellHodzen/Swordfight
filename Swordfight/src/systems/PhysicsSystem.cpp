@@ -2,7 +2,7 @@
 #include "kecs/KECS.h"
 #include "Components/c_transform.h"
 #include "Components/c_physics.h"
-#include "Components/c_rect.h"
+#include "Components/c_boxcollider.h"
 #include "Components/c_input.h"
 #include "Time.h"
 #include "MessageManager.h"
@@ -24,8 +24,8 @@ void PhysicsSystem::HandleCollisions()
 	while (MessageManager::NotEmpty<CollisionMessage>())
 	{
 		CollisionMessage message = MessageManager::PopMessage<CollisionMessage>();
-		Rect* rect1 = EntityManager::GetComponent<Rect>(message.entityOne);
-		Rect* rect2 = EntityManager::GetComponent<Rect>(message.entityTwo);
+		BoxCollider* col1 = EntityManager::GetComponent<BoxCollider>(message.entityOne);
+		BoxCollider* col2 = EntityManager::GetComponent<BoxCollider>(message.entityTwo);
 
 		//Do collision handling here
 		/*
