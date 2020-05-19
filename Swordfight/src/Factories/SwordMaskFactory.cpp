@@ -45,7 +45,7 @@ Entity SwordMaskFactory::ConstructSwordMask(bool isPlayerOne, Entity fighter)
 		Lifetime* lifetime = EntityManager::AddComponent<Lifetime>(swordMask);
 		if (lifetime != nullptr)
 		{
-			lifetime->timeToLiveMs = 100;
+			lifetime->timeToLiveMs = 225;
 		}
 	}
 

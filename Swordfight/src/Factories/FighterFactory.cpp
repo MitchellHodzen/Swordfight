@@ -60,7 +60,7 @@ Entity FighterFactory::ConstructFighter(int posX, int posY, bool isPlayerOne)
 			fighter->attackMoveSpeed = 5000;
 			fighter->attackMaxMoveOffset = 150;
 			fighter->attackTimeMs = 500;
-			fighter->attackMaskSpawnMs = 100;
+			fighter->attackMaskSpawnMs = 50;
 			fighter->attackMaskWidth = 100;
 			fighter->dashTimeMs = 500;
 			fighter->dashMoveSpeed = 7000;

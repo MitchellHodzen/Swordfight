@@ -38,6 +38,7 @@ struct Fighter
 	Timer attackTimer;
 	uint32_t attackTimeMs = 0;
 	uint32_t attackMaskSpawnMs = 0;
+	bool hasSpawnedMask = false;
 	int attackMaskColOffset = 0;
 	int attackMaskWidth = 0;
 	Timer dashTimer;

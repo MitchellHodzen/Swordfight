@@ -88,11 +88,11 @@ void FighterStateSystem::UpdateReadyingState(Entity entity, UserInput& userInput
 void FighterStateSystem::UpdateAttackingState(Entity entity, Fighter& fighter)
 {
 	uint32_t elapsedAttackTime = fighter.attackTimer.GetTimeElapsedMs();
-	if (elapsedAttackTime >= fighter.attackMaskSpawnMs)
+	if (elapsedAttackTime >= fighter.attackMaskSpawnMs && !fighter.hasSpawnedMask)
 	{
 		//Spawn the attack mask
 		Entity attackMask = SwordMaskFactory::ConstructSwordMask(fighter.isPlayerOne, entity);
-
+		fighter.hasSpawnedMask = true;
 	}
 	if (elapsedAttackTime <= fighter.attackTimeMs / 2.0f)
 	{
@@ -110,6 +110,7 @@ void FighterStateSystem::UpdateAttackingState(Entity entity, Fighter& fighter)
 	else if (elapsedAttackTime >= fighter.attackTimeMs)
 	{
 		//If the attack is over, transition back to block
+		fighter.hasSpawnedMask = false;
 		TransitionState(entity, fighter, Fighter::State::Blocking);
 	}
 }
