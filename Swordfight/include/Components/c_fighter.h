@@ -37,6 +37,9 @@ struct Fighter
 	Stance currentStance = Stance::MIDDLE;
 	Timer attackTimer;
 	uint32_t attackTimeMs = 0;
+	uint32_t attackMaskSpawnMs = 0;
+	int attackMaskColOffset = 0;
+	int attackMaskWidth = 0;
 	Timer dashTimer;
 	uint32_t dashTimeMs = 0;
 	float dashMoveSpeed = 0;
@@ -44,6 +47,9 @@ struct Fighter
 	Direction defaultDashDirection = Direction::LEFT;
 	Direction currentDashDirection = Direction::LEFT;
 	Direction primaryDirection = Direction::RIGHT;
+
+	bool isPlayerOne = false;
+	
 
 	void PrintActions()
 	{

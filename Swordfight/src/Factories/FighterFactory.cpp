@@ -45,12 +45,23 @@ Entity FighterFactory::ConstructFighter(int posX, int posY, bool isPlayerOne)
 		Fighter* fighter = EntityManager::AddComponent<Fighter>(playerFighter);
 		if (fighter != nullptr)
 		{
+			if (isPlayerOne)
+			{
+				fighter->attackMaskColOffset = 20;
+			}
+			else
+			{
+				fighter->attackMaskColOffset = 20;
+			}
+			fighter->isPlayerOne = isPlayerOne;
 			fighter->lowerBody = lowerBody;
 			fighter->upperBody = upperBody;
 			fighter->moveSpeed = 500;
 			fighter->attackMoveSpeed = 5000;
 			fighter->attackMaxMoveOffset = 150;
 			fighter->attackTimeMs = 500;
+			fighter->attackMaskSpawnMs = 100;
+			fighter->attackMaskWidth = 100;
 			fighter->dashTimeMs = 500;
 			fighter->dashMoveSpeed = 7000;
 			fighter->dashMaxMoveOffset = 100;
@@ -68,7 +79,7 @@ Entity FighterFactory::ConstructFighter(int posX, int posY, bool isPlayerOne)
 		if (horzCol != nullptr)
 		{
 			horzCol->width = 100; //How wide the fighter is
-			horzCol->offsetX =  -50;//((horzCol->width / 2)); //We put the collider in the middle of the transform
+			horzCol->offsetX =  -(horzCol->width / 2); //We put the collider in the middle of the transform
 		}
 		
 		Transform* lowerBodyTrans = EntityManager::AddComponent<Transform>(lowerBody);

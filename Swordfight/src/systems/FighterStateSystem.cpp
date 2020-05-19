@@ -8,6 +8,7 @@
 #include "MessageManager.h"
 #include "InputCommandMapper.h"
 #include "Messages/m_fighterStateChanged.h"
+#include "Factories/SwordMaskFactory.h"
 
 
 void FighterStateSystem::UpdateFighterState()
@@ -87,6 +88,12 @@ void FighterStateSystem::UpdateReadyingState(Entity entity, UserInput& userInput
 void FighterStateSystem::UpdateAttackingState(Entity entity, Fighter& fighter)
 {
 	uint32_t elapsedAttackTime = fighter.attackTimer.GetTimeElapsedMs();
+	if (elapsedAttackTime >= fighter.attackMaskSpawnMs)
+	{
+		//Spawn the attack mask
+		Entity attackMask = SwordMaskFactory::ConstructSwordMask(fighter.isPlayerOne, entity);
+
+	}
 	if (elapsedAttackTime <= fighter.attackTimeMs / 2.0f)
 	{
 		if (fighter.primaryDirection == Fighter::Direction::RIGHT)
