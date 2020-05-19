@@ -5,8 +5,8 @@ class KRenderer;
 class RenderSystem
 {
 public:
-	void Draw(KRenderer& kRenderer, bool drawColliders);
-private:
+	void DrawSprites(KRenderer& kRenderer);
 	void DrawColliders(KRenderer& kRenderer);
+	void DrawToScreen(KRenderer& kRenderer);
 };
 

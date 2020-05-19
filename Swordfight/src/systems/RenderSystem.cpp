@@ -9,7 +9,7 @@
 #include "Rectangle.h"
 #include "rendering/KRenderer.h"
 
-void RenderSystem::Draw(KRenderer& kRenderer, bool drawColliders)//std::vector<Entity*>* entityList, std::vector<TextElement*>* textList)//, Camera* camera)
+void RenderSystem::DrawSprites(KRenderer& kRenderer)//std::vector<Entity*>* entityList, std::vector<TextElement*>* textList)//, Camera* camera)
 {
 	kRenderer.ClearScreen();
 
@@ -36,12 +36,6 @@ void RenderSystem::Draw(KRenderer& kRenderer, bool drawColliders)//std::vector<E
 
 		kRenderer.RenderTexture(*text, position.GetX(), position.GetY(), *spriteCutRect, render->isFlipped);
 	}
-
-	if (drawColliders)
-	{
-		DrawColliders(kRenderer);
-	}
-	kRenderer.DrawScreen();
 }
 
 void RenderSystem::DrawColliders(KRenderer& kRenderer)
@@ -72,3 +66,9 @@ void RenderSystem::DrawColliders(KRenderer& kRenderer)
 		kRenderer.DrawRectangle(rectangle);
 	}
 }
+
+void RenderSystem::DrawToScreen(KRenderer& kRenderer)
+{
+	kRenderer.DrawScreen();
+}
+

@@ -66,7 +66,9 @@ void Game::Run(){
 		collisionSystem->CheckCollisions();
 		physicsSystem->HandleCollisions();
 		animationSystem->AdvanceAnimations();
-		renderSystem->Draw(*kRenderer, true);
+		renderSystem->DrawSprites(*kRenderer);
+		renderSystem->DrawColliders(*kRenderer);
+		renderSystem->DrawToScreen(*kRenderer);
 		//std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 }
