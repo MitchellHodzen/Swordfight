@@ -62,7 +62,7 @@ void Game::Run(){
 		collisionSystem->CheckCollisions();
 		physicsSystem->HandleCollisions();
 		animationSystem->AdvanceAnimations();
-		renderSystem->Draw(*kRenderer);
+		renderSystem->Draw(*kRenderer, true);
 		//std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 }

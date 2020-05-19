@@ -14,6 +14,7 @@ public:
 
 	void ClearScreen();
 	void RenderTexture(Texture& texture, int posX, int posY, Rectangle& cutRect, bool flipped);
+	void DrawRectangle(Rectangle& rectangle);
 	void DrawScreen();
 
 	int GetScreenWidth();

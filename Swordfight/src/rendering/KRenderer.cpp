@@ -40,6 +40,15 @@ void KRenderer::RenderTexture(Texture& texture, int posX, int posY, Rectangle& c
 
 }
 
+void KRenderer::DrawRectangle(Rectangle& rectangle)
+{
+	SDL_Rect rect{ rectangle.posX, rectangle.posY, rectangle.width, rectangle.height };
+    SDL_SetRenderDrawColor( sdlRenderer, 0x00, 0xFF, 0x00, 0xFF );        
+    SDL_RenderDrawRect( sdlRenderer, &rect );
+	//SDL_SetRenderDrawColor(sdlRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
+}
+
 void KRenderer::DrawScreen()
 {
 	SDL_RenderPresent(sdlRenderer);
