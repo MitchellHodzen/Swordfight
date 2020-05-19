@@ -11,6 +11,7 @@
 #include "systems/RenderSystem.h"
 #include "ResourceManager.h"
 #include "Components/c_render.h"
+#include "Components/c_lifetime.h"
 #include "systems/InputSystem.h"
 #include "systems/CollisionSystem.h"
 #include "systems/PhysicsSystem.h"
@@ -22,6 +23,7 @@
 #include "systems/BulletSystem.h"
 #include "InputManager.h"
 #include "systems/AnimationSystem.h"
+#include "systems/LifetimeSystem.h"
 #include <chrono>
 #include <thread>
 
@@ -34,13 +36,14 @@ Game::~Game()
 	delete animationSystem;
 	delete fighterAnimationSystem;
 	delete fighterStateSystem;
+	delete lifetimeSystem;
 	delete kRenderer;
 }
 
 
 void Game::Run(){
 
-	EntityManager::SetUpComponents<Transform, BoxCollider, UserInput, Render, Physics, Fighter, HorizontalCollider>();
+	EntityManager::SetUpComponents<Transform, BoxCollider, UserInput, Render, Physics, Fighter, HorizontalCollider, Lifetime>();
 	EntityManager::SetUpTags<Player1, Player2>();
 
 	Entity player1 = FighterFactory::ConstructFighter(300, 300, true);
@@ -55,6 +58,7 @@ void Game::Run(){
 		KTime::CalculateDeltaTime();
 		InputManager::GetInstance().UpdateInput();
 		quit = InputManager::GetInstance().ShouldQuit();
+		lifetimeSystem->CheckEntityLifetimes();
 		inputSystem->GetUserInput();
 		fighterStateSystem->UpdateFighterState();
 		fighterAnimationSystem->ResolveAnimations();
@@ -84,6 +88,7 @@ bool Game::SetUp(int screenWidth, int screenHeight) {
 			animationSystem = new AnimationSystem();
 			fighterAnimationSystem = new FighterAnimationSystem();
 			fighterStateSystem = new FighterStateSystem();
+			lifetimeSystem = new LifetimeSystem();
 		}
 		else
 		{

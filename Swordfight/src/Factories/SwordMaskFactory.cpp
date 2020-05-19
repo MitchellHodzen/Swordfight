@@ -2,6 +2,7 @@
 #include "kecs/KECS.h"
 #include "Components/c_transform.h"
 #include "Components/c_horizontalcollider.h"
+#include "Components/c_lifetime.h"
 #include "Tags.h"
 
 
@@ -39,6 +40,12 @@ Entity SwordMaskFactory::ConstructSwordMask(bool isPlayerOne, Entity fighter)
 			}
 			horzCol->offsetX = modifier *(additionalOffset);//modifier * 10;//((horzCol->width / 2)); //We put the collider in the middle of the transform
 			horzCol->isTrigger = true;
+		}
+
+		Lifetime* lifetime = EntityManager::AddComponent<Lifetime>(swordMask);
+		if (lifetime != nullptr)
+		{
+			lifetime->timeToLiveMs = 100;
 		}
 	}
 

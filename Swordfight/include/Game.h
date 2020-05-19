@@ -8,6 +8,7 @@ class BulletSystem;
 class AnimationSystem;
 class FighterAnimationSystem;
 class FighterStateSystem;
+class LifetimeSystem;
 class KRenderer;
 
 class Game
@@ -29,6 +30,7 @@ private:
 	AnimationSystem* animationSystem;
 	FighterAnimationSystem* fighterAnimationSystem;
 	FighterStateSystem* fighterStateSystem;
+	LifetimeSystem* lifetimeSystem;
 	KRenderer* kRenderer;
 };
 
