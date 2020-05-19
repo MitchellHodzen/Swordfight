@@ -68,7 +68,7 @@ void RenderSystem::DrawColliders(KRenderer& kRenderer)
 		float posX = position.GetX() + col->offsetX;
 		float width = col->width;
 
-		Rectangle rectangle(posX, position.GetY(), width, 10);
+		Rectangle rectangle(posX, position.GetY(), width, 100);
 		kRenderer.DrawRectangle(rectangle);
 	}
 }
