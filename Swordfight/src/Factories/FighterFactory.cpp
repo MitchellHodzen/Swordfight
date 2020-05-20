@@ -78,8 +78,9 @@ Entity FighterFactory::ConstructFighter(int posX, int posY, bool isPlayerOne)
 		HorizontalCollider* horzCol = EntityManager::AddComponent<HorizontalCollider>(playerFighter);
 		if (horzCol != nullptr)
 		{
-			horzCol->width = 100; //How wide the fighter is
-			horzCol->offsetX =  -(horzCol->width / 2); //We put the collider in the middle of the transform
+			horzCol->width = 50; //How wide the fighter is
+			int modifier = isPlayerOne ? -1 : 1;
+			horzCol->offsetX =  (-(horzCol->width / 2)) + (modifier * 20); //We put the collider in the middle of the transform
 		}
 		
 		Transform* lowerBodyTrans = EntityManager::AddComponent<Transform>(lowerBody);
