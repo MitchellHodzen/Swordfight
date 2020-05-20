@@ -23,8 +23,8 @@ void FighterStateSystem::UpdateFighterState()
 		Physics* physics = EntityManager::GetComponent<Physics>(entity);
 		Fighter::State fighterState = fighter->GetState();
 
-		//Clear all actions
-		fighter->ClearActions();
+		//Reset Movement
+		fighter->shouldMove = false;
 
 		//Make input queue instead?
 		switch(fighterState)
@@ -95,14 +95,14 @@ void FighterStateSystem::UpdateAttackingState(Entity entity, Fighter& fighter)
 	{
 		if (fighter.primaryDirection == Fighter::Direction::RIGHT)
 		{
-			fighter.TakeAction(Fighter::Action::MoveRight);
+			fighter.shouldMove = true;
+			fighter.currentMovementDirection = Fighter::Direction::RIGHT;
 		}
 		else
 		{
-			fighter.TakeAction(Fighter::Action::MoveLeft);
+			fighter.shouldMove = true;
+			fighter.currentMovementDirection = Fighter::Direction::LEFT;
 		}
-		
-		fighter.TakeAction(Fighter::Action::MoveRight);
 	}
 	else if (elapsedAttackTime >= fighter.attackTimeMs)
 	{
@@ -122,11 +122,13 @@ void FighterStateSystem::UpdateDashingState(Entity entity, Fighter& fighter)
 	{			
 		if (fighter.currentDashDirection == Fighter::Direction::LEFT)
 		{
-			fighter.TakeAction(Fighter::Action::MoveLeft);
+			fighter.shouldMove = true;
+			fighter.currentMovementDirection = Fighter::Direction::LEFT;
 		}
 		else
 		{
-			fighter.TakeAction(Fighter::Action::MoveRight);
+			fighter.shouldMove = true;
+			fighter.currentMovementDirection = Fighter::Direction::RIGHT;
 		}
 	}
 	else if (elapsedDashTimeMs >= fighter.dashTimeMs)
@@ -149,13 +151,15 @@ void FighterStateSystem::HandleMovementInput(Entity entity, UserInput& userInput
 	{
 		FighterEvent startedMoveEvent(entity, Fighter::Direction::LEFT);
 		MessageManager::PushMessage<FighterEvent>(startedMoveEvent);
-		fighter.TakeAction(Fighter::Action::MoveLeft);
+		fighter.shouldMove = true;
+		fighter.currentMovementDirection = Fighter::Direction::LEFT;
 	}
 	else if (userInput.keyStates[InputCommandMapper::Command::MoveRight])
 	{
 		FighterEvent startedMoveEvent(entity, Fighter::Direction::RIGHT);
 		MessageManager::PushMessage<FighterEvent>(startedMoveEvent);
-		fighter.TakeAction(Fighter::Action::MoveRight);
+		fighter.shouldMove = true;
+		fighter.currentMovementDirection = Fighter::Direction::RIGHT;
 	}
 	else
 	{
@@ -233,13 +237,10 @@ void FighterStateSystem::TransitionToState(Fighter& fighter, Fighter::State next
 			break;
 		case Fighter::State::Dashing:
 			fighter.dashTimer.Restart();
-			if (fighter.HasAction(Fighter::Action::MoveRight))
+			if (fighter.shouldMove)
 			{
-				fighter.currentDashDirection = Fighter::Direction::RIGHT;
-			}
-			else if (fighter.HasAction(Fighter::Action::MoveLeft))
-			{
-				fighter.currentDashDirection = Fighter::Direction::LEFT;
+				//If moving in a direction, dash in that direction
+				fighter.currentDashDirection = fighter.currentMovementDirection;
 			}
 			else
 			{
@@ -268,7 +269,7 @@ void FighterStateSystem::ResolveMovement(Fighter& fighter, Physics& phys)
 	}
 	
 	//Movement is left and right
-	if (fighter.HasAction(Fighter::Action::MoveLeft))
+	if (fighter.shouldMove && fighter.currentMovementDirection == Fighter::Direction::LEFT)
 	{
 		float currentVelocityX = phys.velocity.GetX();
 		float newVelocityX = currentVelocityX - moveSpeed * KTime::GetDeltaTime();
@@ -278,7 +279,7 @@ void FighterStateSystem::ResolveMovement(Fighter& fighter, Physics& phys)
 		}
 		phys.velocity.SetX(newVelocityX);
 	}
-	else if (fighter.HasAction(Fighter::Action::MoveRight))
+	else if (fighter.shouldMove && fighter.currentMovementDirection == Fighter::Direction::RIGHT)
 	{
 		float currentVelocityX = phys.velocity.GetX();
 		float newVelocityX = currentVelocityX + moveSpeed * KTime::GetDeltaTime();

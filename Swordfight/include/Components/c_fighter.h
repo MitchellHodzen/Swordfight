@@ -10,8 +10,6 @@
 
 struct Fighter
 {
-	enum Action { MoveLeft, MoveRight};
-
 	enum State {Blocking, Readying, Attacking, Clashing, Dashing};
 
 	enum Stance {UP, MIDDLE, DOWN};
@@ -20,7 +18,6 @@ struct Fighter
 
 	Fighter()
 	{
-		ClearActions();
 		lastState = State::Blocking;
 		currentState = State::Blocking;
 	};
@@ -49,16 +46,10 @@ struct Fighter
 	Direction currentDashDirection = Direction::LEFT;
 	Direction primaryDirection = Direction::RIGHT;
 
-	bool isPlayerOne = false;
-	
+	bool shouldMove = false;
+	Direction currentMovementDirection = Direction::RIGHT;
 
-	void PrintActions()
-	{
-		for (int i = 0; i < actionCount; ++i)
-		{
-			std::cout<<actions[i]<<std::endl;
-		}
-	};
+	bool isPlayerOne = false;
 
 	void ChangeState(State newState)
 	{
@@ -77,28 +68,7 @@ struct Fighter
 		return lastState;
 	}
 
-	void TakeAction(Action action)
-	{
-		actions[action] = true;
-	};
-
-	bool HasAction(Action action)
-	{
-		return actions[action];
-	};
-
-	void ClearActions()
-	{
-		//Zeroing out actions
-		for (int i = 0; i < actionCount; ++i)
-		{
-			actions[i] = false;
-		}
-	};
-
 private:
-	const static int actionCount = 2;
-	bool actions[actionCount];
 	State currentState;
 	State lastState;
 };
