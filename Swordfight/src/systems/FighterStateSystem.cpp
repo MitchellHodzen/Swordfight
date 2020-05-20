@@ -8,6 +8,7 @@
 #include "MessageManager.h"
 #include "InputCommandMapper.h"
 #include "Messages/m_fighterStateChanged.h"
+#include "Messages/m_fighterEvent.h"
 #include "Factories/SwordMaskFactory.h"
 
 
@@ -53,35 +54,31 @@ void FighterStateSystem::UpdateFighterState()
 void FighterStateSystem::UpdateBlockingState(Entity entity, UserInput& userInput, Fighter& fighter)
 {
 	//std::cout<<"Handling blocking state input" <<std::endl;
-	HandleMovementInput(userInput, fighter);
-	HandleAttackDirectionInput(userInput, fighter);
+	HandleMovementInput(entity, userInput, fighter);
+	HandleAttackDirectionInput(entity, userInput, fighter);
 
 	//Dash overrides attack
 	if (userInput.keyPressed[InputCommandMapper::Command::Dash])
 	{
-		fighter.TakeAction(Fighter::Action::Dash);
 		TransitionState(entity, fighter, Fighter::State::Dashing);
 	}
 	else if (userInput.keyStates[InputCommandMapper::Command::Attack])
 	{
-		fighter.TakeAction(Fighter::Action::ReadyAttack);
 		TransitionState(entity, fighter, Fighter::State::Readying);
 	}
 }
 void FighterStateSystem::UpdateReadyingState(Entity entity, UserInput& userInput, Fighter& fighter)
 {
 	//std::cout<<"Handling readying state input" <<std::endl;
-	HandleMovementInput(userInput, fighter);
+	HandleMovementInput(entity, userInput, fighter);
 
 	//Dash overrides attack
 	if (userInput.keyPressed[InputCommandMapper::Command::Dash])
 	{
-		fighter.TakeAction(Fighter::Action::Dash);
 		TransitionState(entity, fighter, Fighter::State::Dashing);
 	}
 	else if (!(userInput.keyStates[InputCommandMapper::Command::Attack]))
 	{
-		fighter.TakeAction(Fighter::Action::ReleaseAttack);
 		TransitionState(entity, fighter, Fighter::State::Attacking);
 	}
 }
@@ -140,7 +137,7 @@ void FighterStateSystem::UpdateDashingState(Entity entity, Fighter& fighter)
 }
 
 
-void FighterStateSystem::HandleMovementInput(UserInput& userInput, Fighter& fighter)
+void FighterStateSystem::HandleMovementInput(Entity entity, UserInput& userInput, Fighter& fighter)
 {
 	//Check if dash is clicked
 	//if (userInput.keyPressed[InputCommandMapper::Command::Dash])
@@ -150,29 +147,55 @@ void FighterStateSystem::HandleMovementInput(UserInput& userInput, Fighter& figh
 	//Movement is left and right
 	if (userInput.keyStates[InputCommandMapper::Command::MoveLeft])
 	{
+		FighterEvent startedMoveEvent(entity, Fighter::Direction::LEFT);
+		MessageManager::PushMessage<FighterEvent>(startedMoveEvent);
 		fighter.TakeAction(Fighter::Action::MoveLeft);
 	}
 	else if (userInput.keyStates[InputCommandMapper::Command::MoveRight])
 	{
+		FighterEvent startedMoveEvent(entity, Fighter::Direction::RIGHT);
+		MessageManager::PushMessage<FighterEvent>(startedMoveEvent);
 		fighter.TakeAction(Fighter::Action::MoveRight);
 	}
+	else
+	{
+		//If no input recorded, stop moving
+		FighterEvent stoppedMoveEvent(entity, FighterEvent::EventType::EndedWalk);
+		MessageManager::PushMessage<FighterEvent>(stoppedMoveEvent);
+	}
+	
 }
 
-void FighterStateSystem::HandleAttackDirectionInput(UserInput& userInput, Fighter& fighter)
+void FighterStateSystem::HandleAttackDirectionInput(Entity entity, UserInput& userInput, Fighter& fighter)
 {
 	//Choose sword direction
 	if (userInput.keyStates[InputCommandMapper::Command::StanceUp])
 	{
-		fighter.currentStance = Fighter::Stance::UP;
+		if (fighter.currentStance != Fighter::Stance::UP)
+		{
+			FighterEvent stanceChangeEvent(entity, fighter.currentStance, Fighter::Stance::UP);
+			MessageManager::PushMessage<FighterEvent>(stanceChangeEvent);
+			fighter.currentStance = Fighter::Stance::UP;
+		}
 	}
 	else if (userInput.keyStates[InputCommandMapper::Command::StanceDown])
 	{
-		fighter.currentStance = Fighter::Stance::DOWN;
+		if (fighter.currentStance != Fighter::Stance::DOWN)
+		{
+			FighterEvent stanceChangeEvent(entity, fighter.currentStance, Fighter::Stance::DOWN);
+			MessageManager::PushMessage<FighterEvent>(stanceChangeEvent);
+			fighter.currentStance = Fighter::Stance::DOWN;
+		}
 	}
 	else
 	{
 		//If no input is selected, default to center
-		fighter.currentStance = Fighter::Stance::MIDDLE;
+		if (fighter.currentStance != Fighter::Stance::MIDDLE)
+		{
+			FighterEvent stanceChangeEvent(entity, fighter.currentStance, Fighter::Stance::MIDDLE);
+			MessageManager::PushMessage<FighterEvent>(stanceChangeEvent);
+			fighter.currentStance = Fighter::Stance::MIDDLE;
+		}
 	}
 }
 
@@ -184,8 +207,8 @@ void FighterStateSystem::TransitionState(Entity entity, Fighter& fighter, Fighte
 	TransitionToState(fighter, nextState);
 	fighter.ChangeState(nextState);
 	
-	FighterStateChangedMessage message(entity, oldState, nextState);
-	MessageManager::PushMessage<FighterStateChangedMessage>(message);
+	FighterEvent stateChangeEvent(entity, oldState, nextState);
+	MessageManager::PushMessage<FighterEvent>(stateChangeEvent);
 }
 void FighterStateSystem::TransitionFromState(Fighter& fighter)
 {

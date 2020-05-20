@@ -6,189 +6,159 @@
 #include "KTime.h"
 #include "MessageManager.h"
 #include "Messages/m_fighterStateChanged.h"
+#include "Messages/m_fighterEvent.h"
 
 void FighterAnimationSystem::ResolveAnimations()
 {
-	std::vector<Entity> entities = EntityManager::GetEntitiesWithComponent<Physics, Fighter>();
-
-	for (Entity entity : entities)
-	{
-		Fighter* fighter = EntityManager::GetComponent<Fighter>(entity);
-
-		Fighter::State fighterState = fighter->GetState();
-
-		switch(fighterState)
-		{
-			case Fighter::State::Blocking:
-				HandleBlockingAnimations(*fighter);
-				break;
-			case Fighter::State::Readying:
-				HandleReadyingAnimations(*fighter);
-				break;
-			case Fighter::State::Attacking:
-				HandleAttackingAnimations(*fighter);
-				break;
-			case Fighter::State::Clashing:
-				HandleClashingAnimations(*fighter);
-				break;
-			default:
-				break;
-		}
-	}
-
 	//Handle state change messages
-	while(MessageManager::NotEmpty<FighterStateChangedMessage>())
+	while(MessageManager::NotEmpty<FighterEvent>())
 	{
-		FighterStateChangedMessage msg = MessageManager::PopMessage<FighterStateChangedMessage>();
-		Entity fighterEntity = msg.fighterEntity;
+		FighterEvent msg = MessageManager::PopMessage<FighterEvent>();
+		Entity entity = msg.baseEntity;
 
-		if (msg.newState == Fighter::State::Attacking)
+		Fighter* fighter = EntityManager::GetComponent<Fighter>(entity);
+		if (fighter != nullptr)
 		{
-			Fighter* fighter = EntityManager::GetComponent<Fighter>(fighterEntity);
-
-			if (fighter != nullptr)
+			switch(msg.eventType)
 			{
-				bool attackAnimationFired = false;
-				std::string animationName;
-				int startFrame = 0;
-				int fps = 16;
-				bool looping = false;
-
-				switch(fighter->currentStance)
+				case FighterEvent::EventType::StartedWalk:
 				{
-					case Fighter::Stance::UP:
-						attackAnimationFired = true;
-						animationName = "highAttack";
-						break;
-					case Fighter::Stance::MIDDLE:
-						attackAnimationFired = true;
-						animationName = "midAttack";
-						break;
-					case Fighter::Stance::DOWN:
-						attackAnimationFired = true;
-						animationName = "lowAttack";
-						break;
-					default:
-						break;
+					StartWalkAnimation(*fighter, msg.walkDirection);
+					break;
 				}
-				if (attackAnimationFired)
+				case FighterEvent::EventType::EndedWalk:
 				{
-					ApplyFighterAnimation(fighter->upperBody, animationName, startFrame, fps, looping);
-					ApplyFighterAnimation(fighter->lowerBody, "feetIdle", 0, 0, false);
+					StopWalkAnimation(*fighter);
+					break;
 				}
+				case FighterEvent::EventType::ChangedStance:
+				{
+					ChangeSwordPositionAnimation(*fighter, msg.newStance);
+					break;
+				}
+				case FighterEvent::EventType::ChangedState:
+				{
+					if (msg.newState == Fighter::State::Blocking)
+					{
+						TransitionToBlockAnimation(*fighter);
+					}
+					else if (msg.newState == Fighter::State::Readying)
+					{
+						TransitionToReadyAnimation(*fighter);
+					}
+					else if (msg.newState == Fighter::State::Attacking)
+					{
+						TransitionToAttackAnimation(*fighter);
+					}
+					else if (msg.newState = Fighter::State::Dashing)
+					{
+						TransitionToDashAnimation(*fighter);
+					}
+					break;
+				}
+				default:
+					break;
 			}
 		}
 	}
 }
 
-void FighterAnimationSystem::HandleWalkAnimations(Fighter& fighter)
+void FighterAnimationSystem::StartWalkAnimation(Fighter& fighter, Fighter::Direction direction)
 {
-	bool setWalkAnimation = false;
-	std::string animationName;
-	int startFrame = 0;
-	int fps = 0;
-	bool looping = false;
-
-	if (fighter.HasAction(Fighter::Action::MoveLeft) || fighter.HasAction(Fighter::Action::MoveRight))
-	{
-		animationName = "feetWalk";
-		setWalkAnimation = true;
-		fps = 5;
-		looping = true;
-	}
-	else
-	{
-		animationName = "feetIdle";
-		setWalkAnimation = true;
-		fps = 0;
-		looping = false;
-	}
-
-	if (setWalkAnimation)
-	{
-		ApplyFighterAnimation(fighter.lowerBody, animationName, startFrame, fps, looping);
-	}
+	ApplyFighterAnimation(fighter.lowerBody, "feetWalk", 0, 5, true);
+}
+void FighterAnimationSystem::StopWalkAnimation(Fighter& fighter)
+{
+	ApplyFighterAnimation(fighter.lowerBody, "feetIdle", 0, 0, false);
 }
 
-void FighterAnimationSystem::HandleBlockingAnimations(Fighter& fighter)
-{	
-	HandleWalkAnimations(fighter);
+void FighterAnimationSystem::ChangeSwordPositionAnimation(Fighter& fighter, Fighter::Stance stance)
+{
+	std::string animationName = "";
 
-	bool guardAnimationSet = false;
-	std::string animationName;
-	int startFrame = 0;
-	int fps = 0;
-	bool looping = false;
-
-	switch(fighter.currentStance)
+	switch(stance)
 	{
 		case Fighter::Stance::UP:
 			animationName = "highGuard";
-			guardAnimationSet = true;
 			break;
 		case Fighter::Stance::MIDDLE:
 			animationName = "midGuard";
-			guardAnimationSet = true;
 			break;
 		case Fighter::Stance::DOWN:
 			animationName = "lowGuard";
-			guardAnimationSet = true;
 			break;
 		default:
 			break;
 	}
-	if (guardAnimationSet)
-	{
-		ApplyFighterAnimation(fighter.upperBody, animationName, startFrame, fps, looping);
-	}
+	ApplyFighterAnimation(fighter.upperBody, animationName, 0, 0, false);
 }
 
-void FighterAnimationSystem::HandleReadyingAnimations(Fighter& fighter)
-{
-	HandleWalkAnimations(fighter);
 
-	bool readyAnimationSet = false;
-	std::string animationName;
-	int startFrame = 0;
-	int fps = 0;
-	bool looping = false;
+void FighterAnimationSystem::TransitionToBlockAnimation(Fighter& fighter)
+{
+	ChangeSwordPositionAnimation(fighter, fighter.currentStance);
+}
+
+void FighterAnimationSystem::TransitionToReadyAnimation(Fighter& fighter)
+{
+	std::string animationName = "";
+
 	switch(fighter.currentStance)
 	{
 		case Fighter::Stance::UP:
 			animationName = "highReady";
-			readyAnimationSet = true;
 			break;
 		case Fighter::Stance::MIDDLE:
 			animationName = "midReady";
-			readyAnimationSet = true;
 			break;
 		case Fighter::Stance::DOWN:
 			animationName = "lowReady";
-			readyAnimationSet = true;
 			break;
 		default:
 			break;
 	}
 
-	if (readyAnimationSet)
-	{
-		ApplyFighterAnimation(fighter.upperBody, animationName, startFrame, fps, looping);
-	}
+	ApplyFighterAnimation(fighter.upperBody, animationName, 0, 0, false);
 }
-void FighterAnimationSystem::HandleAttackingAnimations(Fighter& fighter)
-{
 
-}
-void FighterAnimationSystem::HandleClashingAnimations(Fighter& fighter)
+void FighterAnimationSystem::TransitionToAttackAnimation(Fighter& fighter)
 {
-	
+	std::string animationName = "";
+	int startFrame = 0;
+	int fps = 16;
+	bool looping = false;
+
+	switch(fighter.currentStance)
+	{
+		case Fighter::Stance::UP:
+			animationName = "highAttack";
+			break;
+		case Fighter::Stance::MIDDLE:
+			animationName = "midAttack";
+			break;
+		case Fighter::Stance::DOWN:
+			animationName = "lowAttack";
+			break;
+		default:
+			break;
+	}
+	ApplyFighterAnimation(fighter.upperBody, animationName, 0, 16, false);
+	StopWalkAnimation(fighter);
+}
+
+void FighterAnimationSystem::TransitionToDashAnimation(Fighter& fighter)
+{
+	StopWalkAnimation(fighter);
 }
 
 void FighterAnimationSystem::ApplyFighterAnimation(Entity fighterPart, std::string animationName, int startFrame, int fps, bool looping)
 {
-	Render* render = EntityManager::GetComponent<Render>(fighterPart);
-	if (render != nullptr && render->GetAnimationInstance()->animationName.compare(animationName) != 0)
+	if (!animationName.empty())
 	{
-		render->SetAnimationInstance(animationName, startFrame, fps, looping);
+		Render* render = EntityManager::GetComponent<Render>(fighterPart);
+		if (render != nullptr && render->GetAnimationInstance()->animationName.compare(animationName) != 0)
+		{
+			render->SetAnimationInstance(animationName, startFrame, fps, looping);
+		}
 	}
 }

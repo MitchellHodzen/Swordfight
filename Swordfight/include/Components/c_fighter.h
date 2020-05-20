@@ -10,7 +10,7 @@
 
 struct Fighter
 {
-	enum Action { MoveLeft, MoveRight, ReadyAttack, ReleaseAttack, Dash};
+	enum Action { MoveLeft, MoveRight};
 
 	enum State {Blocking, Readying, Attacking, Clashing, Dashing};
 
@@ -97,7 +97,7 @@ struct Fighter
 	};
 
 private:
-	const static int actionCount = 5;
+	const static int actionCount = 2;
 	bool actions[actionCount];
 	State currentState;
 	State lastState;

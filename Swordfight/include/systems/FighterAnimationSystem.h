@@ -7,13 +7,15 @@ class FighterAnimationSystem
 public:
 	void ResolveAnimations();
 
-	void HandleBlockingAnimations(Fighter& fighter);
-	void HandleReadyingAnimations(Fighter& fighter);
-	void HandleAttackingAnimations(Fighter& fighter);
-	void HandleClashingAnimations(Fighter& fighter);
+	void TransitionToBlockAnimation(Fighter& fighter);
+	void TransitionToReadyAnimation(Fighter& fighter);
+	void TransitionToAttackAnimation(Fighter& fighter);
+	void TransitionToDashAnimation(Fighter& fighter);
 
-	void HandleWalkAnimations(Fighter& fighter);
-	void HandleSwordPositionAnimations(Fighter& fighter);
+	void StartWalkAnimation(Fighter& fighter, Fighter::Direction direction);
+	void StopWalkAnimation(Fighter& fighter);
+	
+	void ChangeSwordPositionAnimation(Fighter& fighter, Fighter::Stance stance);
 
 	void ApplyFighterAnimation(Entity fighterPart, std::string animationName, int startFrame, int fps, bool looping);
 };

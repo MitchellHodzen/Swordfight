@@ -18,8 +18,8 @@ private:
 	void UpdateClashingState(Entity entity, Fighter& fighter);
 	void UpdateDashingState(Entity entity, Fighter& fighter);
 
-	void HandleMovementInput(UserInput& userInput, Fighter& fighter);
-	void HandleAttackDirectionInput(UserInput& userInput, Fighter& fighter);
+	void HandleMovementInput(Entity entity, UserInput& userInput, Fighter& fighter);
+	void HandleAttackDirectionInput(Entity entity, UserInput& userInput, Fighter& fighter);
 
 	void TransitionState(Entity entity, Fighter& fighter, Fighter::State nextState);
 	void TransitionFromState(Fighter& fighter);
