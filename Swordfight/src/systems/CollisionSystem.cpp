@@ -40,16 +40,33 @@ void CollisionSystem::CheckCollisions()
 			{
 				HorizontalCollider* col1 = EntityManager::GetComponent<HorizontalCollider>(entity);
 				Transform* trans1 = EntityManager::GetComponent<Transform>(entity);
+				Vector2 pos1 = GetParentModifiedPosition(*trans1);
 				HorizontalCollider* col2 = EntityManager::GetComponent<HorizontalCollider>(otherEntity);
 				Transform* trans2 = EntityManager::GetComponent<Transform>(otherEntity);
+				Vector2 pos2 = GetParentModifiedPosition(*trans2);
 
-				if (HorizontalColliding(*col1, trans1->position, *col2, trans2->position))
+
+				if (HorizontalColliding(*col1, pos1, *col2, pos2))
 				{
-					CollisionMessage message(entity, trans2->position.GetX() + col2->offsetX, col2->width, col2->isTrigger);
+					CollisionMessage message(entity, otherEntity, pos2.GetX() + col2->offsetX, col2->width, col2->isTrigger);
 					MessageManager::PushMessage<CollisionMessage>(message);
 				}
 
 			}
 		}
 	}
+}
+
+Vector2 CollisionSystem::GetParentModifiedPosition(Transform& transform)
+{
+	if (EntityManager::IsValidEntity(transform.parentEntity))
+	{
+		//If there is a parent entity, add the transform
+		Transform* parentTrans = EntityManager::GetComponent<Transform>(transform.parentEntity);
+		if (parentTrans != nullptr)
+		{
+			return Vector2::ComponentWiseAddition(transform.position, parentTrans->position);
+		}
+	}
+	return transform.position;
 }
