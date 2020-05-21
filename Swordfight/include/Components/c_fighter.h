@@ -10,7 +10,7 @@
 
 struct Fighter
 {
-	enum State {Blocking, Readying, Attacking, Clashing, Dashing};
+	enum State {Blocking, Readying, Attacking, Clashing, Dashing, Dead};
 
 	enum Stance {UP, MIDDLE, DOWN};
 

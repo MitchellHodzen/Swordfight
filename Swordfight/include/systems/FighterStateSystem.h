@@ -10,6 +10,8 @@ class FighterStateSystem
 public:
 
 	void UpdateFighterState();
+
+	void HandleSwordHitEvents();
 	
 private:
 	void UpdateBlockingState(Entity entity, UserInput& userInput, Fighter& fighter);
