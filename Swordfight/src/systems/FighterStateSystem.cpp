@@ -54,47 +54,53 @@ void FighterStateSystem::UpdateFighterState()
 
 void FighterStateSystem::HandleSwordHitEvents()
 {
-	while (MessageManager::NotEmpty<SwordCollisionMessage>())
+	unsigned int messageOffsetIndex = MessageManager::GetNewOffsetIndex<SwordCollisionMessage>();
+	while (MessageManager::HasNext<SwordCollisionMessage>(messageOffsetIndex))
 	{
-		SwordCollisionMessage message = MessageManager::PopMessage<SwordCollisionMessage>();
-		Entity entity = message.entity;
-		if (EntityManager::HasComponent<Fighter>(entity))
+
+		SwordCollisionMessage* message = MessageManager::PopMessage<SwordCollisionMessage>(messageOffsetIndex);
+		if (message != nullptr)
 		{
-			Fighter* fighter = EntityManager::GetComponent<Fighter>(entity);
-
-			Entity attacker = message.attacker;
-			Fighter::Stance attackerStance = message.attackerStance;
-			Fighter::State attackerState = message.attackerState;
-
-			Fighter::State fighterState = fighter->GetState();
-
-			bool dies = false;
-			if (fighterState == Fighter::State::Dashing || fighterState == Fighter::State::Readying ||
-				(fighterState == Fighter::State::Blocking && fighter->currentStance != attackerStance))
+			Entity entity = message->entity;
+			if (EntityManager::HasComponent<Fighter>(entity))
 			{
-				//If the fighter is dashing, readying, or blocking in the wrong position, the fighter dies
-				dies = true;
-			}
-			else if (fighterState == Fighter::State::Attacking)
-			{
-				//If we both attack at the same time, at the same position, clash
-				if (fighter->currentStance == attackerStance)
+				Fighter* fighter = EntityManager::GetComponent<Fighter>(entity);
+
+				Entity attacker = message->attacker;
+				Fighter::Stance attackerStance = message->attackerStance;
+				Fighter::State attackerState = message->attackerState;
+
+				Fighter::State fighterState = fighter->GetState();
+
+				bool dies = false;
+				if (fighterState == Fighter::State::Dashing || fighterState == Fighter::State::Readying ||
+					(fighterState == Fighter::State::Blocking && fighter->currentStance != attackerStance))
 				{
-					//clash
-					TransitionState(entity, *fighter, Fighter::State::Clashing);
-				}
-				else
-				{
+					//If the fighter is dashing, readying, or blocking in the wrong position, the fighter dies
 					dies = true;
 				}
-			}
+				else if (fighterState == Fighter::State::Attacking)
+				{
+					//If we both attack at the same time, at the same position, clash
+					if (fighter->currentStance == attackerStance)
+					{
+						//clash
+						TransitionState(entity, *fighter, Fighter::State::Clashing);
+					}
+					else
+					{
+						dies = true;
+					}
+				}
 
-			if (dies)
-			{
-				TransitionState(entity, *fighter, Fighter::State::Dead);
+				if (dies)
+				{
+					TransitionState(entity, *fighter, Fighter::State::Dead);
+				}
 			}
-			
 		}
+		
+		
 	}
 }
 

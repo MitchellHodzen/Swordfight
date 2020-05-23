@@ -22,50 +22,54 @@ PhysicsSystem::~PhysicsSystem()
 
 void PhysicsSystem::HandleCollisions()
 {
-	while (MessageManager::NotEmpty<CollisionMessage>())
+	unsigned int messageOffsetIndex = MessageManager::GetNewOffsetIndex<CollisionMessage>();
+	while (MessageManager::HasNext<CollisionMessage>(messageOffsetIndex))
 	{
-		CollisionMessage message = MessageManager::PopMessage<CollisionMessage>();
-		HorizontalCollider* col1 = EntityManager::GetComponent<HorizontalCollider>(message.entity);
-		Transform* trans1 = EntityManager::GetComponent<Transform>(message.entity);
-
-		float posX1 = trans1->position.GetX() + col1->offsetX;
-		float posX2 = message.collidedWithX;
-		float col2Width = message.collidedWithWidth;
-
-		if (!message.collidedWithIsTrigger)
+		CollisionMessage* message = MessageManager::PopMessage<CollisionMessage>(messageOffsetIndex);
+		if (message != nullptr)
 		{
-			//If the collider wasn't a trigger, effect position
-			float newPosX1;
+			HorizontalCollider* col1 = EntityManager::GetComponent<HorizontalCollider>(message->entity);
+			Transform* trans1 = EntityManager::GetComponent<Transform>(message->entity);
 
-			//Handle horizontal collisions
-			if (posX1 < posX2)
+			float posX1 = trans1->position.GetX() + col1->offsetX;
+			float posX2 = message->collidedWithX;
+			float col2Width = message->collidedWithWidth;
+
+			if (!message->collidedWithIsTrigger)
 			{
-				//If colliding on the left
-				newPosX1 = posX2 - col1->width - col1->offsetX;
+				//If the collider wasn't a trigger, effect position
+				float newPosX1;
+
+				//Handle horizontal collisions
+				if (posX1 < posX2)
+				{
+					//If colliding on the left
+					newPosX1 = posX2 - col1->width - col1->offsetX;
+				}
+				else
+				{
+					//If colliding on the right
+					newPosX1 =  posX2 + col2Width - col1->offsetX;
+				}
+
+				trans1->position.SetX(newPosX1);
 			}
 			else
 			{
-				//If colliding on the right
-				newPosX1 =  posX2 + col2Width - col1->offsetX;
-			}
-
-			trans1->position.SetX(newPosX1);
-		}
-		else
-		{
-			//The only triggers are currently swords, so a trigger hit is a sword hit
-			//Ugly, not expandable, change this plz
-			Entity collidedEntity = message.collidedWithEntity;
-			Transform* collidedTrans = EntityManager::GetComponent<Transform>(collidedEntity);
-			if (collidedTrans != nullptr)
-			{
-				Entity parentEntity = collidedTrans->parentEntity;
-				if (EntityManager::IsValidEntity(parentEntity) && EntityManager::HasComponent<Fighter>(parentEntity))
+				//The only triggers are currently swords, so a trigger hit is a sword hit
+				//Ugly, not expandable, change this plz
+				Entity collidedEntity = message->collidedWithEntity;
+				Transform* collidedTrans = EntityManager::GetComponent<Transform>(collidedEntity);
+				if (collidedTrans != nullptr)
 				{
-					Fighter* collidedWithFighter = EntityManager::GetComponent<Fighter>(parentEntity);
-					Fighter::Stance collidedWithStance = collidedWithFighter->currentStance;
-					SwordCollisionMessage swordColMsg(message.entity, parentEntity, collidedWithStance, collidedWithFighter->GetState());
-					MessageManager::PushMessage<SwordCollisionMessage>(swordColMsg);
+					Entity parentEntity = collidedTrans->parentEntity;
+					if (EntityManager::IsValidEntity(parentEntity) && EntityManager::HasComponent<Fighter>(parentEntity))
+					{
+						Fighter* collidedWithFighter = EntityManager::GetComponent<Fighter>(parentEntity);
+						Fighter::Stance collidedWithStance = collidedWithFighter->currentStance;
+						SwordCollisionMessage swordColMsg(message->entity, parentEntity, collidedWithStance, collidedWithFighter->GetState());
+						MessageManager::PushMessage<SwordCollisionMessage>(swordColMsg);
+					}
 				}
 			}
 		}

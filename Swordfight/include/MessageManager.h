@@ -9,15 +9,7 @@ public:
 	
 	template<typename Message> static void PushMessage(Message message)
 	{
-		messageQueue<Message>->push(message);
 		messageVector<Message>->push_back(message);
-	}
-
-	template<typename Message> static Message PopMessage()
-	{
-		Message message = messageQueue<Message>->front();
-		messageQueue<Message>->pop();
-		return message;
 	}
 
 	template<typename Message> static Message* PopMessage(unsigned int offsetIndex)
@@ -47,11 +39,6 @@ public:
 		return false;
 	}
 
-	template<typename Message> static bool NotEmpty()
-	{
-		return !messageQueue<Message>->empty();
-	}
-
 	template<typename Message> static unsigned int GetNewOffsetIndex()
 	{
 		return AddNewOffset<Message>();
@@ -77,10 +64,6 @@ private:
 	{
 		offsetVector<Message>->at(index) = offset;
 	}
-	//static inline std::queue<int, std::vector<int>> messageQueue;
-	template<typename T> static inline std::queue<T>* messageQueue = new std::queue<T>;
-	//template<typename T> static inline std::vector<T> messageVector;
-
 
 	template<typename T> static inline std::vector<T>* messageVector = new std::vector<T>;
 	template<typename T> static inline std::vector<unsigned int>* offsetVector = new std::vector<unsigned int>;
