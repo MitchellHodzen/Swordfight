@@ -71,6 +71,7 @@ void Game::Run(){
 		physicsSystem->ApplyPhysics();
 		collisionSystem->CheckCollisions();
 		physicsSystem->HandleCollisions();
+		fighterStateSystem->ListenForSwordHitEvents();
 		fighterStateSystem->HandleSwordHitEvents();
 		animationSystem->AdvanceAnimations();
 		renderSystem->DrawSprites(*kRenderer);

@@ -3,6 +3,7 @@
 #include "Components/c_input.h"
 #include "Components/c_fighter.h"
 #include "Components/c_physics.h"
+#include "Components/c_transform.h"
 #include "KTime.h"
 #include "Timer.h"
 #include "MessageManager.h"
@@ -11,6 +12,7 @@
 #include "Messages/m_fighterEvent.h"
 #include "Factories/SwordMaskFactory.h"
 #include "Messages/m_swordcollision.h"
+#include "Messages/m_collision.h"
 
 
 void FighterStateSystem::UpdateFighterState()
@@ -52,6 +54,39 @@ void FighterStateSystem::UpdateFighterState()
 	}
 }
 
+void FighterStateSystem::ListenForSwordHitEvents()
+{
+	unsigned int messageOffsetIndex = MessageManager::GetNewOffsetIndex<CollisionMessage>();
+	while (MessageManager::HasNext<CollisionMessage>(messageOffsetIndex))
+	{
+		CollisionMessage* message = MessageManager::PopMessage<CollisionMessage>(messageOffsetIndex);
+		if (message != nullptr)
+		{
+			Entity entity = message->entity;
+			Entity collidedWith = message->collidedWithEntity;
+
+			//If the collided entity is a fighter, and the collided with is a trigger, it was hit by a sword
+			if (EntityManager::HasComponent<Fighter>(entity) && message->collidedWithIsTrigger)
+			{
+				//The only triggers are currently swords, so a trigger hit is a sword hit
+				//Ugly, not expandable, change this plz
+				Transform* collidedTrans = EntityManager::GetComponent<Transform>(collidedWith);
+				if (collidedTrans != nullptr)
+				{
+					Entity parentEntity = collidedTrans->parentEntity;
+					if (EntityManager::IsValidEntity(parentEntity) && EntityManager::HasComponent<Fighter>(parentEntity))
+					{
+						Fighter* collidedWithFighter = EntityManager::GetComponent<Fighter>(parentEntity);
+						Fighter::Stance collidedWithStance = collidedWithFighter->currentStance;
+						SwordCollisionMessage swordColMsg(message->entity, parentEntity, collidedWithStance, collidedWithFighter->GetState());
+						MessageManager::PushMessage<SwordCollisionMessage>(swordColMsg);
+					}
+				}
+			}
+		}
+		
+	}
+}
 void FighterStateSystem::HandleSwordHitEvents()
 {
 	unsigned int messageOffsetIndex = MessageManager::GetNewOffsetIndex<SwordCollisionMessage>();
@@ -71,6 +106,8 @@ void FighterStateSystem::HandleSwordHitEvents()
 				Fighter::State attackerState = message->attackerState;
 
 				Fighter::State fighterState = fighter->GetState();
+				std::cout<<"Fighter stance: " << fighter->currentStance << ". Attacker stance: " << attackerStance << std::endl;
+				std::cout<<"	Fighter state: " << fighterState << ". Attacker state: " << attackerState << std::endl;
 
 				bool dies = false;
 				if (fighterState == Fighter::State::Dashing || fighterState == Fighter::State::Readying ||
@@ -85,7 +122,7 @@ void FighterStateSystem::HandleSwordHitEvents()
 					if (fighter->currentStance == attackerStance)
 					{
 						//clash
-						TransitionState(entity, *fighter, Fighter::State::Clashing);
+						//TransitionState(entity, *fighter, Fighter::State::Clashing);
 					}
 					else
 					{

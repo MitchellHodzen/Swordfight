@@ -54,26 +54,7 @@ void PhysicsSystem::HandleCollisions()
 
 				trans1->position.SetX(newPosX1);
 			}
-			else
-			{
-				//The only triggers are currently swords, so a trigger hit is a sword hit
-				//Ugly, not expandable, change this plz
-				Entity collidedEntity = message->collidedWithEntity;
-				Transform* collidedTrans = EntityManager::GetComponent<Transform>(collidedEntity);
-				if (collidedTrans != nullptr)
-				{
-					Entity parentEntity = collidedTrans->parentEntity;
-					if (EntityManager::IsValidEntity(parentEntity) && EntityManager::HasComponent<Fighter>(parentEntity))
-					{
-						Fighter* collidedWithFighter = EntityManager::GetComponent<Fighter>(parentEntity);
-						Fighter::Stance collidedWithStance = collidedWithFighter->currentStance;
-						SwordCollisionMessage swordColMsg(message->entity, parentEntity, collidedWithStance, collidedWithFighter->GetState());
-						MessageManager::PushMessage<SwordCollisionMessage>(swordColMsg);
-					}
-				}
-			}
 		}
-		
 	}
 }
 

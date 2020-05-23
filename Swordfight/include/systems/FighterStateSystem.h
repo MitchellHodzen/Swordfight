@@ -11,6 +11,7 @@ public:
 
 	void UpdateFighterState();
 
+	void ListenForSwordHitEvents();
 	void HandleSwordHitEvents();
 	
 private:

@@ -6,7 +6,8 @@ class FighterAnimationSystem
 {
 public:
 	void ResolveAnimations();
-
+	
+private:
 	void TransitionToBlockAnimation(Fighter& fighter);
 	void TransitionToReadyAnimation(Fighter& fighter);
 	void TransitionToAttackAnimation(Fighter& fighter);
