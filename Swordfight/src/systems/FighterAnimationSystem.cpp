@@ -11,53 +11,59 @@
 void FighterAnimationSystem::ResolveAnimations()
 {
 	//Handle state change messages
-	while(MessageManager::NotEmpty<FighterEvent>())
+	unsigned int messageOffsetIndex = MessageManager::GetNewOffsetIndex<FighterEvent>();
+	//while(MessageManager::NotEmpty<FighterEvent>())
+	while(MessageManager::HasNext<FighterEvent>(messageOffsetIndex))
 	{
-		FighterEvent msg = MessageManager::PopMessage<FighterEvent>();
-		Entity entity = msg.baseEntity;
-
-		Fighter* fighter = EntityManager::GetComponent<Fighter>(entity);
-		if (fighter != nullptr)
+		//FighterEvent msg = MessageManager::PopMessage<FighterEvent>();
+		FighterEvent* msg = MessageManager::PopMessage<FighterEvent>(messageOffsetIndex);
+		if (msg != nullptr)
 		{
-			switch(msg.eventType)
+			Entity entity = msg->baseEntity;
+
+			Fighter* fighter = EntityManager::GetComponent<Fighter>(entity);
+			if (fighter != nullptr)
 			{
-				case FighterEvent::EventType::StartedWalk:
+				switch(msg->eventType)
 				{
-					StartWalkAnimation(*fighter, msg.walkDirection);
-					break;
-				}
-				case FighterEvent::EventType::EndedWalk:
-				{
-					StopWalkAnimation(*fighter);
-					break;
-				}
-				case FighterEvent::EventType::ChangedStance:
-				{
-					ChangeSwordPositionAnimation(*fighter, msg.newStance);
-					break;
-				}
-				case FighterEvent::EventType::ChangedState:
-				{
-					if (msg.newState == Fighter::State::Blocking)
+					case FighterEvent::EventType::StartedWalk:
 					{
-						TransitionToBlockAnimation(*fighter);
+						StartWalkAnimation(*fighter, msg->walkDirection);
+						break;
 					}
-					else if (msg.newState == Fighter::State::Readying)
+					case FighterEvent::EventType::EndedWalk:
 					{
-						TransitionToReadyAnimation(*fighter);
+						StopWalkAnimation(*fighter);
+						break;
 					}
-					else if (msg.newState == Fighter::State::Attacking)
+					case FighterEvent::EventType::ChangedStance:
 					{
-						TransitionToAttackAnimation(*fighter);
+						ChangeSwordPositionAnimation(*fighter, msg->newStance);
+						break;
 					}
-					else if (msg.newState = Fighter::State::Dashing)
+					case FighterEvent::EventType::ChangedState:
 					{
-						TransitionToDashAnimation(*fighter);
+						if (msg->newState == Fighter::State::Blocking)
+						{
+							TransitionToBlockAnimation(*fighter);
+						}
+						else if (msg->newState == Fighter::State::Readying)
+						{
+							TransitionToReadyAnimation(*fighter);
+						}
+						else if (msg->newState == Fighter::State::Attacking)
+						{
+							TransitionToAttackAnimation(*fighter);
+						}
+						else if (msg->newState = Fighter::State::Dashing)
+						{
+							TransitionToDashAnimation(*fighter);
+						}
+						break;
 					}
-					break;
+					default:
+						break;
 				}
-				default:
-					break;
 			}
 		}
 	}
