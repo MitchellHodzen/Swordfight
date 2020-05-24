@@ -1,6 +1,7 @@
 #include "systems/LifetimeSystem.h"
 #include "kecs/KECS.h"
 #include "Components/c_lifetime.h"
+#include "Tags.h"
 
 void LifetimeSystem::CheckEntityLifetimes()
 {
@@ -18,6 +19,8 @@ void LifetimeSystem::CheckEntityLifetimes()
 
 	for (Entity entityToDestroy : entitiesToDestroy)
 	{
-		EntityManager::DestroyEntity(entityToDestroy);
+		//EntityManager::DestroyEntity(entityToDestroy);
+		//Add destroy tag to be picked up by another system
+		EntityManager::AddTag<Destroy>(entityToDestroy);
 	}
 }

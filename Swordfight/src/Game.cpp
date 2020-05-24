@@ -24,6 +24,7 @@
 #include "InputManager.h"
 #include "systems/AnimationSystem.h"
 #include "systems/LifetimeSystem.h"
+#include "systems/EntityDestructionSystem.h"
 #include <chrono>
 #include <thread>
 #include "MessageManager.h"
@@ -43,6 +44,7 @@ Game::~Game()
 	delete fighterAnimationSystem;
 	delete fighterStateSystem;
 	delete lifetimeSystem;
+	delete entityDestructionSystem;
 	delete kRenderer;
 }
 
@@ -50,7 +52,7 @@ Game::~Game()
 void Game::Run(){
 
 	EntityManager::SetUpComponents<Transform, BoxCollider, UserInput, Render, Physics, Fighter, HorizontalCollider, Lifetime>();
-	EntityManager::SetUpTags<Player1, Player2>();
+	EntityManager::SetUpTags<Player1, Player2, Destroy>();
 
 	Entity player1 = FighterFactory::ConstructFighter(300, 300, true);
 	//Entity player1 = FighterFactory::ConstructFighter(500, 300, true);
@@ -65,6 +67,7 @@ void Game::Run(){
 		InputManager::GetInstance().UpdateInput();
 		quit = InputManager::GetInstance().ShouldQuit();
 		lifetimeSystem->CheckEntityLifetimes();
+		entityDestructionSystem->DestroyMarkedEntities();
 		inputSystem->GetUserInput();
 		fighterStateSystem->UpdateFighterState();
 		fighterAnimationSystem->ResolveAnimations();
@@ -104,6 +107,7 @@ bool Game::SetUp(int screenWidth, int screenHeight) {
 			fighterAnimationSystem = new FighterAnimationSystem();
 			fighterStateSystem = new FighterStateSystem();
 			lifetimeSystem = new LifetimeSystem();
+			entityDestructionSystem = new EntityDestructionSystem();
 		}
 		else
 		{

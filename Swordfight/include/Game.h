@@ -9,6 +9,7 @@ class AnimationSystem;
 class FighterAnimationSystem;
 class FighterStateSystem;
 class LifetimeSystem;
+class EntityDestructionSystem;
 class KRenderer;
 
 class Game
@@ -31,6 +32,7 @@ private:
 	FighterAnimationSystem* fighterAnimationSystem;
 	FighterStateSystem* fighterStateSystem;
 	LifetimeSystem* lifetimeSystem;
+	EntityDestructionSystem* entityDestructionSystem;
 	KRenderer* kRenderer;
 };
 
