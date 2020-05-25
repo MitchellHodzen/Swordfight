@@ -45,6 +45,10 @@ struct Fighter
 	Direction defaultDashDirection = Direction::LEFT;
 	Direction currentDashDirection = Direction::LEFT;
 	Direction primaryDirection = Direction::RIGHT;
+	Timer clashTimer;
+	uint32_t clashTimeMs = 0;
+	float clashMoveSpeed = 0;
+	float clashMaxMoveOffset = 0;
 
 	bool shouldMove = false;
 	Direction currentMovementDirection = Direction::RIGHT;

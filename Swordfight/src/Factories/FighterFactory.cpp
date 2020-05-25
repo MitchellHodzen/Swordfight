@@ -67,6 +67,9 @@ Entity FighterFactory::ConstructFighter(int posX, int posY, bool isPlayerOne)
 			fighter->dashMaxMoveOffset = 100;
 			fighter->defaultDashDirection = dashDirection;
 			fighter->primaryDirection = primaryDirection;
+			fighter->clashTimeMs = 500;
+			fighter->clashMoveSpeed = 7000;
+			fighter->clashMaxMoveOffset = 100;
 		}
 
 		Transform* playerTrans = EntityManager::AddComponent<Transform>(playerFighter);

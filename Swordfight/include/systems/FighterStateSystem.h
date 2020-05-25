@@ -26,8 +26,9 @@ private:
 	void HandleAttackDirectionInput(Entity entity, UserInput& userInput, Fighter& fighter);
 
 	void TransitionState(Entity entity, Fighter& fighter, Fighter::State nextState);
-	void TransitionFromState(Fighter& fighter);
-	void TransitionToState(Fighter& fighter, Fighter::State nextState);
+	void TransitionFromState(Entity entity, Fighter& fighter);
+	void TransitionToState(Entity entity, Fighter& fighter, Fighter::State nextState);
 
 	void ResolveMovement(Fighter& fighter, Physics& phys);
+	void ResetVelocity(Entity entity);
 };

@@ -223,13 +223,31 @@ void FighterStateSystem::UpdateAttackingState(Entity entity, Fighter& fighter)
 	else if (elapsedAttackTime >= fighter.attackTimeMs)
 	{
 		//If the attack is over, transition back to block
-		fighter.hasSpawnedMask = false;
 		TransitionState(entity, fighter, Fighter::State::Blocking);
 	}
 }
 void FighterStateSystem::UpdateClashingState(Entity entity, Fighter& fighter)
 {
-	//Nothing yet
+	uint32_t elapsedClashTime = fighter.clashTimer.GetTimeElapsedMs();
+	if (elapsedClashTime <= fighter.clashTimeMs / 2.0f)
+	{
+		//Clashing moves backwards
+		if (fighter.primaryDirection == Fighter::Direction::RIGHT)
+		{
+			fighter.shouldMove = true;
+			fighter.currentMovementDirection = Fighter::Direction::LEFT;
+		}
+		else
+		{
+			fighter.shouldMove = true;
+			fighter.currentMovementDirection = Fighter::Direction::RIGHT;
+		}
+	}
+	else if (elapsedClashTime >= fighter.clashTimeMs)
+	{
+		//If the attack is over, transition back to block
+		TransitionState(entity, fighter, Fighter::State::Blocking);
+	}
 }
 void FighterStateSystem::UpdateDashingState(Entity entity, Fighter& fighter)
 {
@@ -323,20 +341,24 @@ void FighterStateSystem::HandleAttackDirectionInput(Entity entity, UserInput& us
 void FighterStateSystem::TransitionState(Entity entity, Fighter& fighter, Fighter::State nextState)
 {
 	Fighter::State oldState = fighter.GetState();
-	TransitionFromState(fighter);
-	TransitionToState(fighter, nextState);
+	TransitionFromState(entity, fighter);
+	TransitionToState(entity, fighter, nextState);
 	fighter.ChangeState(nextState);
 	
 	FighterEvent stateChangeEvent(entity, oldState, nextState);
 	MessageManager::PushMessage<FighterEvent>(stateChangeEvent);
 }
-void FighterStateSystem::TransitionFromState(Fighter& fighter)
+void FighterStateSystem::TransitionFromState(Entity entity, Fighter& fighter)
 {
 	//Do transition from current fighter state
 	Fighter::State previousState = fighter.GetState();
+	if (previousState == Fighter::State::Attacking)
+	{
+		fighter.hasSpawnedMask = false;
+	}
 	//std::cout<<"Transitioning from fighter state " << previousState << std::endl;
 }
-void FighterStateSystem::TransitionToState(Fighter& fighter, Fighter::State nextState)
+void FighterStateSystem::TransitionToState(Entity entity, Fighter& fighter, Fighter::State nextState)
 {
 	//Do transition to next state
 	//std::cout<<"Transitioning to fighter state " << nextState << std::endl;
@@ -350,6 +372,8 @@ void FighterStateSystem::TransitionToState(Fighter& fighter, Fighter::State next
 			fighter.attackTimer.Restart();
 			break;
 		case Fighter::State::Clashing:
+			fighter.clashTimer.Restart();
+			//ResetVelocity(entity);
 			break;
 		case Fighter::State::Dashing:
 			fighter.dashTimer.Restart();
@@ -382,6 +406,11 @@ void FighterStateSystem::ResolveMovement(Fighter& fighter, Physics& phys)
 	{
 		maxSpeed += fighter.dashMaxMoveOffset;
 		moveSpeed = fighter.dashMoveSpeed;
+	}
+	else if (fighter.GetState() == Fighter::State::Clashing)
+	{
+		maxSpeed += fighter.clashMaxMoveOffset;
+		moveSpeed = fighter.clashMoveSpeed;
 	}
 	
 	//Movement is left and right
@@ -432,5 +461,14 @@ void FighterStateSystem::ResolveMovement(Fighter& fighter, Physics& phys)
 	if (phys.velocity.GetMagnitude() > maxSpeed)
 	{
 		phys.velocity.SetMagnitude(maxSpeed);
+	}
+}
+
+
+void FighterStateSystem::ResetVelocity(Entity entity)
+{
+	if (EntityManager::HasComponent<Physics>(entity))
+	{
+		EntityManager::GetComponent<Physics>(entity)->ResetVelocity();
 	}
 }
