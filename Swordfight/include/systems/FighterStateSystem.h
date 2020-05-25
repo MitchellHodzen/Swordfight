@@ -13,6 +13,7 @@ public:
 
 	void ListenForSwordHitEvents();
 	void HandleSwordHitEvents();
+	void HandleSwordBlockEvents();
 	
 private:
 	void UpdateBlockingState(Entity entity, UserInput& userInput, Fighter& fighter);

@@ -3,7 +3,7 @@
 #include "Components/c_fighter.h"
 struct FighterEvent
 {
-	enum EventType {ChangedState, ChangedStance, StartedWalk, EndedWalk};
+	enum EventType {ChangedState, ChangedStance, StartedWalk, EndedWalk, Blocked};
 
 	FighterEvent(Entity baseEntity, Fighter::State oldState, Fighter::State newState)
 	{

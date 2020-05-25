@@ -108,32 +108,59 @@ void FighterStateSystem::HandleSwordHitEvents()
 				std::cout<<"Fighter stance: " << fighter->currentStance << ". Attacker stance: " << attackerStance << std::endl;
 				std::cout<<"	Fighter state: " << fighterState << ". Attacker state: " << attackerState << std::endl;
 
-				bool dies = false;
-				if (fighterState == Fighter::State::Dashing || fighterState == Fighter::State::Readying ||
-					(fighterState == Fighter::State::Blocking && fighter->currentStance != attackerStance))
+				if (fighterState == Fighter::State::Blocking && fighter->currentStance == attackerStance)
 				{
-					//If the fighter is dashing, readying, or blocking in the wrong position, the fighter dies
-					dies = true;
+					//If the fighter is blocking correctly, the other entity gets blocked
+					FighterEvent fighterEvent(attacker, FighterEvent::EventType::Blocked);
+					MessageManager::PushMessage<FighterEvent>(fighterEvent);
 				}
-				else if (fighterState == Fighter::State::Attacking)
+				else
 				{
-					//If we both attack at the same time, at the same position, clash
-					if (fighter->currentStance == attackerStance)
+					//If the fighter is not blocking correctly, or is in another state
+					bool dies = false;
+					if (fighterState == Fighter::State::Dashing || fighterState == Fighter::State::Readying ||
+						(fighterState == Fighter::State::Blocking && fighter->currentStance != attackerStance))
 					{
-						//clash
-						//TransitionState(entity, *fighter, Fighter::State::Clashing);
-					}
-					else
-					{
+						//If the fighter is dashing, readying, or blocking in the wrong position, the fighter dies
 						dies = true;
 					}
-				}
+					else if (fighterState == Fighter::State::Attacking)
+					{
+						//If we both attack at the same time, at the same position, clash
+						if (fighter->currentStance == attackerStance)
+						{
+							//clash
+							TransitionState(entity, *fighter, Fighter::State::Clashing);
+						}
+						else
+						{
+							dies = true;
+						}
+					}
 
-				if (dies)
-				{
-					TransitionState(entity, *fighter, Fighter::State::Dead);
+					if (dies)
+					{
+						TransitionState(entity, *fighter, Fighter::State::Dead);
+					}
 				}
 			}
+		}
+		
+		
+	}
+}
+
+void FighterStateSystem::HandleSwordBlockEvents()
+{
+	unsigned int messageOffsetIndex = MessageManager::GetNewOffsetIndex<FighterEvent>();
+	while (MessageManager::HasNext<FighterEvent>(messageOffsetIndex))
+	{
+
+		FighterEvent* message = MessageManager::PopMessage<FighterEvent>(messageOffsetIndex);
+		if (message != nullptr && message->eventType == FighterEvent::EventType::Blocked && EntityManager::HasComponent<Fighter>(message->baseEntity))
+		{
+			//If a fighter is blocked it goes to the clashing state
+			TransitionState(message->baseEntity, *EntityManager::GetComponent<Fighter>(message->baseEntity), Fighter::State::Clashing);
 		}
 		
 		
