@@ -20,7 +20,6 @@
 #include "Factories/FighterFactory.h"
 #include "Components/c_fighter.h"
 #include "Components/c_horizontalcollider.h"
-#include "systems/BulletSystem.h"
 #include "InputManager.h"
 #include "systems/AnimationSystem.h"
 #include "systems/LifetimeSystem.h"
@@ -28,10 +27,8 @@
 #include <chrono>
 #include <thread>
 #include "MessageManager.h"
-#include "Messages/m_bulletFired.h"
 #include "Messages/m_collision.h"
 #include "Messages/m_fighterEvent.h"
-#include "Messages/m_fighterStateChanged.h"
 #include "Messages/m_swordcollision.h"
 
 Game::~Game()
@@ -80,10 +77,8 @@ void Game::Run(){
 		renderSystem->DrawSprites(*kRenderer);
 		renderSystem->DrawColliders(*kRenderer);
 		renderSystem->DrawToScreen(*kRenderer);
-		MessageManager::ClearMessages<BulletFiredMessage>();
 		MessageManager::ClearMessages<CollisionMessage>();
 		MessageManager::ClearMessages<FighterEvent>();
-		MessageManager::ClearMessages<FighterStateChangedMessage>();
 		MessageManager::ClearMessages<SwordCollisionMessage>();
 		//std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}

@@ -8,7 +8,6 @@
 #include "Timer.h"
 #include "MessageManager.h"
 #include "InputCommandMapper.h"
-#include "Messages/m_fighterStateChanged.h"
 #include "Messages/m_fighterEvent.h"
 #include "Factories/SwordMaskFactory.h"
 #include "Messages/m_swordcollision.h"

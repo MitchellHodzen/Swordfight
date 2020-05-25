@@ -4,7 +4,6 @@ class InputSystem;
 class RenderSystem;
 class CollisionSystem;
 class PhysicsSystem;
-class BulletSystem;
 class AnimationSystem;
 class FighterAnimationSystem;
 class FighterStateSystem;

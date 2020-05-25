@@ -5,7 +5,6 @@
 #include "Components/c_render.h"
 #include "KTime.h"
 #include "MessageManager.h"
-#include "Messages/m_fighterStateChanged.h"
 #include "Messages/m_fighterEvent.h"
 
 void FighterAnimationSystem::ResolveAnimations()
