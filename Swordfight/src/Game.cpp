@@ -49,7 +49,7 @@ Game::~Game()
 void Game::Run(){
 
 	EntityManager::SetUpComponents<Transform, BoxCollider, UserInput, Render, Physics, Fighter, HorizontalCollider, Lifetime>();
-	EntityManager::SetUpTags<Player1, Player2, Destroy>();
+	EntityManager::SetUpTags<Player1, Player2, Sword, Destroy>();
 
 	Entity player1 = FighterFactory::ConstructFighter(300, 300, true);
 	//Entity player1 = FighterFactory::ConstructFighter(500, 300, true);
@@ -74,6 +74,7 @@ void Game::Run(){
 		fighterStateSystem->ListenForSwordHitEvents();
 		fighterStateSystem->HandleSwordHitEvents();
 		fighterStateSystem->HandleSwordBlockEvents();
+		fighterStateSystem->RemoveOrphanedSwords();
 		animationSystem->AdvanceAnimations();
 		renderSystem->DrawSprites(*kRenderer);
 		renderSystem->DrawColliders(*kRenderer);

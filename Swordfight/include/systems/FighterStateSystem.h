@@ -14,6 +14,7 @@ public:
 	void ListenForSwordHitEvents();
 	void HandleSwordHitEvents();
 	void HandleSwordBlockEvents();
+	void RemoveOrphanedSwords();
 	
 private:
 	void UpdateBlockingState(Entity entity, UserInput& userInput, Fighter& fighter);

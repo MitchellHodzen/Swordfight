@@ -12,6 +12,7 @@
 #include "Factories/SwordMaskFactory.h"
 #include "Messages/m_swordcollision.h"
 #include "Messages/m_collision.h"
+#include "Tags.h"
 
 
 void FighterStateSystem::UpdateFighterState()
@@ -126,11 +127,14 @@ void FighterStateSystem::HandleSwordHitEvents()
 					}
 					else if (fighterState == Fighter::State::Attacking)
 					{
-						//If we both attack at the same time, at the same position, clash
+						//If we both attack at the same time, at the same position, both fighters clash
 						if (fighter->currentStance == attackerStance)
 						{
-							//clash
+							//This fighter clashes
 							TransitionState(entity, *fighter, Fighter::State::Clashing);
+							//The other fighter is blocked
+							FighterEvent fighterEvent(attacker, FighterEvent::EventType::Blocked);
+							MessageManager::PushMessage<FighterEvent>(fighterEvent);
 						}
 						else
 						{
@@ -164,6 +168,34 @@ void FighterStateSystem::HandleSwordBlockEvents()
 		}
 		
 		
+	}
+}
+
+void FighterStateSystem::RemoveOrphanedSwords()
+{
+	std::vector<Entity> entities = EntityManager::GetEntitiesWithTag<Sword>();
+
+	for (Entity entity : entities)
+	{
+		//Get the parent of the sword's transform
+		Transform* trans = EntityManager::GetComponent<Transform>(entity);
+		if (trans != nullptr)
+		{
+			Entity parent = trans->parentEntity;
+			if (EntityManager::IsValidEntity(parent) && EntityManager::HasComponent<Fighter>(parent))
+			{
+				//If there is a parent fighter, check the state
+				Fighter* fighter = EntityManager::GetComponent<Fighter>(parent);
+
+				Fighter::State fighterState = fighter->GetState();
+
+				if (fighterState != Fighter::State::Attacking)
+				{
+					//If the fighter associated with this sword is no longer attacking, destroy it
+					EntityManager::AddTag<Destroy>(entity);
+				}
+			}
+		}
 	}
 }
 

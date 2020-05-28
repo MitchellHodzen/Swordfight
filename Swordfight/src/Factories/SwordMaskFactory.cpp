@@ -19,6 +19,7 @@ Entity SwordMaskFactory::ConstructSwordMask(bool isPlayerOne, Entity fighter)
 		{
 			EntityManager::AddTag<Player2>(swordMask);
 		}
+		EntityManager::AddTag<Sword>(swordMask);
 
 		Transform* swordTrans = EntityManager::AddComponent<Transform>(swordMask);
 		if (swordTrans != nullptr)
