@@ -13,6 +13,7 @@
 #include "Messages/m_swordcollision.h"
 #include "Messages/m_collision.h"
 #include "Tags.h"
+#include "Components/c_lifetime.h"
 
 
 void FighterStateSystem::UpdateFighterState()
@@ -419,7 +420,29 @@ void FighterStateSystem::TransitionToState(Entity entity, Fighter& fighter, Figh
 				//If no input pressed for the dash, go backwards
 				fighter.currentDashDirection = fighter.defaultDashDirection;
 			}
-			
+			break;
+		case Fighter::State::Dead:
+		{
+			//When dying, wait for time then destroy entity
+			Lifetime* lifetime = EntityManager::AddComponent<Lifetime>(entity);
+			if (lifetime != nullptr)
+			{
+				lifetime->timeToLiveMs = 225;
+			}
+
+			Lifetime* upperLifetime = EntityManager::AddComponent<Lifetime>(fighter.upperBody);
+			if (upperLifetime != nullptr)
+			{
+				upperLifetime->timeToLiveMs = 225;
+			}
+
+			Lifetime* lowerLifetime = EntityManager::AddComponent<Lifetime>(fighter.lowerBody);
+			if (lowerLifetime != nullptr)
+			{
+				lowerLifetime->timeToLiveMs = 225;
+			}
+			break;
+		}
 		default:
 			break;
 	}
