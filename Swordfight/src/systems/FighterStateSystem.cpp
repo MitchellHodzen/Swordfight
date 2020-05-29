@@ -427,19 +427,19 @@ void FighterStateSystem::TransitionToState(Entity entity, Fighter& fighter, Figh
 			Lifetime* lifetime = EntityManager::AddComponent<Lifetime>(entity);
 			if (lifetime != nullptr)
 			{
-				lifetime->timeToLiveMs = 225;
+				lifetime->timeToLiveMs = 0;
 			}
 
 			Lifetime* upperLifetime = EntityManager::AddComponent<Lifetime>(fighter.upperBody);
 			if (upperLifetime != nullptr)
 			{
-				upperLifetime->timeToLiveMs = 225;
+				upperLifetime->timeToLiveMs = 0;
 			}
 
 			Lifetime* lowerLifetime = EntityManager::AddComponent<Lifetime>(fighter.lowerBody);
 			if (lowerLifetime != nullptr)
 			{
-				lowerLifetime->timeToLiveMs = 225;
+				lowerLifetime->timeToLiveMs = 0;
 			}
 			break;
 		}

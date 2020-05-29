@@ -121,7 +121,7 @@ Entity FighterFactory::ConstructFighter(int posX, int posY, bool isPlayerOne)
 		if (upperBodyRender != nullptr)
 		{
 			upperBodyRender->spritesheet = ResourceManager::GetInstance().GetSpritesheet(ResourceManager::SpritesheetKey::Fighter);
-			upperBodyRender->SetAnimationInstance("animTest", 0, 16, true);
+			upperBodyRender->SetAnimationInstance("midGuard", 0, 0, false);
 			upperBodyRender->isFlipped = isFlipped;
 		}
 
